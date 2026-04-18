@@ -200,16 +200,16 @@ erDiagram
         VARCHAR name
         VARCHAR email
         VARCHAR password
-        ENUM role
-        FK company_id
+        VARCHAR role
+        UUID company_id FK
         BOOLEAN active
         TIMESTAMP created_at
     }
 
     Client {
         UUID id PK
-        FK company_id
-        FK client_company_id
+        UUID company_id FK
+        UUID client_company_id FK
         VARCHAR name
         VARCHAR document
         VARCHAR email
@@ -219,59 +219,59 @@ erDiagram
 
     Service {
         UUID id PK
-        FK company_id
-        FK client_id
+        UUID company_id FK
+        UUID client_id FK
         VARCHAR name
         TEXT description
         VARCHAR url
         DECIMAL monthly_value
-        ENUM status
+        VARCHAR status
         DATE started_at
         TIMESTAMP created_at
     }
 
     ServiceAsset {
         UUID id PK
-        FK service_id
-        FK company_id
+        UUID service_id FK
+        UUID company_id FK
         VARCHAR type
         VARCHAR provider
         VARCHAR identifier
         VARCHAR login_url
         JSON credentials
         DECIMAL cost
-        ENUM billing_cycle
+        VARCHAR billing_cycle
         DATE expires_at
         BOOLEAN auto_renew
-        ENUM status
+        VARCHAR status
         TEXT notes
         TIMESTAMP created_at
     }
 
     Transaction {
         UUID id PK
-        FK company_id
-        FK client_id
-        FK service_id
-        ENUM type
+        UUID company_id FK
+        UUID client_id FK
+        UUID service_id FK
+        VARCHAR type
         VARCHAR category
         TEXT description
         DECIMAL amount
         DATE due_date
         DATE paid_at
-        ENUM status
-        FK created_by
+        VARCHAR status
+        UUID created_by FK
         TIMESTAMP created_at
     }
 
     Invite {
         UUID id PK
-        FK company_id
+        UUID company_id FK
         VARCHAR email
-        ENUM role
+        VARCHAR role
         VARCHAR token
-        ENUM status
-        FK invited_by
+        VARCHAR status
+        UUID invited_by FK
         TIMESTAMP expires_at
         TIMESTAMP created_at
     }
