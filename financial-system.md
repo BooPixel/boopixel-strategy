@@ -10,20 +10,18 @@ Multi-tenant system where each user belongs to a company and can independently m
 
 Signup always creates a **User** and a **Company** in a single operation. Additional users join through an **invite** linked to an existing company.
 
-### Path A — New signup
+```mermaid
+flowchart LR
+    subgraph A["Path A — New signup"]
+        A1[Signup screen] --> A2[Personal data\nname, email, password]
+        A1 --> A3[Company data\nname, tax ID]
+        A2 & A3 --> A4[Creates Company\n+ User role=admin]
+    end
 
-```
-Signup screen:
-  ├─ Personal data (name, email, password)
-  └─ Company data (name, tax ID)
-
-→ Creates Company + User (role=admin) in a single operation
-```
-
-### Path B — Invite
-
-```
-Receives invite link → Creates account (name, email, password) → Links to existing Company
+    subgraph B["Path B — Invite"]
+        B1[Receives invite link] --> B2[Creates account\nname, email, password]
+        B2 --> B3[Links to\nexisting Company]
+    end
 ```
 
 **Result:** every user always belongs to a company, simplifying permissions and data scoping.
@@ -76,7 +74,7 @@ Relationship between companies. Company A registers Company B as its client.
 
 ### Service
 
-Services provided to each client.
+Services provided to each client. A service represents a website, app, or any deliverable managed for the client.
 
 | Field         | Type          | Description                                  |
 |---------------|---------------|----------------------------------------------|
@@ -85,10 +83,33 @@ Services provided to each client.
 | client_id     | FK → Client   | Linked client                                |
 | name          | VARCHAR(255)  | Service name (e.g.: "Institutional website") |
 | description   | TEXT          | Detailed description                         |
+| url           | VARCHAR(500)  | Live URL (e.g.: https://joesbakery.com)      |
 | monthly_value | DECIMAL(10,2) | Monthly fee                                  |
 | status        | ENUM          | `active`, `suspended`, `cancelled`           |
 | started_at    | DATE          | Start date                                   |
 | created_at    | TIMESTAMP     | Creation date                                |
+
+### ServiceAsset
+
+Trackable assets tied to a service (domains, hosting, SSL, email, etc.).
+
+| Field        | Type              | Description                                          |
+|--------------|-------------------|------------------------------------------------------|
+| id           | UUID / PK         | Unique identifier                                    |
+| service_id   | FK → Service      | Parent service                                       |
+| company_id   | FK → Company      | Owner company (for scoping)                          |
+| type         | ENUM              | `domain`, `hosting`, `ssl`, `email`, `dns`, `other`  |
+| provider     | VARCHAR(255)      | Provider name (e.g.: GoDaddy, Cloudflare, Vercel)    |
+| identifier   | VARCHAR(500)      | Main identifier (domain name, server IP, cert ID)    |
+| login_url    | VARCHAR(500)      | Provider panel URL                                   |
+| credentials  | JSON, NULL        | Encrypted access info (user, notes) — never plaintext passwords |
+| cost         | DECIMAL(10,2)     | Cost per billing cycle                               |
+| billing_cycle| ENUM              | `monthly`, `quarterly`, `yearly`                     |
+| expires_at   | DATE, NULL        | Expiration date (domain renewal, SSL, hosting)       |
+| auto_renew   | BOOLEAN           | Auto-renewal enabled                                 |
+| status       | ENUM              | `active`, `expiring_soon`, `expired`, `cancelled`    |
+| notes        | TEXT              | Additional notes                                     |
+| created_at   | TIMESTAMP         | Creation date                                        |
 
 ### Transaction
 
@@ -128,21 +149,134 @@ Invitations for new users to join an existing company.
 
 ---
 
-## Relationship Diagram
+## Entity Relationship Diagram
 
+```mermaid
+erDiagram
+    Company ||--o{ User : "has"
+    Company ||--o{ Client : "owns"
+    Company ||--o{ Invite : "sends"
+    Company ||--o{ ServiceAsset : "scopes"
+
+    Client ||--o{ Service : "receives"
+    Client ||--o{ Transaction : "linked to"
+    Client }o--o| Company : "client_company_id"
+
+    Service ||--o{ ServiceAsset : "has"
+    Service ||--o{ Transaction : "generates"
+
+    User ||--o{ Transaction : "created_by"
+    User ||--o{ Invite : "invited_by"
+
+    Company {
+        UUID id PK
+        VARCHAR name
+        VARCHAR document
+        VARCHAR segment
+        VARCHAR email
+        VARCHAR phone
+        TEXT address
+        BOOLEAN active
+        TIMESTAMP created_at
+    }
+
+    User {
+        UUID id PK
+        VARCHAR name
+        VARCHAR email
+        VARCHAR password
+        ENUM role
+        FK company_id
+        BOOLEAN active
+        TIMESTAMP created_at
+    }
+
+    Client {
+        UUID id PK
+        FK company_id
+        FK client_company_id
+        VARCHAR name
+        VARCHAR document
+        VARCHAR email
+        VARCHAR phone
+        TIMESTAMP created_at
+    }
+
+    Service {
+        UUID id PK
+        FK company_id
+        FK client_id
+        VARCHAR name
+        TEXT description
+        VARCHAR url
+        DECIMAL monthly_value
+        ENUM status
+        DATE started_at
+        TIMESTAMP created_at
+    }
+
+    ServiceAsset {
+        UUID id PK
+        FK service_id
+        FK company_id
+        ENUM type
+        VARCHAR provider
+        VARCHAR identifier
+        VARCHAR login_url
+        JSON credentials
+        DECIMAL cost
+        ENUM billing_cycle
+        DATE expires_at
+        BOOLEAN auto_renew
+        ENUM status
+        TEXT notes
+        TIMESTAMP created_at
+    }
+
+    Transaction {
+        UUID id PK
+        FK company_id
+        FK client_id
+        FK service_id
+        ENUM type
+        VARCHAR category
+        TEXT description
+        DECIMAL amount
+        DATE due_date
+        DATE paid_at
+        ENUM status
+        FK created_by
+        TIMESTAMP created_at
+    }
+
+    Invite {
+        UUID id PK
+        FK company_id
+        VARCHAR email
+        ENUM role
+        VARCHAR token
+        ENUM status
+        FK invited_by
+        TIMESTAMP expires_at
+        TIMESTAMP created_at
+    }
 ```
-Company (1) ◄──── (N) User
-   │
-   ├── (1) ◄──── (N) Client
-   │                    │
-   │                    ├── (1) ◄──── (N) Service
-   │                    │
-   │                    └── (1) ◄──── (N) Transaction
-   │
-   └── (1) ◄──── (N) Invite
 
-Transaction (N) ────► (1) Service  (optional)
-Transaction (N) ────► (1) User     (created_by)
+## Service Asset Management Flow
+
+```mermaid
+flowchart TD
+    S[Service created for Client] --> A1[Add Domain]
+    S --> A2[Add Hosting]
+    S --> A3[Add SSL]
+    S --> A4[Add Email]
+    S --> A5[Add DNS]
+
+    A1 & A2 & A3 & A4 & A5 --> Track[Track expiration\n& billing cycle]
+
+    Track --> Cron[Cron Job]
+    Cron -->|expires_at within 30d| Alert[Mark expiring_soon]
+    Cron -->|expires_at passed| Expired[Mark expired]
 ```
 
 ---
@@ -167,6 +301,8 @@ Transaction (N) ────► (1) User     (created_by)
 4. **Invite** — expires automatically after a defined period. Token is single-use.
 5. **Linked client** — if `client_company_id` points to another system Company, the client can (in the future) view received charges.
 6. **Automatic status** — transactions past `due_date` without `paid_at` are changed to `overdue` via cron job.
+7. **Asset expiration alerts** — assets with `expires_at` within 30 days are marked `expiring_soon` via cron job.
+8. **Credentials** — `ServiceAsset.credentials` stores only non-sensitive info (usernames, notes). Never store plaintext passwords.
 
 ---
 
@@ -178,6 +314,10 @@ Transaction (N) ────► (1) User     (created_by)
 - Cost vs revenue per service
 - Active services per company
 - Payment history per client
+- Domains expiring in next 30 days
+- SSL certificates expiring soon
+- Total hosting cost per client
+- Assets without auto-renew enabled
 
 ---
 
@@ -186,11 +326,18 @@ Transaction (N) ────► (1) User     (created_by)
 ```
 Company "BooPixel" (admin: Fernando)
   └─ Client: "Joe's Bakery"
-       └─ Service: "Institutional website" — $500/month
+       └─ Service: "Institutional website" — $500/month — https://joesbakery.com
+            ├─ Asset: domain, "joesbakery.com", GoDaddy, expires 2027-03-10, auto_renew: true
+            ├─ Asset: hosting, "Vercel Pro", Vercel, $20/month
+            ├─ Asset: ssl, "Let's Encrypt", auto_renew: true, expires 2026-07-01
+            ├─ Asset: email, "contato@joesbakery.com", Google Workspace, $6/month
             └─ Transaction: income, $500, due 05/05, status: pending
 
   └─ Client: "Maria's Store"
-       └─ Service: "E-commerce" — $1,200/month
+       └─ Service: "E-commerce" — $1,200/month — https://mariastore.com
+            ├─ Asset: domain, "mariastore.com", Cloudflare, expires 2027-01-15
+            ├─ Asset: hosting, "AWS EC2 t3.medium", AWS, $50/month
+            ├─ Asset: dns, "Cloudflare DNS", Cloudflare, free
             └─ Transaction: income, $1,200, due 05/10, status: paid
 
   └─ Transaction: expense, "AWS Server", $350, due 05/01, status: paid
