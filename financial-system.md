@@ -72,33 +72,71 @@ Relationship between companies. Company A registers Company B as its client.
 | phone              | VARCHAR(20)       | Phone number                                       |
 | created_at         | TIMESTAMP         | Creation date                                      |
 
+### ServiceType
+
+Reusable catalog of service types per company. Created once, reused across services.
+
+| Field       | Type          | Description                                  |
+|-------------|---------------|----------------------------------------------|
+| id          | UUID / PK     | Unique identifier                            |
+| company_id  | FK → Company  | Owner company                                |
+| name        | VARCHAR(255)  | Type name (e.g.: "Institutional website")    |
+| description | TEXT          | Optional description                         |
+| active      | BOOLEAN       | Active/inactive                              |
+| created_at  | TIMESTAMP     | Creation date                                |
+
 ### Service
 
-Services provided to each client. A service represents a website, app, or any deliverable managed for the client.
+Services provided to each client. Linked to a reusable ServiceType.
 
-| Field         | Type          | Description                                  |
-|---------------|---------------|----------------------------------------------|
-| id            | UUID / PK     | Unique identifier                            |
-| company_id    | FK → Company  | Service provider company                     |
-| client_id     | FK → Client   | Linked client                                |
-| name          | VARCHAR(255)  | Service name (e.g.: "Institutional website") |
-| description   | TEXT          | Detailed description                         |
-| url           | VARCHAR(500)  | Live URL (e.g.: https://joesbakery.com)      |
-| monthly_value | DECIMAL(10,2) | Monthly fee                                  |
-| status        | ENUM          | `active`, `suspended`, `cancelled`           |
-| started_at    | DATE          | Start date                                   |
-| created_at    | TIMESTAMP     | Creation date                                |
+| Field           | Type          | Description                                  |
+|-----------------|---------------|----------------------------------------------|
+| id              | UUID / PK     | Unique identifier                            |
+| company_id      | FK → Company  | Service provider company                     |
+| client_id       | FK → Client   | Linked client                                |
+| service_type_id | FK → ServiceType | Type of service                           |
+| name            | VARCHAR(255)  | Service name (e.g.: "Joe's website")         |
+| description     | TEXT          | Detailed description                         |
+| url             | VARCHAR(500)  | Live URL (e.g.: https://joesbakery.com)      |
+| monthly_value   | DECIMAL(10,2) | Monthly fee                                  |
+| status          | ENUM          | `active`, `suspended`, `cancelled`           |
+| started_at      | DATE          | Start date                                   |
+| created_at      | TIMESTAMP     | Creation date                                |
+
+### AssetType
+
+Reusable catalog of asset types per company. Created once, reused across assets.
+
+| Field       | Type          | Description                                  |
+|-------------|---------------|----------------------------------------------|
+| id          | UUID / PK     | Unique identifier                            |
+| company_id  | FK → Company  | Owner company                                |
+| category    | VARCHAR(100)  | Category grouping (see table below)          |
+| name        | VARCHAR(255)  | Type name (e.g.: "Domain", "Hosting")        |
+| description | TEXT          | Optional description                         |
+| active      | BOOLEAN       | Active/inactive                              |
+| created_at  | TIMESTAMP     | Creation date                                |
+
+**Suggested seed data per company:**
+
+| Category | Names |
+|----------|-------|
+| **Web** | Domain, Hosting, SSL, DNS, CDN |
+| **Communication** | Email, Chat, Phone Line |
+| **Marketing** | Ad Account, Analytics, Social Media |
+| **Software** | License, SaaS, API Key |
+| **Infrastructure** | Server, Database, Storage, Backup |
 
 ### ServiceAsset
 
-Trackable assets tied to a service (domains, hosting, SSL, email, etc.).
+Trackable assets tied to a service. Linked to a reusable AssetType.
 
 | Field        | Type              | Description                                          |
 |--------------|-------------------|------------------------------------------------------|
 | id           | UUID / PK         | Unique identifier                                    |
 | service_id   | FK → Service      | Parent service                                       |
 | company_id   | FK → Company      | Owner company (for scoping)                          |
-| type         | VARCHAR(50)       | Asset type (see Asset Types table below)              |
+| asset_type_id| FK → AssetType    | Type of asset                                        |
 | provider     | VARCHAR(255)      | Provider name (e.g.: GoDaddy, Cloudflare, Vercel)    |
 | identifier   | VARCHAR(500)      | Main identifier (domain name, server IP, cert ID)    |
 | login_url    | VARCHAR(500)      | Provider panel URL                                   |
@@ -110,19 +148,6 @@ Trackable assets tied to a service (domains, hosting, SSL, email, etc.).
 | status       | ENUM              | `active`, `expiring_soon`, `expired`, `cancelled`    |
 | notes        | TEXT              | Additional notes                                     |
 | created_at   | TIMESTAMP         | Creation date                                        |
-
-### Asset Types
-
-| Category | Types | Examples |
-|----------|-------|---------|
-| **Web** | `domain`, `hosting`, `ssl`, `dns`, `cdn` | GoDaddy, Vercel, Let's Encrypt, Cloudflare |
-| **Communication** | `email`, `chat`, `phone_line` | Google Workspace, Slack, VoIP |
-| **Marketing** | `ad_account`, `analytics`, `social_media` | Google Ads, GA4, Instagram Business |
-| **Software** | `license`, `saas`, `api_key` | Adobe, Figma, Stripe API |
-| **Infrastructure** | `server`, `database`, `storage`, `backup` | AWS EC2, RDS, S3 |
-| **Other** | `other` | Anything not covered above |
-
-The `type` field is a `VARCHAR(50)`, not a fixed ENUM — new types can be added without migration.
 
 ---
 
@@ -171,14 +196,19 @@ erDiagram
     Company ||--o{ User : "has"
     Company ||--o{ Client : "owns"
     Company ||--o{ Invite : "sends"
+    Company ||--o{ ServiceType : "defines"
+    Company ||--o{ AssetType : "defines"
     Company ||--o{ ServiceAsset : "scopes"
 
     Client ||--o{ Service : "receives"
     Client ||--o{ Transaction : "linked to"
     Client }o--o| Company : "client_company_id"
 
+    ServiceType ||--o{ Service : "categorizes"
     Service ||--o{ ServiceAsset : "has"
     Service ||--o{ Transaction : "generates"
+
+    AssetType ||--o{ ServiceAsset : "categorizes"
 
     User ||--o{ Transaction : "created_by"
     User ||--o{ Invite : "invited_by"
@@ -217,10 +247,30 @@ erDiagram
         TIMESTAMP created_at
     }
 
+    ServiceType {
+        UUID id PK
+        UUID company_id FK
+        VARCHAR name
+        TEXT description
+        BOOLEAN active
+        TIMESTAMP created_at
+    }
+
+    AssetType {
+        UUID id PK
+        UUID company_id FK
+        VARCHAR category
+        VARCHAR name
+        TEXT description
+        BOOLEAN active
+        TIMESTAMP created_at
+    }
+
     Service {
         UUID id PK
         UUID company_id FK
         UUID client_id FK
+        UUID service_type_id FK
         VARCHAR name
         TEXT description
         VARCHAR url
@@ -234,7 +284,7 @@ erDiagram
         UUID id PK
         UUID service_id FK
         UUID company_id FK
-        VARCHAR type
+        UUID asset_type_id FK
         VARCHAR provider
         VARCHAR identifier
         VARCHAR login_url
