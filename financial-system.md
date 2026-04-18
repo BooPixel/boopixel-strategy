@@ -98,7 +98,7 @@ Trackable assets tied to a service (domains, hosting, SSL, email, etc.).
 | id           | UUID / PK         | Unique identifier                                    |
 | service_id   | FK → Service      | Parent service                                       |
 | company_id   | FK → Company      | Owner company (for scoping)                          |
-| type         | ENUM              | `domain`, `hosting`, `ssl`, `email`, `dns`, `other`  |
+| type         | VARCHAR(50)       | Asset type (see Asset Types table below)              |
 | provider     | VARCHAR(255)      | Provider name (e.g.: GoDaddy, Cloudflare, Vercel)    |
 | identifier   | VARCHAR(500)      | Main identifier (domain name, server IP, cert ID)    |
 | login_url    | VARCHAR(500)      | Provider panel URL                                   |
@@ -110,6 +110,21 @@ Trackable assets tied to a service (domains, hosting, SSL, email, etc.).
 | status       | ENUM              | `active`, `expiring_soon`, `expired`, `cancelled`    |
 | notes        | TEXT              | Additional notes                                     |
 | created_at   | TIMESTAMP         | Creation date                                        |
+
+### Asset Types
+
+| Category | Types | Examples |
+|----------|-------|---------|
+| **Web** | `domain`, `hosting`, `ssl`, `dns`, `cdn` | GoDaddy, Vercel, Let's Encrypt, Cloudflare |
+| **Communication** | `email`, `chat`, `phone_line` | Google Workspace, Slack, VoIP |
+| **Marketing** | `ad_account`, `analytics`, `social_media` | Google Ads, GA4, Instagram Business |
+| **Software** | `license`, `saas`, `api_key` | Adobe, Figma, Stripe API |
+| **Infrastructure** | `server`, `database`, `storage`, `backup` | AWS EC2, RDS, S3 |
+| **Other** | `other` | Anything not covered above |
+
+The `type` field is a `VARCHAR(50)`, not a fixed ENUM — new types can be added without migration.
+
+---
 
 ### Transaction
 
@@ -219,7 +234,7 @@ erDiagram
         UUID id PK
         FK service_id
         FK company_id
-        ENUM type
+        VARCHAR type
         VARCHAR provider
         VARCHAR identifier
         VARCHAR login_url
