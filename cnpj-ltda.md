@@ -141,6 +141,35 @@ flowchart TD
 
 ---
 
+## Como Economizar na Abertura
+
+### Estrategias para reduzir custos
+
+| Estrategia | Economia |
+|------------|----------|
+| Contador online (Contaja, Agilize) | Abertura gratis + mensalidade baixa |
+| Certificado digital A1 (mais barato que A3) | ~R$ 100-180 por socio |
+| Sede no endereco de um socio | Elimina aluguel |
+| Atividade baixo risco (Lei 14.195/2021) | Dispensa alvara pago, abertura em ate 24h |
+| Simples Nacional | Menor burocracia fiscal |
+
+### Cenarios de custo
+
+| Cenario | Custo abertura | Custo mensal |
+|---------|---------------|--------------|
+| Mais barato possivel | ~R$ 500 | ~R$ 89/mes |
+| Padrao (conforme estimativas acima) | R$ 1.500 - R$ 4.500 | R$ 89 - R$ 500/mes |
+
+### O que NAO da pra cortar
+
+- **Contabilidade mensal** — obrigatoria por lei, mesmo sem faturamento
+- **Certificado digital** — necessario para assinar documentos
+- **Taxa da Junta Comercial** — ~R$ 150-224
+
+> **Dica:** Contaja e Agilize fazem toda abertura online, sem sair de casa. So precisam do certificado digital e-CPF e definir as decisoes pendentes abaixo.
+
+---
+
 ## Decisoes Pendentes
 
 - [ ] Razao social definitiva
