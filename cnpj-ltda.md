@@ -172,7 +172,7 @@ flowchart TD
 
 ## Decisoes Pendentes
 
-- [ ] Razao social definitiva
+- [x] Razao social definitiva — **BooPixel Tecnologia LTDA**
 - [ ] Endereco da sede
 - [ ] Valor do capital social
 - [ ] Divisao de quotas (50/50 ou outra)
