@@ -110,9 +110,22 @@ flowchart TD
 
 | Item | Valor Mensal |
 |------|-------------|
-| Contabilidade | R$ 500 - R$ 2.000/mes |
+| Contabilidade | R$ 89 - R$ 500/mes |
 | Simples Nacional (imposto) | 6% a 15.5% sobre faturamento |
 | Certificado digital (renovacao anual) | R$ 150 - R$ 250/ano |
+
+> **Contabilidade mensal e obrigatoria por lei.** Mesmo sem faturamento, a empresa tem obrigacoes mensais: declaracoes fiscais (PGDAS, DEFIS, SPED), guias de impostos (mesmo zeradas), eSocial (mesmo sem funcionarios) e balanco patrimonial anual. Se parar de entregar declaracoes, a Receita Federal pode suspender ou inativar o CNPJ.
+
+---
+
+## Contabilidade — Opcoes para Tech/SaaS
+
+| Empresa | Preco/mes | Clientes | Reclame Aqui | Abertura CNPJ | Foco |
+|---------|-----------|----------|-------------|----------------|------|
+| [Contaja](https://contaja.com.br) | a partir de R$ 89 | 20k+ | — | Sim | Especializada em tech/SaaS |
+| [Comece com o Pe Direito](https://www.comececomopedireito.com.br) | sob consulta | — | — | Sim | Especializada em SaaS/startups |
+| [Agilize](https://agilize.com.br) | a partir de R$ 189 | 25k+ | 8.7, selo RA1000 | Sim, gratis | Geral, bom suporte |
+| [Contabilizei](https://www.contabilizei.com.br) | a partir de R$ 195 | 100k+ | Reputacao alta | Sim, gratis | Geral, volume |
 
 ---
 
