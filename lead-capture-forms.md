@@ -98,15 +98,15 @@ Cada persona → um fluxo diferente com perguntas específicas, copy adequado e 
 - Faixa de preço centrada em R$ 5.500–11.000
 - Pergunta se tem **prazo** (até 30d / 60d / 90d / sem pressa)
 
-### 4.2 `landing-evento` — Landing para evento pontual ✅
+### 4.2 `landing-evento` — Landing para evento pontual (implementado)
 
 Já implementado — ver [`forms/landing-evento.json`](forms/landing-evento.json).
 
-### 4.3 `sistema-mvp` — Sistema/app/plataforma ✅
+### 4.3 `sistema-mvp` — Sistema/app/plataforma (implementado)
 
 Já implementado — ver [`forms/sistema-mvp.json`](forms/sistema-mvp.json).
 
-### 4.4 `revisao-site` — Manutenção/melhoria ✅
+### 4.4 `revisao-site` — Manutenção/melhoria (implementado)
 
 Já implementado — ver [`forms/revisao-site.json`](forms/revisao-site.json).
 
@@ -143,7 +143,7 @@ Padrões de linguagem que funcionam bem:
 **Por quê:** cliente entende o porquê, resistência cai. Nunca peça dado sem justificar.
 
 ### 5.3 Validação amigável
-> "⚠️ Esse e-mail não parece correto, vamos tentar novamente."
+> "Esse e-mail nao parece correto, vamos tentar novamente."
 
 **Por quê:** tom acolhedor em vez de "ERRO: email inválido".
 
