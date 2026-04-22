@@ -1,0 +1,12 @@
+{
+  "skills": [
+    {
+      "name": "boopixel-db",
+      "version": "1.0.0",
+      "description": "Manipulate BooPixel production database (MySQL): query, update, insert, delete projects, charges, customers, subscriptions, transactions, leads",
+      "category": "database",
+      "url": "https://raw.githubusercontent.com/BooPixel/boopixel-strategy/master/skills/boopixel-db/SKILL.md"
+    }
+  ],
+  "plugins": []
+}

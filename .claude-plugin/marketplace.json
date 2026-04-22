@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "BooPixel-boopixel-strategy",
+  "description": "Internal skills for BooPixel business operations: database management, project tracking and automation",
+  "owner": {
+    "name": "BooPixel",
+    "email": "email@boopixel.com"
+  },
+  "plugins": [
+    {
+      "name": "boopixel-db",
+      "description": "Manipulate BooPixel production database (MySQL): query, update, insert, delete projects, charges, customers, subscriptions, transactions, leads",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fernando Celmer"
+      },
+      "source": "./skills/boopixel-db",
+      "category": "database",
+      "strict": false
+    }
+  ]
+}
