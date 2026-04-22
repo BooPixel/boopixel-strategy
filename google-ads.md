@@ -8,14 +8,37 @@ Estrategia de anuncios no Google Ads para captar leads e novos clientes para htt
 
 | Servico | ID | Status |
 |---------|-----|--------|
-| Google Ads | 469-236-2147 | Conta criada |
+| Google Ads (conta) | 469-236-2147 | Conta criada, campanha em setup |
+| Google Ads (MCC) | 860-999-5521 | Manager account criado |
 | GA4 | G-XFS7Y4F884 | Configurado com Consent Mode v2 |
 | GTM | (no app.boopixel.com) | Configurado |
+| Google Cloud Project | boopixel | OAuth Desktop app configurado |
+| API Basic Access | — | Solicitado em 2026-04-22, aguardando aprovação (~3 dias úteis) |
+
+### Credenciais (em ~/.env)
+
+| Variável | Descrição |
+|----------|-----------|
+| `ADS_CUSTOMER_ID` | Conta de anúncios (469-236-2147) |
+| `ADS_MCC_ID` | Manager account (860-999-5521) |
+| `ADS_CLIENT_ID` | OAuth Desktop app client ID |
+| `ADS_CLIENT_SECRET` | OAuth Desktop app client secret |
+| `ADS_REFRESH_TOKEN` | OAuth refresh token (conta ads.boopixel@gmail.com) |
+| `ADS_DEVELOPER_TOKEN` | Developer token (test account, pendente Basic Access) |
+| `ADS_PROJECT_ID` | Google Cloud project (boopixel) |
 
 ### Vincular GA4 ↔ Google Ads
 
 1. **GA4**: Admin → Product Links → Google Ads Links → Link → ID `469-236-2147`
 2. **Google Ads**: Tools → Linked accounts → Google Analytics (GA4) → vincular propriedade
+
+### Scripts
+
+| Script | Descrição |
+|--------|-----------|
+| `scripts/test_google_ads.py` | Testa conexão com a API (requer Basic Access aprovado) |
+| `scripts/generate_ads_token.py` | Gera refresh token via OAuth Desktop flow |
+| `scripts/generate_api_doc.py` | Gera PDF de design document pra aplicação de Basic Access |
 
 ---
 
@@ -297,8 +320,15 @@ graph LR
 ## Decisoes Pendentes
 
 - [x] Criar conta Google Ads — ID: 469-236-2147
+- [x] Criar MCC (Manager Account) — ID: 860-999-5521
 - [x] Configurar Google Tag Manager no app.boopixel.com — GA4 (G-XFS7Y4F884) com Consent Mode v2 e cookie banner
 - [x] Configurar GA4 com eventos de conversao — gtag.js carregado, consent management implementado
+- [x] Configurar OAuth Desktop app no Google Cloud (projeto boopixel)
+- [x] Gerar credenciais API (client_id, client_secret, refresh_token, developer_token) — salvas em ~/.env
+- [x] Solicitar Basic Access pra API — enviado em 2026-04-22, aguardando aprovação
+- [x] Gerar design document PDF pra aplicação
+- [ ] Aguardar aprovação Basic Access (~3 dias úteis)
+- [ ] Vincular GA4 ↔ Google Ads (469-236-2147)
 - [ ] Configurar eventos customizados no GA4 (page_view_pricing, plan_click, lead_modal_open, lead_submit)
 - [ ] Definir budget inicial (minimo R$ 1.500 ou recomendado R$ 4.000)
 - [ ] Criar anuncios responsivos (RSA) com variacoes de titulo
