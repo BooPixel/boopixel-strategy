@@ -15,6 +15,7 @@ Strategic documentation, system modeling and skills for **BooPixel** — https:/
 | [Lead Capture Forms](lead-capture-forms.md) | Product | Form strategy, personas, copy patterns, pipeline, roadmap ([`forms/`](forms/)) |
 | [Pricing Page](pricing-page.md) | Product | Arquitetura da /pricing publica — modelo de dados, endpoints, admin, fluxo |
 | [Google Ads](google-ads.md) | Marketing | Estrategia de anuncios Google Ads — campanhas, keywords, budget, metricas |
+| [Meta Ads](meta-ads.md) | Marketing | Estrategia Facebook + Instagram — campanhas, criativos, segmentacao, Advantage+ |
 
 ---
 
