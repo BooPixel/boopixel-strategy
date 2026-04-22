@@ -6,20 +6,13 @@ Strategic documentation, system modeling and skills for **BooPixel** — https:/
 
 ## Documents
 
-### Business
-
-| Document | Description |
-|----------|-------------|
-| [Pricing](pricing.md) | Plans (Essential, Professional, Complete, Starter, Growth, Scale, AI Agent), offerings, margins, market reference, active clients |
-| [CNPJ LTDA](cnpj-ltda.md) | Abertura de CNPJ Sociedade Limitada entre Mateus e Fernando — checklist, custos, contabilidade, fluxo mermaid |
-| [Project Overview](project-overview.md) | Visao geral do projeto BooPixel |
-
-### Product
-
-| Document | Description |
-|----------|-------------|
-| [Financial System](financial-system.md) | Data modeling, signup flow, business rules and strategy for the multi-tenant financial management system |
-| [Lead Capture Forms](lead-capture-forms.md) | Conversational form strategy, personas, copy patterns, pipeline and roadmap for lead generation ([`forms/`](forms/)) |
+| Document | Category | Description |
+|----------|----------|-------------|
+| [Pricing](pricing.md) | Business | Plans, offerings, margins, market reference, active clients |
+| [CNPJ LTDA](cnpj-ltda.md) | Business | Abertura de CNPJ LTDA — checklist, custos, contabilidade, fluxo |
+| [Project Overview](project-overview.md) | Business | Visao geral do projeto BooPixel |
+| [Financial System](financial-system.md) | Product | Data modeling, signup flow, business rules, multi-tenant financial system |
+| [Lead Capture Forms](lead-capture-forms.md) | Product | Form strategy, personas, copy patterns, pipeline, roadmap ([`forms/`](forms/)) |
 
 ---
 
