@@ -21,3 +21,4 @@ claude plugins install <skill-name>@BooPixel-boopixel-strategy
 |-------|-----------|
 | [boopixel-db](skills/boopixel-db/SKILL.md) | Manipular banco de dados de produção BooPixel (projetos, charges, customers, etc.) |
 | [hostinger](skills/hostinger/SKILL.md) | Gerenciar conta Hostinger via API (websites, domínios, DNS, billing, VPS, Docker) |
+| [boopixel-strategy](skills/boopixel-strategy/SKILL.md) | Auto-documentar e manter estratégia BooPixel (pricing, clientes, planos, processos) |

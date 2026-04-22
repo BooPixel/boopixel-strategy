@@ -13,6 +13,13 @@
       "description": "Manage Hostinger account via API: websites, domains, DNS, billing, subscriptions, VPS, Docker, email marketing",
       "category": "infrastructure",
       "url": "https://raw.githubusercontent.com/BooPixel/boopixel-strategy/master/skills/hostinger/SKILL.md"
+    },
+    {
+      "name": "boopixel-strategy",
+      "version": "1.0.0",
+      "description": "Auto-document and maintain BooPixel strategy: pricing, clients, plans, processes, market research. Creates and updates .md files in the strategy repo.",
+      "category": "business",
+      "url": "https://raw.githubusercontent.com/BooPixel/boopixel-strategy/master/skills/boopixel-strategy/SKILL.md"
     }
   ],
   "plugins": []

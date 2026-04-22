@@ -39,6 +39,17 @@
       "source": "./skills/hostinger",
       "category": "infrastructure",
       "strict": false
+    },
+    {
+      "name": "boopixel-strategy",
+      "description": "Auto-document and maintain BooPixel strategy: pricing, clients, plans, processes, market research",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fernando Celmer"
+      },
+      "source": "./skills/boopixel-strategy",
+      "category": "business",
+      "strict": false
     }
   ]
 }
