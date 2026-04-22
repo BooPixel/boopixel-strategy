@@ -33,15 +33,48 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 
 ```mermaid
 graph LR
-    A[Essencial<br>R$ 161/mes<br>R$ 1.935/ano] --> B[Profissional<br>R$ 250/mes<br>R$ 2.500/ano]
-    B --> C[Completo<br>R$ 497/mes<br>R$ 4.970/ano]
+    A[Essential<br>R$ 161/mes<br>R$ 1.935/ano] --> B[Professional<br>R$ 250/mes<br>R$ 2.500/ano]
+    B --> C[Complete<br>R$ 497/mes<br>R$ 4.970/ano]
 ```
 
-| Plano | Tier | Mensal | Anual | Incluso |
-|-------|------|--------|-------|---------|
-| **Essencial** | 1 | R$ 161,25 | R$ 1.935 | Hosting + 1 dominio + email (3 contas) + SSL + manutencao WP + backup + suporte email |
-| **Profissional** | 2 | R$ 250 | R$ 2.500 | Tudo do Essencial + SEO on-page + relatorio mensal + email (10 contas) + suporte WhatsApp |
-| **Completo** | 3 | R$ 497 | R$ 4.970 | Tudo do Profissional + Agente IA (chat/WhatsApp) + SEO mensal completo + Google Analytics + suporte prioritario |
+#### Essential — R$ 161,25/mes | R$ 1.935/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 5 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup semanal |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 3 contas |
+
+#### Professional — R$ 250/mes | R$ 2.500/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 5 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup diario |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 10 contas |
+| Consultoria SEO | #5 | SEO on-page + relatorio mensal |
+
+#### Complete — R$ 497/mes | R$ 4.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 10 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup diario |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 10 contas |
+| Consultoria SEO | #5 | SEO mensal completo + Google Analytics |
+| Agente IA WhatsApp | #4 | WhatsApp + Chat |
 
 ### Planos Premium (novos clientes)
 
@@ -51,23 +84,44 @@ graph LR
     E --> F[Scale<br>R$ 3.997/mes<br>R$ 39.970/ano]
 ```
 
-| Plano | Tier | Mensal | Anual | Incluso |
-|-------|------|--------|-------|---------|
-| **Starter** | 4 | R$ 497 | R$ 4.970 | Site institucional + 1 LP + SSL + Hosting + SEO on-page + suporte email |
-| **Growth** | 5 | R$ 1.497 | R$ 14.970 | Tudo do Starter + Agente IA basico + WhatsApp bot + SEO mensal + relatorios + suporte WhatsApp |
-| **Scale** | 6 | R$ 3.997 | R$ 39.970 | Tudo do Growth + Agente IA avancado + automacoes custom + SEO + trafego pago + consultoria mensal + suporte prioritario |
+#### Starter — R$ 497/mes | R$ 4.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 5 paginas |
+| Landing Page | #1 | 1 LP/mes |
+| Consultoria SEO | #5 | SEO basico |
+
+#### Growth — R$ 1.497/mes | R$ 14.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | tudo do Starter |
+| Landing Page | #1 | ate 2 LPs/mes |
+| Agente IA WhatsApp | #4 | WhatsApp + Chat |
+| Consultoria SEO | #5 | SEO mensal completo |
+
+#### Scale — R$ 3.997/mes | R$ 39.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | tudo do Growth |
+| Landing Page | #1 | ate 5 LPs/mes |
+| Agente IA WhatsApp | #4 | avancado + automacoes |
+| Consultoria SEO | #5 | SEO + trafego pago |
+| Automacao de Processos | #7 | automacoes custom |
 
 ---
 
 ## Clientes Ativos — Plano Atual
 
-| Cliente | Projeto | Desde | Mensal | Anual | Total Recebido | Plano Sugerido |
-|---------|---------|-------|--------|-------|---------------|----------------|
-| Caminho das Origens | Site (#2) | ago/2020 | R$ 176 | R$ 2.112 | R$ 6.312 | Essencial |
-| Magsinos | Site (#8) | set/2019 | R$ 173 | R$ 2.076 | R$ 7.540 | Essencial |
-| PSK Ambiental | Site (#11) | set/2019 | R$ 161 | R$ 1.935 | R$ 8.616 | Essencial |
-| Pedreira Griebeler | Site (#13) | set/2019 | R$ 161 | R$ 1.935 | R$ 7.890 | Essencial |
-| Preto Imoveis | Site (#15) | jun/2019 | R$ 161 | R$ 1.935 | R$ 4.764 | Essencial |
+| Cliente | Projeto | Desde | Mensal | Anual | Total Recebido | Plano |
+|---------|---------|-------|--------|-------|---------------|-------|
+| Caminho das Origens | Site (#2) | ago/2020 | R$ 176 | R$ 2.112 | R$ 6.312 | Essential |
+| Magsinos | Site (#8) | set/2019 | R$ 173 | R$ 2.076 | R$ 7.540 | Essential |
+| PSK Ambiental | Site (#11) | set/2019 | R$ 161 | R$ 1.935 | R$ 8.616 | Essential |
+| Pedreira Griebeler | Site (#13) | set/2019 | R$ 161 | R$ 1.935 | R$ 7.890 | Essential |
+| Preto Imoveis | Site (#15) | jun/2019 | R$ 161 | R$ 1.935 | R$ 4.764 | Essential |
 | Licenca Consultoria | Site (#34) | — | R$ 0 | R$ 0 | R$ 0 | A definir |
 
 **Receita recorrente atual (5 clientes):** ~R$ 832/mes | ~R$ 9.993/ano
@@ -78,9 +132,9 @@ graph LR
 
 | Plano | Preco/mes | Custo/mes | Margem |
 |-------|-----------|-----------|--------|
-| Essencial | R$ 161 | ~R$ 10 (infra) | **94%** |
-| Profissional | R$ 250 | ~R$ 15 | **94%** |
-| Completo | R$ 497 | ~R$ 50 (infra + IA API) | **90%** |
+| Essential | R$ 161 | ~R$ 10 (infra) | **94%** |
+| Professional | R$ 250 | ~R$ 15 | **94%** |
+| Complete | R$ 497 | ~R$ 50 (infra + IA API) | **90%** |
 | Starter | R$ 497 | ~R$ 50 | **90%** |
 | Growth | R$ 1.497 | ~R$ 150 | **90%** |
 | Scale | R$ 3.997 | ~R$ 400 | **90%** |
@@ -104,6 +158,11 @@ graph LR
 | 7 | Automacao de Processos | recorrente | — | R$ 1.497/mes |
 | 8 | Manutencao Webmaster | recorrente | — | variavel |
 | 9 | Midias Sociais | recorrente | — | variavel |
+| 10 | Backup | recorrente | — | incluso nos planos |
+| 11 | Certificado SSL | recorrente | — | incluso nos planos |
+| 12 | Hospedagem | recorrente | — | incluso nos planos |
+| 13 | Dominio | recorrente | — | incluso nos planos |
+| 14 | Email Profissional | recorrente | — | incluso nos planos |
 
 ---
 
