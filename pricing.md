@@ -257,8 +257,9 @@ graph LR
 ## Decisoes Pendentes
 
 - [x] Definir modelo principal — pacotes + avulsos
-- [x] Criar planos no sistema (Essencial, Profissional, Completo, Starter, Growth, Scale)
-- [ ] Migrar 5 clientes ativos para plano Essencial (subscriptions)
+- [x] Criar planos no sistema (Essential, Professional, Complete, Starter, Growth, Scale, AI Agent)
+- [x] Migrar 5 clientes ativos para plano Essential (subscriptions criadas)
+- [x] Criar service assets para todos os clientes ativos (6 assets por cliente)
 - [ ] Definir preco para Licenca Consultoria
 - [ ] Criar pagina de precos no app.boopixel.com
 - [ ] Definir politica de reajuste anual
@@ -267,13 +268,28 @@ graph LR
 
 ---
 
+## Assets por Cliente
+
+Cada cliente ativo tem 6 service assets padrao:
+
+| Asset Type | Provider | Descricao |
+|------------|----------|-----------|
+| Dominio | Registro.br | Registro do dominio .com.br |
+| Hosting | Hostinger | Cloud Startup compartilhado |
+| SSL Certificate | Let's Encrypt | Auto-renew via Hostinger |
+| Email Account | Hostinger | Contas de email profissional |
+| Backup | Hostinger | Backup via hPanel |
+| WordPress | WordPress | Site WP + wp-admin |
+
+---
+
 ## Proximos Passos
 
-1. Migrar clientes atuais para subscriptions do plano Essencial
-2. Definir situacao de Licenca Consultoria
-3. Montar pagina de precos no site
-4. Oferecer upgrade para Profissional/Completo aos clientes atuais
-5. Lancar planos Starter/Growth/Scale para novos clientes
+1. Definir situacao de Licenca Consultoria
+2. Montar pagina de precos no site
+3. Oferecer upgrade para Professional/Complete aos clientes atuais
+4. Lancar planos Starter/Growth/Scale para novos clientes
+5. Preencher dados faltantes dos clientes (phone, document, address, email real)
 
 ---
 
