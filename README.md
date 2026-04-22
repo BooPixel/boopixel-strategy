@@ -13,6 +13,7 @@ Strategic documentation, system modeling and skills for **BooPixel** — https:/
 | [Project Overview](project-overview.md) | Business | Visao geral do projeto BooPixel |
 | [Financial System](financial-system.md) | Product | Data modeling, signup flow, business rules, multi-tenant financial system |
 | [Lead Capture Forms](lead-capture-forms.md) | Product | Form strategy, personas, copy patterns, pipeline, roadmap ([`forms/`](forms/)) |
+| [Pricing Page](pricing-page.md) | Product | Arquitetura da /pricing publica — modelo de dados, endpoints, admin, fluxo |
 
 ---
 
