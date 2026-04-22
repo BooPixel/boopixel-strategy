@@ -4,6 +4,21 @@ Estrategia de anuncios no Google Ads para captar leads e novos clientes para htt
 
 ---
 
+## Contas e Acessos
+
+| Servico | ID | Status |
+|---------|-----|--------|
+| Google Ads | 469-236-2147 | Conta criada |
+| GA4 | G-XFS7Y4F884 | Configurado com Consent Mode v2 |
+| GTM | (no app.boopixel.com) | Configurado |
+
+### Vincular GA4 ↔ Google Ads
+
+1. **GA4**: Admin → Product Links → Google Ads Links → Link → ID `469-236-2147`
+2. **Google Ads**: Tools → Linked accounts → Google Analytics (GA4) → vincular propriedade
+
+---
+
 ## Objetivo
 
 Gerar leads qualificados para os planos da BooPixel via Google Search Ads, direcionando para a pricing page com formulario de lead integrado.
@@ -281,7 +296,7 @@ graph LR
 
 ## Decisoes Pendentes
 
-- [ ] Criar conta Google Ads
+- [x] Criar conta Google Ads — ID: 469-236-2147
 - [x] Configurar Google Tag Manager no app.boopixel.com — GA4 (G-XFS7Y4F884) com Consent Mode v2 e cookie banner
 - [x] Configurar GA4 com eventos de conversao — gtag.js carregado, consent management implementado
 - [ ] Configurar eventos customizados no GA4 (page_view_pricing, plan_click, lead_modal_open, lead_submit)
