@@ -188,7 +188,7 @@ git push origin master
 
 ## Business Data — Plans & Items
 
-### Plans (6 active)
+### Plans (7 active)
 
 | ID | Slug | Name | Tier | Monthly | Yearly | Target |
 |----|------|------|------|---------|--------|--------|
@@ -198,6 +198,7 @@ git push origin master
 | 1 | starter | Starter | 4 | R$ 497 | R$ 4.970 | Novos clientes |
 | 2 | growth | Growth | 5 | R$ 1.497 | R$ 14.970 | Novos clientes |
 | 3 | scale | Scale | 6 | R$ 3.997 | R$ 39.970 | Novos clientes |
+| 7 | ai-agent | AI Agent | 7 | R$ 997 | R$ 9.970 | Addon — combinavel com qualquer plano |
 
 ### Plan Items (plan_items bridge table)
 
@@ -220,7 +221,7 @@ git push origin master
 - Email Profissional (offering=14) — ate 10 contas
 - Consultoria SEO (offering=5) — SEO on-page + relatorio mensal
 
-**Complete (plan=6) — 9 items:**
+**Complete (plan=6) — 8 items:**
 - Site Institucional (offering=2) — ate 10 paginas
 - Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
 - Backup (offering=10) — backup diario
@@ -229,25 +230,26 @@ git push origin master
 - Dominio (offering=13) — 1 dominio .com.br
 - Email Profissional (offering=14) — ate 10 contas
 - Consultoria SEO (offering=5) — SEO mensal completo + Google Analytics
-- Agente IA WhatsApp (offering=4) — WhatsApp + Chat
 
-**Starter (plan=1):**
+**Starter (plan=1) — 3 items:**
 - Site Institucional (offering=2) — ate 5 paginas
 - Landing Page (offering=1) — 1 LP/mes
 - Consultoria SEO (offering=5) — SEO basico
 
-**Growth (plan=2):**
+**Growth (plan=2) — 3 items:**
 - Site Institucional (offering=2) — tudo do Starter
 - Landing Page (offering=1) — ate 2 LPs/mes
-- Agente IA WhatsApp (offering=4) — WhatsApp + Chat
 - Consultoria SEO (offering=5) — SEO mensal completo
 
-**Scale (plan=3):**
+**Scale (plan=3) — 4 items:**
 - Site Institucional (offering=2) — tudo do Growth
 - Landing Page (offering=1) — ate 5 LPs/mes
-- Agente IA WhatsApp (offering=4) — avancado + automacoes
 - Consultoria SEO (offering=5) — SEO + trafego pago
 - Automacao de Processos (offering=7) — automacoes custom
+
+**AI Agent (plan=7) — 2 items (addon):**
+- Agente IA WhatsApp (offering=4) — WhatsApp + Chat
+- Automacao de Processos (offering=7) — automacao basica
 
 ### Offerings (14 active)
 

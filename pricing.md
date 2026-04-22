@@ -74,7 +74,6 @@ graph LR
 | Dominio | #13 | 1 dominio .com.br |
 | Email Profissional | #14 | ate 10 contas |
 | Consultoria SEO | #5 | SEO mensal completo + Google Analytics |
-| Agente IA WhatsApp | #4 | WhatsApp + Chat |
 
 ### Planos Premium (novos clientes)
 
@@ -98,7 +97,6 @@ graph LR
 |------|----------|---------|
 | Site Institucional | #2 | tudo do Starter |
 | Landing Page | #1 | ate 2 LPs/mes |
-| Agente IA WhatsApp | #4 | WhatsApp + Chat |
 | Consultoria SEO | #5 | SEO mensal completo |
 
 #### Scale — R$ 3.997/mes | R$ 39.970/ano
@@ -107,9 +105,24 @@ graph LR
 |------|----------|---------|
 | Site Institucional | #2 | tudo do Growth |
 | Landing Page | #1 | ate 5 LPs/mes |
-| Agente IA WhatsApp | #4 | avancado + automacoes |
 | Consultoria SEO | #5 | SEO + trafego pago |
 | Automacao de Processos | #7 | automacoes custom |
+
+### Plano Addon — IA
+
+```mermaid
+graph TD
+    G[AI Agent<br>R$ 997/mes<br>R$ 9.970/ano<br>Combinavel com qualquer plano]
+```
+
+#### AI Agent — R$ 997/mes | R$ 9.970/ano
+
+> Plano independente, combinavel com qualquer outro plano (ex: Essential + AI Agent).
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Agente IA WhatsApp | #4 | Agente IA WhatsApp + Chat |
+| Automacao de Processos | #7 | Automacao de processos basica |
 
 ---
 
@@ -134,10 +147,11 @@ graph LR
 |-------|-----------|-----------|--------|
 | Essential | R$ 161 | ~R$ 10 (infra) | **94%** |
 | Professional | R$ 250 | ~R$ 15 | **94%** |
-| Complete | R$ 497 | ~R$ 50 (infra + IA API) | **90%** |
+| Complete | R$ 497 | ~R$ 30 | **94%** |
 | Starter | R$ 497 | ~R$ 50 | **90%** |
 | Growth | R$ 1.497 | ~R$ 150 | **90%** |
 | Scale | R$ 3.997 | ~R$ 400 | **90%** |
+| AI Agent | R$ 997 | ~R$ 100 (IA API) | **90%** |
 
 **Meta de margem bruta:** 90%+
 
