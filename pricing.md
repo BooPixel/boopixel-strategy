@@ -37,7 +37,7 @@ graph LR
     B --> C[Advanced<br>R$ 797/mes]
 ```
 
-#### Essential — R$ 250/mes | R$ 2.500/ano
+#### Essential — R$ 250/mes | R$ 2.750/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -49,7 +49,7 @@ graph LR
 | Dominio | #13 | 1 dominio .com.br |
 | Email Profissional | #14 | ate 3 contas |
 
-#### Professional — R$ 497/mes | R$ 4.970/ano
+#### Professional — R$ 497/mes | R$ 5.467/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -62,7 +62,7 @@ graph LR
 | Email Profissional | #14 | ate 10 contas |
 | Consultoria SEO | #5 | SEO on-page + relatorio mensal |
 
-#### Advanced — R$ 797/mes | R$ 7.970/ano
+#### Advanced — R$ 797/mes | R$ 8.767/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -83,7 +83,7 @@ graph LR
     E --> F[Enterprise<br>R$ 3.997/mes]
 ```
 
-#### Business — R$ 1.497/mes | R$ 14.970/ano
+#### Business — R$ 1.497/mes | R$ 16.467/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -97,7 +97,7 @@ graph LR
 | Consultoria SEO | #5 | SEO completo + trafego pago |
 | Landing Page | #1 | ate 2 LPs/mes |
 
-#### Growth — R$ 2.497/mes | R$ 24.970/ano
+#### Growth — R$ 2.497/mes | R$ 27.467/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -111,7 +111,7 @@ graph LR
 | Consultoria SEO | #5 | SEO completo + trafego pago + consultoria mensal |
 | Landing Page | #1 | ate 5 LPs/mes |
 
-#### Enterprise — R$ 3.997/mes | R$ 39.970/ano
+#### Enterprise — R$ 3.997/mes | R$ 43.967/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -132,14 +132,14 @@ graph LR
     E[AI Agent<br>R$ 997/mes] --- F[Automation<br>R$ 1.497/mes]
 ```
 
-#### AI Agent — R$ 997/mes | R$ 9.970/ano
+#### AI Agent — R$ 997/mes | R$ 10.967/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
 | Agente IA WhatsApp | #4 | Agente IA WhatsApp + Chat |
 | Automacao de Processos | #7 | Automacao de processos basica |
 
-#### Automation — R$ 1.497/mes | R$ 14.970/ano
+#### Automation — R$ 1.497/mes | R$ 16.467/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
