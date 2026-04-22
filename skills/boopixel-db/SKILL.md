@@ -186,6 +186,133 @@ git push origin master
 
 ---
 
+## Business Data — Plans & Items
+
+### Plans (6 active)
+
+| ID | Slug | Name | Tier | Monthly | Yearly | Target |
+|----|------|------|------|---------|--------|--------|
+| 4 | essencial | Essencial | 1 | R$ 161,25 | R$ 1.935 | Clientes existentes |
+| 5 | profissional | Profissional | 2 | R$ 250 | R$ 2.500 | Upgrade existentes |
+| 6 | completo | Completo | 3 | R$ 497 | R$ 4.970 | Upgrade existentes |
+| 1 | starter | Starter | 4 | R$ 497 | R$ 4.970 | Novos clientes |
+| 2 | growth | Growth | 5 | R$ 1.497 | R$ 14.970 | Novos clientes |
+| 3 | scale | Scale | 6 | R$ 3.997 | R$ 39.970 | Novos clientes |
+
+### Plan Items (plan_items bridge table)
+
+**Essencial (plan=4):**
+- Site Institucional (offering=2) — ate 5 paginas
+- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (3 contas)
+
+**Profissional (plan=5):**
+- Site Institucional (offering=2) — ate 5 paginas
+- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (10 contas)
+- Consultoria SEO (offering=5) — SEO on-page + relatorio mensal
+
+**Completo (plan=6):**
+- Site Institucional (offering=2) — ate 10 paginas
+- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (10 contas)
+- Consultoria SEO (offering=5) — SEO mensal completo + Google Analytics
+- Agente IA WhatsApp (offering=4) — WhatsApp + Chat
+
+**Starter (plan=1):**
+- Site Institucional (offering=2) — ate 5 paginas
+- Landing Page (offering=1) — 1 LP/mes
+- Consultoria SEO (offering=5) — SEO basico
+
+**Growth (plan=2):**
+- Site Institucional (offering=2) — tudo do Starter
+- Landing Page (offering=1) — ate 2 LPs/mes
+- Agente IA WhatsApp (offering=4) — WhatsApp + Chat
+- Consultoria SEO (offering=5) — SEO mensal completo
+
+**Scale (plan=3):**
+- Site Institucional (offering=2) — tudo do Growth
+- Landing Page (offering=1) — ate 5 LPs/mes
+- Agente IA WhatsApp (offering=4) — avancado + automacoes
+- Consultoria SEO (offering=5) — SEO + trafego pago
+- Automacao de Processos (offering=7) — automacoes custom
+
+### Offerings (9 active)
+
+| ID | Slug | Name | Model |
+|----|------|------|-------|
+| 1 | landing-page | Landing Page | one_time |
+| 2 | site-institucional | Site Institucional | hybrid |
+| 3 | ecommerce | E-commerce | hybrid |
+| 4 | agente-ia | Agente IA WhatsApp | recurring |
+| 5 | seo-mensal | Consultoria SEO | recurring |
+| 6 | branding | Identidade Visual | one_time |
+| 7 | automacao | Automacao de Processos | recurring |
+| 8 | webmaster | Manutencao Webmaster | recurring |
+| 9 | midias-sociais | Midias Sociais | recurring |
+
+---
+
+## Business Flows
+
+### Novo Cliente (plano)
+
+```
+Lead chega -> Qualifica -> Escolhe plano -> Cria user (status=prospect)
+-> Cria user_company (role=client) -> Cria subscription (status=trialing)
+-> Setup site/IA/SEO conforme plan_items -> subscription.status = active
+-> Gera charges mensais/anuais
+```
+
+### Novo Cliente (avulso)
+
+```
+Lead chega -> Qualifica -> Escolhe offering -> Cria user + user_company
+-> Cria project (status=proposal) -> Aceita -> project.status = in_progress
+-> Entrega -> project.status = delivered -> Pagamento -> project.status = paid
+-> Se recurring: project.status = active + charges recorrentes
+```
+
+### Upgrade de Plano
+
+```
+Cliente ativo (subscription) -> Escolhe novo plano -> Atualiza subscription.plan_id
+-> Ajusta subscription.price_override se necessario
+-> Novos plan_items entram em vigor -> Ajusta charges
+```
+
+### Cobranca
+
+```
+Charge criada (status=pending) -> Envia ao cliente -> Pagamento recebido
+-> charge.status = paid + charge.paid_date = now
+-> Cria transaction (direction=income, category=revenue, charge_id=charge.id)
+-> Se vencida: charge.status = overdue
+```
+
+### Cancelamento
+
+```
+Cliente solicita -> subscription.status = cancelled + subscription.ends_at = fim do periodo
+-> Projetos vinculados -> project.status = archived
+-> User -> user.status = inactive
+```
+
+---
+
+## Active Clients (snapshot 2026-04-22)
+
+| Cliente | Project | Plan | Monthly | Annual | Since | Total Revenue |
+|---------|---------|------|---------|--------|-------|---------------|
+| Caminho das Origens | #2 | Essencial | R$ 176 | R$ 2.112 | ago/2020 | R$ 6.312 |
+| Magsinos | #8 | Essencial | R$ 173 | R$ 2.076 | set/2019 | R$ 7.540 |
+| PSK Ambiental | #11 | Essencial | R$ 161 | R$ 1.935 | set/2019 | R$ 8.616 |
+| Pedreira Griebeler | #13 | Essencial | R$ 161 | R$ 1.935 | set/2019 | R$ 7.890 |
+| Preto Imoveis | #15 | Essencial | R$ 161 | R$ 1.935 | jun/2019 | R$ 4.764 |
+| Licenca Consultoria | #34 | A definir | R$ 0 | R$ 0 | — | R$ 0 |
+
+**MRR (Monthly Recurring Revenue):** ~R$ 832/mes
+**ARR (Annual Recurring Revenue):** ~R$ 9.993/ano
+
+---
+
 ## Common Recipes
 
 ### List active projects
@@ -201,6 +328,17 @@ conn.execute(text("""
     JOIN user_companies uc ON u.id = uc.user_id
     JOIN companies c ON uc.company_id = c.id
     WHERE uc.role = 'client'
+"""))
+```
+
+### List plan with items
+```python
+conn.execute(text("""
+    SELECT p.name, o.name, pi.quantity, pi.limit_note
+    FROM plan_items pi
+    JOIN plans p ON pi.plan_id = p.id
+    JOIN offerings o ON pi.offering_id = o.id
+    ORDER BY p.tier, o.id
 """))
 ```
 
@@ -222,4 +360,20 @@ conn.execute(text("""
     WHERE status = 'pending' AND company_id = :cid
     ORDER BY due_date
 """), {"cid": company_id})
+```
+
+### Client full picture
+```python
+conn.execute(text("""
+    SELECT u.name, u.email, u.phone, u.status,
+           p.name as project, p.status as proj_status, p.recurring_price,
+           s.status as sub_status, pl.name as plan_name
+    FROM users u
+    JOIN user_companies uc ON u.id = uc.user_id
+    LEFT JOIN projects p ON u.id = p.customer_id
+    LEFT JOIN subscriptions s ON u.id = s.customer_id
+    LEFT JOIN plans pl ON s.plan_id = pl.id
+    WHERE uc.role = 'client' AND u.status = 'active'
+    ORDER BY u.name
+"""))
 ```
