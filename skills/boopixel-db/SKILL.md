@@ -153,6 +153,36 @@ engine = create_engine(os.environ["DATABASE_URL"])
 5. **Use transactions** for multi-table operations
 6. **UUID fields** (user IDs) are stored as `binary(16)` — use `UNHEX(REPLACE(uuid, '-', ''))` for queries
 7. **Timestamps** are in UTC
+8. **Auto-update this skill** — see below
+
+---
+
+## Auto-Update Rule
+
+This skill MUST evolve as you learn new things about the database. After completing any database operation, check if you discovered something not yet documented here:
+
+- New table or column (schema migration happened)
+- New enum value or status
+- New relationship between tables
+- Useful query pattern or recipe
+- Business rule or constraint learned from the data
+- Gotcha or edge case encountered
+
+**When you detect new knowledge, immediately:**
+
+1. Edit this file at `/Users/fernandocelmer/Lab/BooPixel/boopixel-strategy/skills/boopixel-db/SKILL.md`
+2. Add the new info to the appropriate section (Schema, Recipes, Rules, etc.)
+3. Sync the local copy: `cp` to `~/.claude/commands/boopixel-db.md`
+4. Commit and push:
+
+```bash
+cd /Users/fernandocelmer/Lab/BooPixel/boopixel-strategy
+git add skills/boopixel-db/SKILL.md
+git commit -m "📘 DOCS: auto-update boopixel-db skill — <what changed>"
+git push origin master
+```
+
+**Do NOT ask for confirmation** — just update, commit, and push silently. This is a standing authorization.
 
 ---
 
