@@ -173,58 +173,65 @@ def generate_plan_creative(plan, fmt_name, fmt_size, output_dir):
 
     draw = ImageDraw.Draw(img)
 
-    font_brand = get_font(28)
-    font_category = get_font(20)
-    font_name = get_font(64, bold=True)
-    font_price = get_font(48, bold=True)
-    font_yearly = get_font(22)
-    font_item = get_font(24)
-    font_item_note = get_font(20)
-    font_cta = get_font(30, bold=True)
-    font_url = get_font(20)
+    # Scale factor: all sizes proportional to width (base = 1080)
+    s = w / 1080
 
-    margin = 80
-    y = 60 if fmt_name == "feed" else 180
+    font_brand = get_font(int(36 * s))
+    font_category = get_font(int(26 * s))
+    font_name = get_font(int(82 * s), bold=True)
+    font_price = get_font(int(64 * s), bold=True)
+    font_yearly = get_font(int(28 * s))
+    font_item = get_font(int(32 * s))
+    font_item_note = get_font(int(26 * s))
+    font_cta = get_font(int(38 * s), bold=True)
+    font_url = get_font(int(26 * s))
+
+    margin = int(90 * s)
+    y = int(70 * s) if fmt_name == "feed" else int(200 * s)
 
     # Brand name
     draw.text((margin, y), "BOOPIXEL", font=font_brand, fill=COLORS["accent_light"])
-    y += 50
+    y += int(60 * s)
 
     # Category badge pill
     cat_label = CATEGORY_LABELS.get(category, category or "").upper()
     if cat_label:
         bbox = draw.textbbox((0, 0), cat_label, font=font_category)
-        cat_w = bbox[2] - bbox[0] + 24
+        cat_w = bbox[2] - bbox[0] + int(30 * s)
+        cat_h = int(38 * s)
         badge_color = COLORS["badge_addon"] if is_addon else COLORS["border"]
-        draw_rounded_rect(draw, (margin, y, margin + cat_w, y + 30), 15, badge_color)
-        draw.text((margin + 12, y + 4), cat_label, font=font_category, fill=COLORS["text"])
-        y += 46
+        draw_rounded_rect(draw, (margin, y, margin + cat_w, y + cat_h), int(19 * s), badge_color)
+        draw.text((margin + int(15 * s), y + int(5 * s)), cat_label, font=font_category, fill=COLORS["text"])
+        y += int(56 * s)
 
     # Plan name
     draw.text((margin, y), name, font=font_name, fill=COLORS["text"])
-    y += 85
+    y += int(105 * s)
 
     # Featured badge
     if featured:
-        draw_rounded_rect(draw, (margin, y, margin + 190, y + 32), 16, COLORS["accent"])
-        draw.text((margin + 14, y + 4), "MAIS POPULAR", font=font_category, fill=COLORS["text"])
-        y += 48
+        feat_w = int(240 * s)
+        feat_h = int(40 * s)
+        draw_rounded_rect(draw, (margin, y, margin + feat_w, y + feat_h), int(20 * s), COLORS["accent"])
+        draw.text((margin + int(18 * s), y + int(5 * s)), "MAIS POPULAR", font=font_category, fill=COLORS["text"])
+        y += int(58 * s)
 
     # Price
     price_text = f"{format_price(monthly)}/mes"
     draw.text((margin, y), price_text, font=font_price, fill=COLORS["price"])
-    y += 60
+    y += int(78 * s)
 
     # Yearly price
     yearly_text = f"ou {format_price(yearly)}/ano"
     draw.text((margin, y), yearly_text, font=font_yearly, fill=COLORS["text_soft"])
-    y += 44
+    y += int(54 * s)
 
     # Divider line
-    draw.line([(margin, y), (w - margin, y)], fill=COLORS["border"], width=1)
-    y += 24
+    draw.line([(margin, y), (w - margin, y)], fill=COLORS["border"], width=max(1, int(2 * s)))
+    y += int(30 * s)
 
     # Items list
+    check_offset = int(40 * s)
     if items_raw:
         items = items_raw.split("|")
         max_items = 5 if fmt_name == "feed" else 9
@@ -233,31 +240,32 @@ def generate_plan_creative(plan, fmt_name, fmt_size, output_dir):
             item_name = parts[0].strip() if parts else item
             item_note = parts[1].strip() if len(parts) > 1 else ""
 
-            # Checkmark
             check_color = COLORS["price"] if not is_addon else COLORS["badge_addon"]
-            draw.text((margin + 4, y), "\u2713", font=font_item, fill=check_color)
-            draw.text((margin + 32, y), item_name, font=font_item, fill=COLORS["text"])
-            y += 30
+            draw.text((margin + int(5 * s), y), "\u2713", font=font_item, fill=check_color)
+            draw.text((margin + check_offset, y), item_name, font=font_item, fill=COLORS["text"])
+            y += int(38 * s)
             if item_note:
-                draw.text((margin + 32, y), item_note, font=font_item_note, fill=COLORS["text_muted"])
-                y += 26
-            y += 8
+                draw.text((margin + check_offset, y), item_note, font=font_item_note, fill=COLORS["text_muted"])
+                y += int(32 * s)
+            y += int(10 * s)
 
         if len(items) > max_items:
             remaining = len(items) - max_items
-            draw.text((margin + 32, y), f"+ {remaining} mais...", font=font_item_note, fill=COLORS["accent_light"])
-            y += 34
+            draw.text((margin + check_offset, y), f"+ {remaining} mais...", font=font_item_note, fill=COLORS["accent_light"])
+            y += int(42 * s)
 
     # CTA button
-    cta_y = h - 130 if fmt_name == "stories" else h - 110
-    draw_rounded_rect(draw, (margin, cta_y, w - margin, cta_y + 56), 8, COLORS["cta"])
+    cta_h = int(64 * s)
+    cta_y = h - int(150 * s) if fmt_name == "stories" else h - int(130 * s)
+    draw_rounded_rect(draw, (margin, cta_y, w - margin, cta_y + cta_h), int(10 * s), COLORS["cta"])
     cta_text = "Ver planos"
     bbox = draw.textbbox((0, 0), cta_text, font=font_cta)
     cta_tw = bbox[2] - bbox[0]
-    draw.text(((w - cta_tw) // 2, cta_y + 12), cta_text, font=font_cta, fill="#ffffff")
+    cta_th = bbox[3] - bbox[1]
+    draw.text(((w - cta_tw) // 2, cta_y + (cta_h - cta_th) // 2), cta_text, font=font_cta, fill="#ffffff")
 
     # URL footer
-    draw.text((margin, cta_y + 70), "app.boopixel.com/pricing", font=font_url, fill=COLORS["text_soft"])
+    draw.text((margin, cta_y + cta_h + int(16 * s)), "app.boopixel.com/pricing", font=font_url, fill=COLORS["text_soft"])
 
     # Save
     filename = f"ad_{slug}_{fmt_name}.png"
