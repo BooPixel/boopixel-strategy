@@ -26,16 +26,16 @@ Diferencial competitivo: oferecer **site + IA + automação** como pacote integr
 
 ## 2. Modelo de negócio
 
-### Catálogo
-- **3 planos** (Starter R$ 497 / Growth R$ 1.497 / Scale R$ 3.997 por mês)
-- **Serviços avulsos** com preço "a partir de" (landing page, site, e-commerce, branding, SEO, agente IA)
-- **Híbrido** (setup + mensalidade)
+### Catálogo (já implementado)
+- **3 planos** Starter (R$ 497/mês) · Growth (R$ 1.497/mês) · Scale (R$ 3.997/mês)
+- **9 serviços avulsos** (Offering): landing-page, site-institucional, e-commerce, agente-ia, seo-mensal, branding, automacao, webmaster, midias-sociais
+- **Tipos de serviço** (ServiceType) — categoria editável (substituiu o enum hardcoded)
+- **4 descontos** padrão: ANUAL (2 meses grátis), BUNDLE10, INDICA, TRIAL50
 
-### Descontos padronizados
-- Pagamento anual (2 meses grátis — 17%)
-- Bundle de serviços (10–15%)
-- Indicação (1 mês grátis)
-- Trial reduzido
+### Modelos de cobrança
+- **Recorrente** — assinatura mensal/anual (Subscription)
+- **One-time** — venda avulsa (Project com `setup_fee`)
+- **Híbrido** — setup + mensalidade (Project com `setup_fee` + `recurring_price`)
 
 ### Estrutura jurídica
 Sociedade LTDA entre dois sócios (50/50). Fluxo completo de abertura em [cnpj-ltda.md](https://github.com/BooPixel/boopixel-strategy/blob/master/cnpj-ltda.md).
@@ -64,7 +64,7 @@ Sociedade LTDA entre dois sócios (50/50). Fluxo completo de abertura em [cnpj-l
 
 - JWT com `access_token` em memória (imune a XSS via web storage)
 - `refresh_token` em `localStorage` (sobrevive fechar/abrir aba/browser)
-- Rehydrate no bootstrap do app via `/auth/refresh` single-flight
+- Rehydrate no bootstrap do app via `/auth/refresh` single-flight (evita race entre bootstrap e 401-retry)
 - Contextos: `admin` (operador da empresa) e `client` (cliente final)
 
 ---
@@ -77,6 +77,10 @@ erDiagram
     Company ||--o{ Plan : "catálogo"
     Company ||--o{ Offering : "catálogo"
     Company ||--o{ Discount : "catálogo"
+    Company ||--o{ ServiceType : "catálogo"
+    Company ||--o{ AssetType : "catálogo"
+    ServiceType ||--o{ Offering : "categoriza"
+    ServiceType ||--o{ AssetType : "agrupa"
     Plan ||--o{ PlanItem : "inclui"
     Offering ||--o{ PlanItem : "referencia"
     User ||--o{ Subscription : "assina"
@@ -85,8 +89,10 @@ erDiagram
     Offering ||--o{ Project : "é contratado"
     Subscription }o--|| Discount : "aplica"
     Project }o--|| Discount : "aplica"
+    Project ||--o{ ServiceAsset : "possui"
+    Project ||--o{ Charge : "gera"
     User ||--o{ Charge : "recebe"
-    Service ||--o{ ServiceAsset : "possui"
+    AssetType ||--o{ ServiceAsset : "tipifica"
     Company ||--o{ Lead : "captura"
     Company ||--o{ FormTemplate : "publica"
     Lead ||--o| User : "convertido em"
@@ -99,14 +105,18 @@ erDiagram
 | **Company** | Tenant (agência). Toda linha do sistema é escopada por `company_id`. |
 | **User** | Pessoa. Pode ser admin da Company ou cliente final (`customer`). Vínculo via `UserCompany` com role. |
 | **Lead** | Contato capturado via formulário público. Pode ser convertido em User. |
-| **FormTemplate** | Template de formulário conversacional. JSON-driven, editável no admin. Default BooPixel + variações por campanha (evento, MVP, revisão). Strategy: [lead-capture-forms.md](https://github.com/BooPixel/boopixel-strategy/blob/master/lead-capture-forms.md). |
-| **Plan** | Pacote do catálogo (Starter/Growth/Scale). Agrupa Offerings via PlanItem. |
-| **Offering** | Serviço vendável individual (landing page, SEO, IA). `pricing_model` ∈ {one_time, recurring, hybrid}. |
-| **Subscription** | Assinatura ativa de um cliente num Plan. Renova por `billing_cycle`. |
-| **Project** | Venda avulsa amarrada a um Offering. `status` ∈ {proposal, in_progress, delivered, paid, archived}. |
-| **Discount** | Regra de desconto reutilizável. `type` ∈ {percent, fixed, months_free}. |
-| **Service / ServiceAsset** | Prestação de serviço ativa + ativos técnicos (domínio, hosting, credenciais cifradas). Domínios integram com Registro.br via RDAP. |
-| **Charge / Transaction** | Cobranças e movimentações financeiras. |
+| **FormTemplate** | Template de formulário conversacional. JSON-driven, editável no admin. Strategy: [lead-capture-forms.md](https://github.com/BooPixel/boopixel-strategy/blob/master/lead-capture-forms.md). |
+| **ServiceType** | Catálogo de tipos (Sites, IA, Marketing, Branding, Automação, Consultoria, Mídias Sociais, etc.). Categoriza Offerings e AssetTypes. |
+| **AssetType** | Tipo de ativo técnico (Domínio, Hosting, E-mail, Credencial, etc.). Vinculado a ServiceType. |
+| **Offering** | Serviço vendável individual (Landing Page, SEO, IA Agente). Tem `service_type_id`, `pricing_model` ∈ {one_time, recurring, hybrid}, `price_from`, `setup_fee`, `recurring_price`. |
+| **Plan** | Pacote (Starter/Growth/Scale) com `tier`, `price_monthly`, `price_yearly`, `trial_days`. Agrupa Offerings via PlanItem. |
+| **PlanItem** | Bridge Plan × Offering. `quantity` + `limit_note` (texto livre, informativo). |
+| **Discount** | Regra reutilizável. `type` ∈ {percent, fixed, months_free}, `applies_to` ∈ {plan, offering, any}, `code` opcional, `valid_from/until`, `max_uses`, `min_months`. |
+| **Subscription** | Assinatura ativa: `customer_id`, `plan_id`, `discount_id`, `billing_cycle` ∈ {monthly, yearly}, `status` ∈ {trialing, active, paused, cancelled, expired}, `current_period_end` (gatilho de cobrança). |
+| **Project** | Venda avulsa: `customer_id`, `offering_id`, `discount_id`, `setup_fee`, `recurring_price`, `status` ∈ {proposal, in_progress, **active**, delivered, paid, archived}. `active` = projeto contínuo (manutenção, mensal). |
+| **ServiceAsset** | Ativo técnico de um Project (domínio, hosting, credenciais cifradas). Action `lookup` consulta dados live (Registro.br RDAP) e sincroniza `expires_at`. |
+| **Charge** | Cobrança individual. Pode estar vinculada a um Project (`project_id`). |
+| **Transaction** | Movimentação financeira (entrada/saída). |
 | **CustomerEmail** | E-mails adicionais do cliente para notificação. |
 
 ---
@@ -123,18 +133,28 @@ Cadastro cria **User + Company** em uma operação. Convites linkam novos usuár
 4. Admin recebe e-mail de notificação
 5. Admin converte Lead → User (customer)
 
-### 5.3 Venda
-- **Pacote** → cria `Subscription(customer, plan, billing_cycle)`
-- **Avulso** → cria `Project(customer, offering, setup_fee)`
+### 5.3 Configuração inicial do catálogo
+1. Admin cadastra `ServiceType` (categorias: Sites, IA, Marketing…) em `/catalog/service-types`
+2. Admin cadastra `Offering` em `/catalog/services` (slug, nome, tipo de serviço, modelo de cobrança, preço a partir de…)
+3. Admin monta `Plan` em `/catalog/plans` agrupando Offerings via PlanItem
+4. Admin cria `Discount` reutilizável em `/catalog/discounts`
+
+### 5.4 Venda
+- **Pacote (Starter/Growth/Scale)** → cria `Subscription(customer, plan, billing_cycle)` em `/sales/subscriptions/new`
+- **Avulso** → cria `Project(customer, offering, setup_fee)` em `/sales/projects/new`
+- **Híbrido** → `Project` com `setup_fee` + `recurring_price`
+- **Contínuo** → `Project` com `status=active` (manutenção, sem entrega final)
 - Desconto aplicado via `discount_id`
 
-### 5.4 Cobrança recorrente
-Job periódico lê `Subscription.current_period_end` e gera `Charge`. Projetos híbridos geram `Charge` de setup + `Charge` mensal de manutenção.
+### 5.5 Cobrança recorrente (a implementar)
+Hoje: cobrança gerada manualmente via `/charges/new`.
+Próximo passo: job periódico lê `Subscription.current_period_end` e gera `Charge` automaticamente.
 
-### 5.5 Gestão de ativos (cloud integrations)
+### 5.6 Gestão de ativos (cloud integrations)
 - Cada `ServiceAsset` pode apontar pra um provider (`registro.br`, futuros)
 - Action `lookup` genérica consulta dados live (status, expiração, nameservers) via RDAP
 - Sincronização automática de `expires_at` quando divergir do registrador
+- UI: `/sales/projects/:id` → expand do asset → menu 3-pontos → "Verificar domínio"
 
 ---
 
@@ -145,13 +165,13 @@ business-api/
 ├── app/
 │   ├── api/v1/routers/      # endpoints REST
 │   ├── cloud/               # integrações (registro.br, futuras)
-│   ├── core/                # auth, email, security, settings
+│   ├── core/                # auth, email, security, settings, listing (paginação)
 │   ├── db/                  # base, mixins, tipos
 │   ├── models/              # SQLAlchemy
 │   ├── repositories/        # acesso a dados
 │   ├── schemas/             # Pydantic (request/response)
 │   └── services/            # lógica de negócio
-│       └── asset_actions/   # ações genéricas por asset
+│       └── asset_actions/   # ações genéricas por asset (registry pattern)
 ├── alembic/                 # migrations
 ├── dependencies/            # requirements.txt (Lambda layer)
 └── requirements-lambda.txt  # idem
@@ -167,37 +187,69 @@ business-frontend/
 │   ├── contexts/            # AuthContext, ThemeContext
 │   ├── guards/              # ProtectedRoute, RoleProtectedRoute
 │   ├── hooks/               # useRequest, useAuth, use<Entity>
-│   ├── i18n/                # pt / en
+│   ├── i18n/                # pt / en (sincronizados)
 │   └── pages/
-│       ├── admin/           # dashboard, customers, services, leads, forms
+│       ├── admin/
+│       │   ├── catalog/     # services, plans, discounts, service-types, asset-types
+│       │   ├── sales/       # subscriptions, projects + ProjectDetail
+│       │   ├── customers/   # CRM
+│       │   ├── charges/     # cobranças
+│       │   ├── transactions/# financeiro
+│       │   ├── leads/       # leads capturados
+│       │   └── formTemplates/
 │       └── client/          # área do cliente final
 ```
+
+### Sidebar (estrutura atual)
+
+- **Operations**: Início · Cobranças · Transações
+- **Contacts**: Clientes · Leads · Formulários · Convites
+- **Catalog**: Serviços · Planos · Descontos · Tipos de Serviço · Tipos de Ativo
+- **Sales**: Assinaturas · Projetos
+- Footer: Configurações
 
 ---
 
 ## 8. Decisões de produto já tomadas
 
 - Multi-tenant por `company_id` em todas as tabelas
-- Catálogo (Plan/Offering/Discount) **por company**, não global
+- Catálogo (Plan/Offering/Discount/ServiceType/AssetType) **por company**, não global
 - Limites de plano informativos (texto livre em `PlanItem.limit_note`), não duros
 - Preço via "faixa mínima" (`Offering.price_from`), valor real negociado no `Project`
-- Modelo de venda híbrido: `Subscription` (recorrente) + `Project` (one-time ou híbrido)
+- Modelo de venda híbrido: `Subscription` (recorrente) + `Project` (one-time/híbrido/contínuo)
+- Status `active` em `Project` = projeto contínuo (manutenção mensal)
+- `Offering.service_type_id` (FK) substitui enum `category` hardcoded — categorias agora editáveis
 - Credenciais de asset cifradas simetricamente antes de persistir
 - Actions de asset via registry genérico (add nova action = novo arquivo)
+- Service legacy completamente removido (migrado pra Project + Offering)
+- Paginação padrão (`PaginatedResponse[T]`) em todos os endpoints de listagem
 
 ---
 
-## 9. Roadmap curto
+## 9. Status de implementação
 
-- [ ] Seed do catálogo BooPixel (3 planos + offerings padrão)
+### ✅ Pronto
+- Catálogo completo: ServiceType, AssetType, Offering, Plan, PlanItem, Discount
+- Vendas: Subscription + Project (com status `active` pra contínuo)
+- Páginas admin (lista + form com seções em cards + detail) pra todas as 5 entidades novas
+- Migração de Service legacy → Project (34 services migrados, 14 assets + 235 charges relinkados)
+- Drop completo do Service model + tabela
+- Cloud integration Registro.br (RDAP) com action `lookup` genérica
+- Auth com bootstrap rehydrate (refresh token sobrevive fechar/abrir aba)
+- Paginação padrão
+- Toggle/badge styling, currency formatting (R$ 1.500,00) em todas as listas
+
+### 🚧 Roadmap curto
+- [ ] Seed automático do catálogo BooPixel (script idempotente)
 - [ ] Cálculo efetivo de desconto aplicado (percent/fixed/months_free)
-- [ ] Geração automática de `Charge` a partir de `Subscription`
-- [ ] UI admin de Plans/Offerings/Discounts
+- [ ] Geração automática de `Charge` a partir de `Subscription.current_period_end`
+- [ ] Cron job (EventBridge → Lambda) pra cobrança recorrente
 - [ ] Upgrade/downgrade de Subscription preservando histórico
 - [ ] Integração Stripe (cobrança cartão)
 - [ ] Migrar `refresh_token` para cookie `httpOnly` quando backend suportar
-- [ ] Adicionar mais cloud providers (Cloudflare DNS, AWS)
+- [ ] Adicionar mais cloud providers (Cloudflare DNS, AWS Route53, Hostinger API)
 - [ ] Invoices/faturas e recibos em PDF
+- [ ] Notificação por e-mail antes da cobrança vencer
 
 ---
 
@@ -207,4 +259,4 @@ business-frontend/
 - [Lead Capture Forms](https://github.com/BooPixel/boopixel-strategy/blob/master/lead-capture-forms.md) — estratégia conversacional, personas, pipeline
 - [Pricing](https://github.com/BooPixel/boopixel-strategy/blob/master/pricing.md) — preços, margens, comparativo
 - [CNPJ LTDA](https://github.com/BooPixel/boopixel-strategy/blob/master/cnpj-ltda.md) — abertura jurídica
-- [CLAUDE.md](CLAUDE.md) — regras do projeto business-api para o Claude
+- [CLAUDE.md](https://github.com/BooPixel/business-api/blob/master/CLAUDE.md) — regras do projeto business-api para o Claude
