@@ -6,6 +6,13 @@
       "description": "Manipulate BooPixel production database (MySQL): query, update, insert, delete projects, charges, customers, subscriptions, transactions, leads",
       "category": "database",
       "url": "https://raw.githubusercontent.com/BooPixel/boopixel-strategy/master/skills/boopixel-db/SKILL.md"
+    },
+    {
+      "name": "hostinger",
+      "version": "1.0.0",
+      "description": "Manage Hostinger account via API: websites, domains, DNS, billing, subscriptions, VPS, Docker, email marketing",
+      "category": "infrastructure",
+      "url": "https://raw.githubusercontent.com/BooPixel/boopixel-strategy/master/skills/hostinger/SKILL.md"
     }
   ],
   "plugins": []

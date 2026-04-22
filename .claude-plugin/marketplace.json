@@ -17,6 +17,17 @@
       "source": "./skills/boopixel-db",
       "category": "database",
       "strict": false
+    },
+    {
+      "name": "hostinger",
+      "description": "Manage Hostinger account via API: websites, domains, DNS, billing, subscriptions, VPS, Docker, email marketing",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fernando Celmer"
+      },
+      "source": "./skills/hostinger",
+      "category": "infrastructure",
+      "strict": false
     }
   ]
 }
