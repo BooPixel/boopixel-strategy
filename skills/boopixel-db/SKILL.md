@@ -270,6 +270,35 @@ git push origin master
 | 13 | dominio | Dominio | recurring |
 | 14 | email-profissional | Email Profissional | recurring |
 
+### Asset Types (13 active)
+
+| ID | Name | Service Type |
+|----|------|-------------|
+| 2 | Banner | Social Media |
+| 4 | Banner | Graphic Projects |
+| 5 | Logo | Graphic Projects |
+| 6 | Video | Graphic Projects |
+| 9 | Dominio | WebSite |
+| 10 | Hosting | WebSite |
+| 11 | SSL Certificate | WebSite |
+| 12 | Email Account | WebSite |
+| 13 | Backup | WebSite |
+| 14 | WordPress | WebSite |
+| 15 | Google Analytics | WebSite |
+| 16 | DNS Zone | WebSite |
+| 17 | Social Media | Social Media |
+
+### Standard Assets per Client (7 per active project)
+
+Every active client project should have these 7 assets:
+- Dominio (asset_type=9) — Registro.br
+- Hosting (asset_type=10) — Hostinger, Cloud Startup shared
+- SSL Certificate (asset_type=11) — Let's Encrypt, auto-renew
+- Email Account (asset_type=12) — Hostinger hPanel
+- Backup (asset_type=13) — Hostinger hPanel
+- WordPress (asset_type=14) — wp-admin
+- DNS Zone (asset_type=16) — Hostinger + Registro.br
+
 ---
 
 ## Business Flows
