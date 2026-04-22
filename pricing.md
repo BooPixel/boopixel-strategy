@@ -15,6 +15,98 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 
 ---
 
+## Custo de Infraestrutura (Hostinger)
+
+| Item | Valor | Ciclo | Mensal |
+|------|-------|-------|--------|
+| Cloud Startup (hosting 27 sites) | R$ 1.559,88 | anual | R$ 130/mes |
+| Dominio .COM.BR x2 | R$ 194,97 cada | 3 anos | ~R$ 5,42/mes cada |
+| Dominio .COM x1 | R$ 140,07 | anual | ~R$ 11,67/mes |
+| **Total infra** | | | **~R$ 141/mes** |
+| **Custo por site** | | | **~R$ 5,22/site/mes** |
+
+---
+
+## Planos Ativos (cadastrados no sistema)
+
+### Planos de Manutencao (clientes existentes)
+
+```mermaid
+graph LR
+    A[Essencial<br>R$ 161/mes<br>R$ 1.935/ano] --> B[Profissional<br>R$ 250/mes<br>R$ 2.500/ano]
+    B --> C[Completo<br>R$ 497/mes<br>R$ 4.970/ano]
+```
+
+| Plano | Tier | Mensal | Anual | Incluso |
+|-------|------|--------|-------|---------|
+| **Essencial** | 1 | R$ 161,25 | R$ 1.935 | Hosting + 1 dominio + email (3 contas) + SSL + manutencao WP + backup + suporte email |
+| **Profissional** | 2 | R$ 250 | R$ 2.500 | Tudo do Essencial + SEO on-page + relatorio mensal + email (10 contas) + suporte WhatsApp |
+| **Completo** | 3 | R$ 497 | R$ 4.970 | Tudo do Profissional + Agente IA (chat/WhatsApp) + SEO mensal completo + Google Analytics + suporte prioritario |
+
+### Planos Premium (novos clientes)
+
+```mermaid
+graph LR
+    D[Starter<br>R$ 497/mes<br>R$ 4.970/ano] --> E[Growth<br>R$ 1.497/mes<br>R$ 14.970/ano]
+    E --> F[Scale<br>R$ 3.997/mes<br>R$ 39.970/ano]
+```
+
+| Plano | Tier | Mensal | Anual | Incluso |
+|-------|------|--------|-------|---------|
+| **Starter** | 4 | R$ 497 | R$ 4.970 | Site institucional + 1 LP + SSL + Hosting + SEO on-page + suporte email |
+| **Growth** | 5 | R$ 1.497 | R$ 14.970 | Tudo do Starter + Agente IA basico + WhatsApp bot + SEO mensal + relatorios + suporte WhatsApp |
+| **Scale** | 6 | R$ 3.997 | R$ 39.970 | Tudo do Growth + Agente IA avancado + automacoes custom + SEO + trafego pago + consultoria mensal + suporte prioritario |
+
+---
+
+## Clientes Ativos — Plano Atual
+
+| Cliente | Projeto | Desde | Mensal | Anual | Total Recebido | Plano Sugerido |
+|---------|---------|-------|--------|-------|---------------|----------------|
+| Caminho das Origens | Site (#2) | ago/2020 | R$ 176 | R$ 2.112 | R$ 6.312 | Essencial |
+| Magsinos | Site (#8) | set/2019 | R$ 173 | R$ 2.076 | R$ 7.540 | Essencial |
+| PSK Ambiental | Site (#11) | set/2019 | R$ 161 | R$ 1.935 | R$ 8.616 | Essencial |
+| Pedreira Griebeler | Site (#13) | set/2019 | R$ 161 | R$ 1.935 | R$ 7.890 | Essencial |
+| Preto Imoveis | Site (#15) | jun/2019 | R$ 161 | R$ 1.935 | R$ 4.764 | Essencial |
+| Licenca Consultoria | Site (#34) | — | R$ 0 | R$ 0 | R$ 0 | A definir |
+
+**Receita recorrente atual (5 clientes):** ~R$ 832/mes | ~R$ 9.993/ano
+
+---
+
+## Margem por Plano
+
+| Plano | Preco/mes | Custo/mes | Margem |
+|-------|-----------|-----------|--------|
+| Essencial | R$ 161 | ~R$ 10 (infra) | **94%** |
+| Profissional | R$ 250 | ~R$ 15 | **94%** |
+| Completo | R$ 497 | ~R$ 50 (infra + IA API) | **90%** |
+| Starter | R$ 497 | ~R$ 50 | **90%** |
+| Growth | R$ 1.497 | ~R$ 150 | **90%** |
+| Scale | R$ 3.997 | ~R$ 400 | **90%** |
+
+**Meta de margem bruta:** 90%+
+
+> **Nota:** Custo por site e muito baixo (~R$ 5/mes) porque todos compartilham o mesmo plano Cloud Startup da Hostinger. A margem real depende do tempo investido em manutencao.
+
+---
+
+## Servicos Avulsos (offerings)
+
+| ID | Servico | Modelo | Setup | Recorrente |
+|----|---------|--------|-------|------------|
+| 1 | Landing Page | unico | R$ 1.500 | — |
+| 2 | Site Institucional | hibrido | R$ 3.000 | R$ 200/mes |
+| 3 | E-commerce | hibrido | R$ 5.000 | R$ 300/mes |
+| 4 | Agente IA WhatsApp | recorrente | — | R$ 997/mes |
+| 5 | Consultoria SEO | recorrente | — | R$ 997/mes |
+| 6 | Identidade Visual | unico | R$ 1.500 | — |
+| 7 | Automacao de Processos | recorrente | — | R$ 1.497/mes |
+| 8 | Manutencao Webmaster | recorrente | — | variavel |
+| 9 | Midias Sociais | recorrente | — | variavel |
+
+---
+
 ## Referencia de Mercado — Brasil 2026
 
 ### Criacao de Sites
@@ -26,7 +118,6 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 | Blog / Portal de Conteudo | R$ 600 - R$ 5.000 | R$ 2.500 - R$ 5.000 |
 | E-commerce / Loja Virtual | R$ 1.200 - R$ 50.000 | R$ 5.000 - R$ 15.000 |
 | Sistema Web / App | R$ 2.000 - R$ 50.000+ | R$ 8.000 - R$ 30.000 |
-| Site Express (template) | R$ 95 - R$ 500/mes | R$ 197/mes |
 
 ### Automacao com IA
 
@@ -55,54 +146,11 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 
 ---
 
-## Modelo de Precificacao Sugerido
-
-### Opcao A — Pacotes (recomendado para escalar)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  STARTER          │  GROWTH           │  SCALE              │
-│  R$ 497/mes       │  R$ 1.497/mes     │  R$ 3.997/mes       │
-├───────────────────┼───────────────────┼─────────────────────┤
-│  Site institucional│  Tudo do Starter  │  Tudo do Growth     │
-│  1 Landing Page   │  Agente IA basico │  Agente IA avancado │
-│  SSL + Hosting    │  WhatsApp bot     │  Automacoes custom  │
-│  SEO on-page      │  SEO mensal       │  SEO + Trafego pago │
-│  Suporte email    │  Suporte WhatsApp │  Suporte prioritario│
-│                   │  Relatorios       │  Consultoria mensal │
-└───────────────────┴───────────────────┴─────────────────────┘
-```
-
-### Opcao B — Servicos Avulsos
-
-| Servico | Preco |
-|---------|-------|
-| Criacao de site institucional | a partir de R$ 3.000 |
-| Landing Page | R$ 1.500 |
-| E-commerce | a partir de R$ 5.000 |
-| Agente IA (WhatsApp + Chat) | R$ 997/mes |
-| Consultoria SEO | R$ 997/mes |
-| Identidade Visual | a partir de R$ 1.500 |
-| Automacao de processos | a partir de R$ 1.497/mes |
-
-### Opcao C — Hibrido (setup + recorrente)
-
-| Fase | Modelo |
-|------|--------|
-| Setup (site + branding + config IA) | Pagamento unico ou parcelado |
-| Recorrente (manutencao + IA + SEO) | Assinatura mensal |
-
-**Exemplo:**
-- Setup: R$ 5.000 (3x de R$ 1.667)
-- Mensal: R$ 997/mes (agente IA + manutencao + SEO basico)
-
----
-
 ## Estrategia de Preco
 
 ### Posicionamento
 
-A BooPixel deve se posicionar **acima de freelancers e fabricas de site**, mas **abaixo de agencias premium**. O diferencial e a **IA integrada** — algo que agencias tradicionais nao oferecem.
+A BooPixel se posiciona **acima de freelancers e fabricas de site**, mas **abaixo de agencias premium**. Diferencial: **IA integrada**.
 
 ```mermaid
 graph LR
@@ -110,17 +158,6 @@ graph LR
     B --> C[BooPixel<br>R$ 1.500-8.000<br>+ IA integrada]
     C --> D[Agencias Premium<br>R$ 10.000-50.000]
 ```
-
-### Margem Alvo
-
-| Servico | Custo estimado | Preco | Margem |
-|---------|---------------|-------|--------|
-| Site institucional | ~R$ 800-1.500 (tempo) | R$ 3.000-8.000 | 60-80% |
-| Agente IA mensal | ~R$ 200-400 (infra + API) | R$ 997/mes | 60-80% |
-| SEO mensal | ~R$ 300-500 (tempo) | R$ 997/mes | 50-70% |
-| Branding | ~R$ 500-1.000 (tempo) | R$ 1.500-3.000 | 50-70% |
-
-**Meta de margem bruta:** 60-75%
 
 ### Descontos e Incentivos
 
@@ -142,29 +179,28 @@ graph LR
 | Agencia Colors | R$ 500-50.000 | Variavel | Nao oferece | Range amplo |
 | **BooPixel** | **R$ 3.000-8.000** | **R$ 997** | **R$ 997/mes** | **IA integrada** |
 
-O diferencial competitivo da BooPixel e oferecer **site + IA + automacao** como pacote unico. Nenhum concorrente direto no Brasil oferece isso de forma integrada no mesmo nivel de preco.
-
 ---
 
 ## Decisoes Pendentes
 
-- [ ] Definir modelo principal (pacotes vs avulso vs hibrido)
-- [ ] Validar precos com primeiros clientes (5-10 projetos)
-- [ ] Definir custos reais de infra IA (OpenAI API, hosting, etc.)
+- [x] Definir modelo principal — pacotes + avulsos
+- [x] Criar planos no sistema (Essencial, Profissional, Completo, Starter, Growth, Scale)
+- [ ] Migrar 5 clientes ativos para plano Essencial (subscriptions)
+- [ ] Definir preco para Licenca Consultoria
 - [ ] Criar pagina de precos no app.boopixel.com
 - [ ] Definir politica de reajuste anual
 - [ ] Definir termos de contrato (fidelidade, cancelamento)
-- [ ] Testar preco do agente IA no mercado
+- [ ] Validar precos Starter/Growth/Scale com novos clientes
 
 ---
 
 ## Proximos Passos
 
-1. Validar custos internos (tempo + infra) por servico
-2. Escolher modelo de precificacao
+1. Migrar clientes atuais para subscriptions do plano Essencial
+2. Definir situacao de Licenca Consultoria
 3. Montar pagina de precos no site
-4. Testar com 5 clientes piloto
-5. Ajustar precos com base no feedback
+4. Oferecer upgrade para Profissional/Completo aos clientes atuais
+5. Lancar planos Starter/Growth/Scale para novos clientes
 
 ---
 
