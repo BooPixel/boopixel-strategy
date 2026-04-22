@@ -26,11 +26,12 @@ Diferencial competitivo: oferecer **site + IA + automação** como pacote integr
 
 ## 2. Modelo de negócio
 
-### Catálogo (já implementado)
-- **3 planos** Starter (R$ 497/mês) · Growth (R$ 1.497/mês) · Scale (R$ 3.997/mês)
-- **9 serviços avulsos** (Offering): landing-page, site-institucional, e-commerce, agente-ia, seo-mensal, branding, automacao, webmaster, midias-sociais
-- **Tipos de serviço** (ServiceType) — categoria editável (substituiu o enum hardcoded)
+### Catálogo (implementado)
+- **7 planos:** Essential (R$ 161/mes) · Professional (R$ 250/mes) · Complete (R$ 497/mes) · Starter (R$ 497/mes) · Growth (R$ 1.497/mes) · Scale (R$ 3.997/mes) · AI Agent (R$ 997/mes addon)
+- **14 offerings:** landing-page, site-institucional, e-commerce, agente-ia, seo-mensal, branding, automacao, webmaster, midias-sociais, backup, ssl, hosting, dominio, email-profissional
+- **Tipos de serviço** (ServiceType) — categoria editável
 - **4 descontos** padrão: ANUAL (2 meses grátis), BUNDLE10, INDICA, TRIAL50
+- **5 subscriptions** ativas (plano Essential) + **6 clientes** ativos
 
 ### Modelos de cobrança
 - **Recorrente** — assinatura mensal/anual (Subscription)
@@ -239,17 +240,35 @@ business-frontend/
 - Paginação padrão
 - Toggle/badge styling, currency formatting (R$ 1.500,00) em todas as listas
 
-### Roadmap curto
-- [ ] Seed automático do catálogo BooPixel (script idempotente)
-- [ ] Cálculo efetivo de desconto aplicado (percent/fixed/months_free)
-- [ ] Geração automática de `Charge` a partir de `Subscription.current_period_end`
-- [ ] Cron job (EventBridge → Lambda) pra cobrança recorrente
-- [ ] Upgrade/downgrade de Subscription preservando histórico
-- [ ] Integração Stripe (cobrança cartão)
-- [ ] Migrar `refresh_token` para cookie `httpOnly` quando backend suportar
-- [ ] Adicionar mais cloud providers (Cloudflare DNS, AWS Route53, Hostinger API)
-- [ ] Invoices/faturas e recibos em PDF
-- [ ] Notificação por e-mail antes da cobrança vencer
+### Roadmap
+
+#### Fase 1 — Automatizar cobranca (urgente)
+
+> 5 subscriptions ativas, 0 charges recorrentes. Sub #3 (PSK Ambiental) ja venceu em mar/2026. SMTP configurado e funcional.
+
+- [ ] Geracao automatica de `Charge` a partir de `Subscription.current_period_end`
+- [ ] Cron job (EventBridge → Lambda) pra cobranca recorrente
+- [ ] Notificacao por e-mail antes da cobranca vencer (SMTP pronto: smtp.hostinger.com)
+
+#### Fase 2 — Formalizar operacao
+
+> Depende do CNPJ abrir pra faturas. Discounts existem no banco (4) mas sem logica no backend.
+
+- [ ] Calculo efetivo de desconto aplicado (percent/fixed/months_free)
+- [ ] Invoices/faturas e recibos em PDF (apos CNPJ abrir)
+- [ ] Upgrade/downgrade de Subscription preservando historico
+
+#### Fase 3 — Escalar
+
+> So faz sentido com novos clientes. Clientes atuais pagam via transferencia.
+
+- [ ] Integracao Stripe (cobranca cartao)
+- [ ] Seed automatico do catalogo BooPixel (script idempotente pra dev/test)
+
+#### Removidos/adiados
+
+- ~~Migrar `refresh_token` para cookie `httpOnly`~~ — nice-to-have, sem impacto no negocio
+- ~~Adicionar mais cloud providers (Cloudflare, Route53)~~ — tudo na Hostinger, sem necessidade real
 
 ---
 
