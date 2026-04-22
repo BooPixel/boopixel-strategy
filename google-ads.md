@@ -205,7 +205,7 @@ graph TD
 
 ```mermaid
 graph LR
-    A[Google Ads] --> B[/pricing page]
+    A[Google Ads] --> B[Pricing Page]
     B --> C[Clica em plano]
     C --> D[Modal de lead]
     D --> E[Preenche nome + email + whatsapp]
