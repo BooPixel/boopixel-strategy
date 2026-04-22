@@ -211,6 +211,11 @@ Payload:
 - [`src/pages/public/pricing/index.js`](https://github.com/BooPixel/business-frontend/blob/master/src/pages/public/pricing/index.js) — renderiza grupos, cards e toggle mensal/anual
 - [`src/pages/public/pricing/LeadModal.js`](https://github.com/BooPixel/business-frontend/blob/master/src/pages/public/pricing/LeadModal.js) — modal que le o form_template e renderiza os steps como campos
 - Rotas: `/pricing` e `/planos` (ambas apontam para a mesma view)
+- Home service cards linkam diretamente pra `/pricing`
+- Desconto anual calculado dinamicamente a partir dos precos do plano (nao hardcoded)
+- Memoized computations + throttled scroll listener (performance)
+- SEO: Open Graph tags, JSON-LD structured data, sitemap.xml, robots.txt
+- Dominio: `app.boopixel.com` (meta tags e paginas legais atualizadas)
 
 ### Admin
 - [`/catalog/plan-categories`](https://app.boopixel.com/catalog/plan-categories) — CRUD de categorias (slug, titulo, descricao, ordem, ativo)
@@ -274,6 +279,21 @@ Steps sem `validation` viram campos opcionais. Tipos de input aceitos: `text`, `
 | `cd3dca7c80cb` | Cria tabela `plan_categories` + seed das 3 categorias |
 | `d378603ab7fd` | Adiciona `plans.lead_form_slug` (legacy) |
 | `9312122e60dd` | Substitui campos string por FKs: `plans.category_id`, `plans.lead_form_id`, `leads.plan_id` — dropa colunas legadas |
+
+---
+
+## Otimizacoes aplicadas
+
+### Backend
+- Eager-load plan relations (fix N+1 query na rota publica)
+
+### Frontend
+- Memoize pricing computations (evita recalculo desnecessario)
+- Throttle scroll listener (performance)
+- Desconto anual dinamico (calculado dos precos, nao hardcoded)
+- SEO completo: OG meta tags, JSON-LD (Product schema), sitemap.xml, robots.txt
+- Dominio canonico: `app.boopixel.com`
+- Home service cards linkam pra pricing
 
 ---
 
