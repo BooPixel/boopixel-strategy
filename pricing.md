@@ -29,15 +29,16 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 
 ## Planos Ativos (cadastrados no sistema)
 
-### Planos de Manutencao (clientes existentes)
+### Planos (maintenance + premium)
 
 ```mermaid
 graph LR
-    A[Essential<br>R$ 161/mes<br>R$ 1.935/ano] --> B[Professional<br>R$ 250/mes<br>R$ 2.500/ano]
-    B --> C[Complete<br>R$ 497/mes<br>R$ 4.970/ano]
+    A[Essential<br>R$ 250/mes<br>R$ 2.500/ano] --> B[Professional<br>R$ 497/mes<br>R$ 4.970/ano]
+    B --> C[Business<br>R$ 1.497/mes<br>R$ 14.970/ano]
+    C --> D[Enterprise<br>R$ 3.997/mes<br>R$ 39.970/ano]
 ```
 
-#### Essential — R$ 161,25/mes | R$ 1.935/ano
+#### Essential — R$ 250/mes | R$ 2.500/ano (maintenance)
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -49,7 +50,7 @@ graph LR
 | Dominio | #13 | 1 dominio .com.br |
 | Email Profissional | #14 | ate 3 contas |
 
-#### Professional — R$ 250/mes | R$ 2.500/ano
+#### Professional — R$ 497/mes | R$ 4.970/ano (maintenance)
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -62,7 +63,7 @@ graph LR
 | Email Profissional | #14 | ate 10 contas |
 | Consultoria SEO | #5 | SEO on-page + relatorio mensal |
 
-#### Complete — R$ 497/mes | R$ 4.970/ano
+#### Business — R$ 1.497/mes | R$ 14.970/ano (premium)
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -73,56 +74,42 @@ graph LR
 | Hospedagem | #12 | hosting compartilhado |
 | Dominio | #13 | 1 dominio .com.br |
 | Email Profissional | #14 | ate 10 contas |
-| Consultoria SEO | #5 | SEO mensal completo + Google Analytics |
+| Consultoria SEO | #5 | SEO completo + trafego pago |
+| Landing Page | #1 | ate 2 LPs/mes |
 
-### Planos Premium (novos clientes)
+#### Enterprise — R$ 3.997/mes | R$ 39.970/ano (premium)
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 15 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup diario |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 10 contas |
+| Consultoria SEO | #5 | SEO completo + trafego pago + consultoria mensal |
+| Landing Page | #1 | LPs ilimitadas |
+
+### Addons (combinavel com qualquer plano)
 
 ```mermaid
 graph LR
-    D[Starter<br>R$ 497/mes<br>R$ 4.970/ano] --> E[Growth<br>R$ 1.497/mes<br>R$ 14.970/ano]
-    E --> F[Scale<br>R$ 3.997/mes<br>R$ 39.970/ano]
-```
-
-#### Starter — R$ 497/mes | R$ 4.970/ano
-
-| Item | Offering | Detalhe |
-|------|----------|---------|
-| Site Institucional | #2 | ate 5 paginas |
-| Landing Page | #1 | 1 LP/mes |
-| Consultoria SEO | #5 | SEO basico |
-
-#### Growth — R$ 1.497/mes | R$ 14.970/ano
-
-| Item | Offering | Detalhe |
-|------|----------|---------|
-| Site Institucional | #2 | tudo do Starter |
-| Landing Page | #1 | ate 2 LPs/mes |
-| Consultoria SEO | #5 | SEO mensal completo |
-
-#### Scale — R$ 3.997/mes | R$ 39.970/ano
-
-| Item | Offering | Detalhe |
-|------|----------|---------|
-| Site Institucional | #2 | tudo do Growth |
-| Landing Page | #1 | ate 5 LPs/mes |
-| Consultoria SEO | #5 | SEO + trafego pago |
-| Automacao de Processos | #7 | automacoes custom |
-
-### Plano Addon — IA
-
-```mermaid
-graph TD
-    G[AI Agent<br>R$ 997/mes<br>R$ 9.970/ano<br>Combinavel com qualquer plano]
+    E[AI Agent<br>R$ 997/mes] --- F[Automation<br>R$ 1.497/mes]
 ```
 
 #### AI Agent — R$ 997/mes | R$ 9.970/ano
-
-> Plano independente, combinavel com qualquer outro plano (ex: Essential + AI Agent).
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
 | Agente IA WhatsApp | #4 | Agente IA WhatsApp + Chat |
 | Automacao de Processos | #7 | Automacao de processos basica |
+
+#### Automation — R$ 1.497/mes | R$ 14.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Automacao de Processos | #7 | Automacao de processos |
 
 ---
 
@@ -130,12 +117,14 @@ graph TD
 
 | Cliente | Projeto | Desde | Mensal | Anual | Total Recebido | Plano |
 |---------|---------|-------|--------|-------|---------------|-------|
-| Caminho das Origens | Site (#2) | ago/2020 | R$ 176 | R$ 2.112 | R$ 6.312 | Essential |
-| Magsinos | Site (#8) | set/2019 | R$ 173 | R$ 2.076 | R$ 7.540 | Essential |
-| PSK Ambiental | Site (#11) | set/2019 | R$ 161 | R$ 1.935 | R$ 8.616 | Essential |
-| Pedreira Griebeler | Site (#13) | set/2019 | R$ 161 | R$ 1.935 | R$ 7.890 | Essential |
-| Preto Imoveis | Site (#15) | jun/2019 | R$ 161 | R$ 1.935 | R$ 4.764 | Essential |
+| Caminho das Origens | Site (#2) | ago/2020 | R$ 176 | R$ 2.112 | R$ 6.312 | Essential (legado) |
+| Magsinos | Site (#8) | set/2019 | R$ 173 | R$ 2.076 | R$ 7.540 | Essential (legado) |
+| PSK Ambiental | Site (#11) | set/2019 | R$ 161 | R$ 1.935 | R$ 8.616 | Essential (legado) |
+| Pedreira Griebeler | Site (#13) | set/2019 | R$ 161 | R$ 1.935 | R$ 7.890 | Essential (legado) |
+| Preto Imoveis | Site (#15) | jun/2019 | R$ 161 | R$ 1.935 | R$ 4.764 | Essential (legado) |
 | Licenca Consultoria | Site (#34) | — | R$ 0 | R$ 0 | R$ 0 | A definir |
+
+> Clientes atuais mantem preco legado (R$ 161-176/mes) ate renovacao. Na renovacao, migram pra Essential R$ 250/mes.
 
 **Receita recorrente atual (5 clientes):** ~R$ 832/mes | ~R$ 9.993/ano
 
@@ -145,13 +134,12 @@ graph TD
 
 | Plano | Preco/mes | Custo/mes | Margem |
 |-------|-----------|-----------|--------|
-| Essential | R$ 161 | ~R$ 10 (infra) | **94%** |
-| Professional | R$ 250 | ~R$ 15 | **94%** |
-| Complete | R$ 497 | ~R$ 30 | **94%** |
-| Starter | R$ 497 | ~R$ 50 | **90%** |
-| Growth | R$ 1.497 | ~R$ 150 | **90%** |
-| Scale | R$ 3.997 | ~R$ 400 | **90%** |
+| Essential | R$ 250 | ~R$ 10 (infra) | **96%** |
+| Professional | R$ 497 | ~R$ 30 | **94%** |
+| Business | R$ 1.497 | ~R$ 150 | **90%** |
+| Enterprise | R$ 3.997 | ~R$ 400 | **90%** |
 | AI Agent | R$ 997 | ~R$ 100 (IA API) | **90%** |
+| Automation | R$ 1.497 | ~R$ 200 | **87%** |
 
 **Meta de margem bruta:** 90%+
 
