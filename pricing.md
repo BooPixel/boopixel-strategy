@@ -29,16 +29,15 @@ Estrategia de precos para os servicos oferecidos pela **BooPixel** em https://ap
 
 ## Planos Ativos (cadastrados no sistema)
 
-### Planos (maintenance + premium)
+### Maintenance (3 planos)
 
 ```mermaid
 graph LR
-    A[Essential<br>R$ 250/mes<br>R$ 2.500/ano] --> B[Professional<br>R$ 497/mes<br>R$ 4.970/ano]
-    B --> C[Business<br>R$ 1.497/mes<br>R$ 14.970/ano]
-    C --> D[Enterprise<br>R$ 3.997/mes<br>R$ 39.970/ano]
+    A[Essential<br>R$ 250/mes] --> B[Professional<br>R$ 497/mes]
+    B --> C[Advanced<br>R$ 797/mes]
 ```
 
-#### Essential — R$ 250/mes | R$ 2.500/ano (maintenance)
+#### Essential — R$ 250/mes | R$ 2.500/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -50,7 +49,7 @@ graph LR
 | Dominio | #13 | 1 dominio .com.br |
 | Email Profissional | #14 | ate 3 contas |
 
-#### Professional — R$ 497/mes | R$ 4.970/ano (maintenance)
+#### Professional — R$ 497/mes | R$ 4.970/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -63,7 +62,28 @@ graph LR
 | Email Profissional | #14 | ate 10 contas |
 | Consultoria SEO | #5 | SEO on-page + relatorio mensal |
 
-#### Business — R$ 1.497/mes | R$ 14.970/ano (premium)
+#### Advanced — R$ 797/mes | R$ 7.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 10 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup diario |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 10 contas |
+| Consultoria SEO | #5 | SEO completo + Google Analytics |
+
+### Premium (3 planos)
+
+```mermaid
+graph LR
+    D[Business<br>R$ 1.497/mes] --> E[Growth<br>R$ 2.497/mes]
+    E --> F[Enterprise<br>R$ 3.997/mes]
+```
+
+#### Business — R$ 1.497/mes | R$ 14.970/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -77,7 +97,21 @@ graph LR
 | Consultoria SEO | #5 | SEO completo + trafego pago |
 | Landing Page | #1 | ate 2 LPs/mes |
 
-#### Enterprise — R$ 3.997/mes | R$ 39.970/ano (premium)
+#### Growth — R$ 2.497/mes | R$ 24.970/ano
+
+| Item | Offering | Detalhe |
+|------|----------|---------|
+| Site Institucional | #2 | ate 10 paginas |
+| Manutencao Webmaster | #8 | atualizacoes WP + seguranca |
+| Backup | #10 | backup diario |
+| Certificado SSL | #11 | SSL incluso |
+| Hospedagem | #12 | hosting compartilhado |
+| Dominio | #13 | 1 dominio .com.br |
+| Email Profissional | #14 | ate 10 contas |
+| Consultoria SEO | #5 | SEO completo + trafego pago + consultoria mensal |
+| Landing Page | #1 | ate 5 LPs/mes |
+
+#### Enterprise — R$ 3.997/mes | R$ 39.970/ano
 
 | Item | Offering | Detalhe |
 |------|----------|---------|
@@ -136,7 +170,9 @@ graph LR
 |-------|-----------|-----------|--------|
 | Essential | R$ 250 | ~R$ 10 (infra) | **96%** |
 | Professional | R$ 497 | ~R$ 30 | **94%** |
+| Advanced | R$ 797 | ~R$ 50 | **94%** |
 | Business | R$ 1.497 | ~R$ 150 | **90%** |
+| Growth | R$ 2.497 | ~R$ 250 | **90%** |
 | Enterprise | R$ 3.997 | ~R$ 400 | **90%** |
 | AI Agent | R$ 997 | ~R$ 100 (IA API) | **90%** |
 | Automation | R$ 1.497 | ~R$ 200 | **87%** |
