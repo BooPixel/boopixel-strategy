@@ -14,40 +14,97 @@ Toda a configuracao vem do banco — **zero hardcode** de plano, preco, categori
 
 ## Fluxo
 
-```
-Usuario abre /pricing
-  |
-  v
-Frontend: GET /api/v1/public/plans/default  (endpoint publico)
-  |
-  v
-Backend devolve grupos: [{ slug, title, description, sort_order, plans: [...] }]
-  |
-  v
-Frontend renderiza 1 secao por categoria com seus cards
-  |
-  v
-Usuario clica "Contratar agora" num card
-  |
-  v
-Frontend: GET /api/v1/public/forms/default/{plan.lead_form_slug}
-  |
-  v
-Modal abre com os steps daquele form_template (nome, email, whatsapp, mensagem...)
-  |
-  v
-Usuario preenche e envia
-  |
-  v
-Frontend: POST /api/v1/public/leads/default  (payload inclui plan_id)
-  |
-  v
-Lead gravado com plan_id FK para relatorios/attribution
+```mermaid
+sequenceDiagram
+    actor User as Visitante
+    participant FE as Frontend /pricing
+    participant API as business-api
+    participant DB as MySQL
+
+    User->>FE: Abre /pricing
+    FE->>API: GET /public/plans/default
+    API->>DB: SELECT plans + plan_categories + plan_items
+    DB-->>API: grupos por categoria
+    API-->>FE: [{ slug, title, description, plans: [...] }]
+    FE-->>User: Renderiza secoes e cards
+
+    User->>FE: Clica "Contratar agora" num plano
+    FE->>API: GET /public/forms/default/{plan.lead_form_slug}
+    API->>DB: SELECT form_templates
+    DB-->>API: steps (nome, email, whatsapp, mensagem...)
+    API-->>FE: form_template
+    FE-->>User: Modal com steps renderizados dinamicamente
+
+    User->>FE: Preenche e submete
+    FE->>API: POST /public/leads/default {plan_id, name, email, ...}
+    API->>DB: INSERT lead (com plan_id FK)
+    DB-->>API: lead id
+    API-->>FE: 201 Created
+    FE-->>User: Tela de confirmacao
 ```
 
 ---
 
 ## Modelo de dados
+
+```mermaid
+erDiagram
+    plan_categories ||--o{ plans : "agrupa"
+    form_templates ||--o{ plans : "lead form"
+    plans ||--o{ plan_items : "inclui"
+    offerings ||--o{ plan_items : "referencia"
+    plans ||--o{ leads : "origina"
+    plans ||--o{ subscriptions : "assina"
+
+    plan_categories {
+        int id PK
+        int company_id FK
+        string slug
+        string title
+        string description
+        int sort_order
+        bool is_active
+    }
+    plans {
+        int id PK
+        int company_id FK
+        int category_id FK "SET NULL"
+        int lead_form_id FK "SET NULL"
+        string slug
+        string name
+        int tier
+        decimal price_monthly
+        decimal price_yearly
+        bool is_active
+        bool is_featured
+    }
+    form_templates {
+        int id PK
+        int company_id FK
+        string slug
+        string name
+        json steps
+        bool is_active
+    }
+    leads {
+        int id PK
+        int company_id FK
+        int plan_id FK "SET NULL"
+        string name
+        string email
+        string phone
+        text message
+        string source
+        string status
+    }
+    plan_items {
+        int id PK
+        int plan_id FK
+        int offering_id FK
+        int quantity
+        string limit_note
+    }
+```
 
 ### `plans`
 Cada plano tem vinculos reais (FK, `ON DELETE SET NULL`):
