@@ -70,6 +70,13 @@ engine = create_engine(os.environ["DATABASE_URL"])
 - `applies_to` (plan|offering|any), `valid_from`, `valid_until`
 - `max_uses`, `used_count`, `min_months`, `is_active`
 
+### Services (legacy)
+
+**services**
+- `id`, `company_id`, `client_id` (FK users UUID), `service_type_id`
+- `name`, `description`, `monthly_value`
+- `status` (active|suspended|cancelled), `started_at`
+
 ### Projects & Subscriptions
 
 **projects**
