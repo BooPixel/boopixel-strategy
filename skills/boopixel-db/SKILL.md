@@ -57,9 +57,15 @@ engine = create_engine(os.environ["DATABASE_URL"])
 - `pricing_model` (one_time|recurring|hybrid)
 - `price_from`, `setup_fee`, `recurring_price`, `is_active`, `is_featured`
 
+**plan_categories**
+- `id`, `company_id`, `slug`, `title`, `description`, `sort_order`, `is_active`
+- Categories: maintenance (sort 10), premium (sort 20), addon (sort 30)
+
 **plans**
 - `id`, `company_id`, `slug`, `name`, `tier`, `description`
 - `price_monthly`, `price_yearly`, `trial_days`, `is_active`, `is_featured`
+- `category_id` (FK plan_categories, SET NULL) — agrupamento visual na pricing page
+- `lead_form_id` (FK form_templates, SET NULL) — form usado no modal de lead
 
 **plan_items** (bridge Plans <-> Offerings)
 - `id`, `plan_id`, `offering_id`, `quantity`, `limit_note`
@@ -117,6 +123,7 @@ engine = create_engine(os.environ["DATABASE_URL"])
 **leads**
 - `id`, `company_id`, `name`, `email`, `phone`, `message`, `source`
 - `status` (new|contacted|qualified|converted|lost)
+- `plan_id` (FK plans, SET NULL) — plano de origem (attribution)
 - `notes`, `converted_user_id` (FK), `created_at`, `updated_at`
 
 **form_templates**
@@ -134,8 +141,11 @@ engine = create_engine(os.environ["DATABASE_URL"])
 ## Key Relationships
 
 - User <-> Company: many-to-many via `user_companies`
-- Company -> Plans, Offerings, Discounts, ServiceTypes, AssetTypes
+- Company -> Plans, Offerings, Discounts, ServiceTypes, AssetTypes, PlanCategories
+- PlanCategory -> Plans (one-to-many via `category_id`)
+- Plan -> PlanCategory (FK), FormTemplate (FK `lead_form_id`)
 - Plan <-> Offering: many-to-many via `plan_items`
+- Lead -> Plan (FK `plan_id`, attribution)
 - Project -> Customer (User), Company, Offering, Discount
 - Subscription -> Customer (User), Plan, Discount
 - Charge -> Company, User, Project
