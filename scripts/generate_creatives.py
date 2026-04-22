@@ -20,12 +20,24 @@ from pathlib import Path
 from datetime import datetime
 
 from dotenv import load_dotenv
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from sqlalchemy import create_engine, text
 
 load_dotenv(os.path.expanduser("~/.env"))
 
 ENGINE = create_engine(os.environ["DATABASE_URL"])
+
+BG_IMAGE_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "..",
+    "..",
+    "business-frontend",
+    "public",
+    "footer-boopixel.png",
+)
+# Fallback: look relative to script dir
+if not os.path.exists(BG_IMAGE_PATH):
+    BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "assets", "footer-boopixel.png")
 
 FORMATS = {
     "feed": (1080, 1080),
@@ -123,27 +135,43 @@ def generate_plan_creative(plan, fmt_name, fmt_size, output_dir):
     w, h = fmt_size
     is_addon = category == "addon"
 
-    # Background: gradient effect (dark bottom, slight color top)
+    # Background with footer image + dark gradient overlay
     img = Image.new("RGBA", (w, h), COLORS["bg"])
-    draw = ImageDraw.Draw(img)
 
-    # Gradient overlay for featured/addon cards
-    if featured:
-        overlay = Image.new("RGBA", (w, h), "#00000000")
-        odraw = ImageDraw.Draw(overlay)
-        for i in range(h // 3):
-            alpha = int(40 * (1 - i / (h // 3)))
-            odraw.line([(0, i), (w, i)], fill=(59, 130, 246, alpha))
-        img = Image.alpha_composite(img, overlay)
-        draw = ImageDraw.Draw(img)
-    elif is_addon:
-        overlay = Image.new("RGBA", (w, h), "#00000000")
-        odraw = ImageDraw.Draw(overlay)
-        for i in range(h // 3):
-            alpha = int(30 * (1 - i / (h // 3)))
-            odraw.line([(0, i), (w, i)], fill=(22, 163, 106, alpha))
-        img = Image.alpha_composite(img, overlay)
-        draw = ImageDraw.Draw(img)
+    if os.path.exists(BG_IMAGE_PATH):
+        bg = Image.open(BG_IMAGE_PATH).convert("RGBA")
+        # Scale to fill width, position at bottom
+        bg_ratio = w / bg.width
+        bg_resized = bg.resize((w, int(bg.height * bg_ratio)))
+        # Place at bottom of image
+        bg_y = h - bg_resized.height
+        if bg_y < 0:
+            bg_resized = bg_resized.crop((0, -bg_y, w, bg_resized.height))
+            bg_y = 0
+        img.paste(bg_resized, (0, bg_y))
+
+        # Dark gradient overlay: solid dark top fading to semi-transparent bottom
+        gradient = Image.new("RGBA", (w, h), "#00000000")
+        gdraw = ImageDraw.Draw(gradient)
+        # Top 60% = solid dark bg
+        solid_end = int(h * 0.55)
+        bg_rgb = tuple(int(COLORS["bg"].lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
+        for y_pos in range(solid_end):
+            gdraw.line([(0, y_pos), (w, y_pos)], fill=(*bg_rgb, 255))
+        # 55%-85% = fade from solid to semi-transparent
+        fade_start = solid_end
+        fade_end = int(h * 0.85)
+        for y_pos in range(fade_start, fade_end):
+            progress = (y_pos - fade_start) / (fade_end - fade_start)
+            alpha = int(255 * (1 - progress * 0.6))
+            gdraw.line([(0, y_pos), (w, y_pos)], fill=(*bg_rgb, alpha))
+        # 85%-100% = semi-transparent (image shows through)
+        for y_pos in range(fade_end, h):
+            gdraw.line([(0, y_pos), (w, y_pos)], fill=(*bg_rgb, 100))
+
+        img = Image.alpha_composite(img, gradient)
+
+    draw = ImageDraw.Draw(img)
 
     font_brand = get_font(28)
     font_category = get_font(20)
