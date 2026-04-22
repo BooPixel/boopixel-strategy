@@ -228,7 +228,7 @@ business-frontend/
 
 ## 9. Status de implementação
 
-### ✅ Pronto
+### Pronto
 - Catálogo completo: ServiceType, AssetType, Offering, Plan, PlanItem, Discount
 - Vendas: Subscription + Project (com status `active` pra contínuo)
 - Páginas admin (lista + form com seções em cards + detail) pra todas as 5 entidades novas
@@ -239,7 +239,7 @@ business-frontend/
 - Paginação padrão
 - Toggle/badge styling, currency formatting (R$ 1.500,00) em todas as listas
 
-### 🚧 Roadmap curto
+### Roadmap curto
 - [ ] Seed automático do catálogo BooPixel (script idempotente)
 - [ ] Cálculo efetivo de desconto aplicado (percent/fixed/months_free)
 - [ ] Geração automática de `Charge` a partir de `Subscription.current_period_end`
