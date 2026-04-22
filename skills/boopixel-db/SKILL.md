@@ -192,27 +192,42 @@ git push origin master
 
 | ID | Slug | Name | Tier | Monthly | Yearly | Target |
 |----|------|------|------|---------|--------|--------|
-| 4 | essencial | Essencial | 1 | R$ 161,25 | R$ 1.935 | Clientes existentes |
-| 5 | profissional | Profissional | 2 | R$ 250 | R$ 2.500 | Upgrade existentes |
-| 6 | completo | Completo | 3 | R$ 497 | R$ 4.970 | Upgrade existentes |
+| 4 | essential | Essential | 1 | R$ 161,25 | R$ 1.935 | Clientes existentes |
+| 5 | professional | Professional | 2 | R$ 250 | R$ 2.500 | Upgrade existentes |
+| 6 | complete | Complete | 3 | R$ 497 | R$ 4.970 | Upgrade existentes |
 | 1 | starter | Starter | 4 | R$ 497 | R$ 4.970 | Novos clientes |
 | 2 | growth | Growth | 5 | R$ 1.497 | R$ 14.970 | Novos clientes |
 | 3 | scale | Scale | 6 | R$ 3.997 | R$ 39.970 | Novos clientes |
 
 ### Plan Items (plan_items bridge table)
 
-**Essencial (plan=4):**
+**Essential (plan=4) — 7 items:**
 - Site Institucional (offering=2) — ate 5 paginas
-- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (3 contas)
+- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
+- Backup (offering=10) — backup semanal
+- Certificado SSL (offering=11) — SSL incluso
+- Hospedagem (offering=12) — hosting compartilhado
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 3 contas
 
-**Profissional (plan=5):**
+**Professional (plan=5) — 8 items:**
 - Site Institucional (offering=2) — ate 5 paginas
-- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (10 contas)
+- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
+- Backup (offering=10) — backup diario
+- Certificado SSL (offering=11) — SSL incluso
+- Hospedagem (offering=12) — hosting compartilhado
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 10 contas
 - Consultoria SEO (offering=5) — SEO on-page + relatorio mensal
 
-**Completo (plan=6):**
+**Complete (plan=6) — 9 items:**
 - Site Institucional (offering=2) — ate 10 paginas
-- Manutencao Webmaster (offering=8) — WP + backup + SSL + hosting + 1 dominio + email (10 contas)
+- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
+- Backup (offering=10) — backup diario
+- Certificado SSL (offering=11) — SSL incluso
+- Hospedagem (offering=12) — hosting compartilhado
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 10 contas
 - Consultoria SEO (offering=5) — SEO mensal completo + Google Analytics
 - Agente IA WhatsApp (offering=4) — WhatsApp + Chat
 
@@ -234,7 +249,7 @@ git push origin master
 - Consultoria SEO (offering=5) — SEO + trafego pago
 - Automacao de Processos (offering=7) — automacoes custom
 
-### Offerings (9 active)
+### Offerings (14 active)
 
 | ID | Slug | Name | Model |
 |----|------|------|-------|
@@ -247,6 +262,11 @@ git push origin master
 | 7 | automacao | Automacao de Processos | recurring |
 | 8 | webmaster | Manutencao Webmaster | recurring |
 | 9 | midias-sociais | Midias Sociais | recurring |
+| 10 | backup | Backup | recurring |
+| 11 | ssl | Certificado SSL | recurring |
+| 12 | hosting | Hospedagem | recurring |
+| 13 | dominio | Dominio | recurring |
+| 14 | email-profissional | Email Profissional | recurring |
 
 ---
 
@@ -301,11 +321,11 @@ Cliente solicita -> subscription.status = cancelled + subscription.ends_at = fim
 
 | Cliente | Project | Plan | Monthly | Annual | Since | Total Revenue |
 |---------|---------|------|---------|--------|-------|---------------|
-| Caminho das Origens | #2 | Essencial | R$ 176 | R$ 2.112 | ago/2020 | R$ 6.312 |
-| Magsinos | #8 | Essencial | R$ 173 | R$ 2.076 | set/2019 | R$ 7.540 |
-| PSK Ambiental | #11 | Essencial | R$ 161 | R$ 1.935 | set/2019 | R$ 8.616 |
-| Pedreira Griebeler | #13 | Essencial | R$ 161 | R$ 1.935 | set/2019 | R$ 7.890 |
-| Preto Imoveis | #15 | Essencial | R$ 161 | R$ 1.935 | jun/2019 | R$ 4.764 |
+| Caminho das Origens | #2 | Essential | R$ 176 | R$ 2.112 | ago/2020 | R$ 6.312 |
+| Magsinos | #8 | Essential | R$ 173 | R$ 2.076 | set/2019 | R$ 7.540 |
+| PSK Ambiental | #11 | Essential | R$ 161 | R$ 1.935 | set/2019 | R$ 8.616 |
+| Pedreira Griebeler | #13 | Essential | R$ 161 | R$ 1.935 | set/2019 | R$ 7.890 |
+| Preto Imoveis | #15 | Essential | R$ 161 | R$ 1.935 | jun/2019 | R$ 4.764 |
 | Licenca Consultoria | #34 | A definir | R$ 0 | R$ 0 | — | R$ 0 |
 
 **MRR (Monthly Recurring Revenue):** ~R$ 832/mes
