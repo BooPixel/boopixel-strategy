@@ -237,23 +237,34 @@ business-frontend/
 ### Pronto
 - Catálogo completo: ServiceType, AssetType, Offering, Plan, PlanItem, Discount
 - Vendas: Subscription + Project (com status `active` pra contínuo)
-- Páginas admin (lista + form com seções em cards + detail) pra todas as 5 entidades novas
+- Páginas admin (lista + form com seções em cards + detail) pra todas as entidades
 - Migração de Service legacy → Project (34 services migrados, 14 assets + 235 charges relinkados)
 - Drop completo do Service model + tabela
 - Cloud integration Registro.br (RDAP) com action `lookup` genérica
 - Auth com bootstrap rehydrate (refresh token sobrevive fechar/abrir aba)
 - Paginação padrão
 - Toggle/badge styling, currency formatting (R$ 1.500,00) em todas as listas
+- **PlanCategory** — tabela + CRUD admin + seed (maintenance, premium, addon)
+- **Pricing page pública** — `/pricing` e `/planos`, dinâmica, toggle mensal/anual, SEO completo (OG, JSON-LD, sitemap.xml, robots.txt)
+- **Lead modal na pricing** — form dinâmico vinculado ao plano via `lead_form_id`, submete lead com `plan_id` e `source`
+- **Lead notification por email** — equipe notificada via SMTP (BackgroundTasks) quando chega lead novo
+- **Form builder visual** — admin pode criar/editar form templates com step builder (JSON-based)
+- **GA4 + Consent Mode v2** — Google Analytics (G-XFS7Y4F884) com cookie banner e consent management
+- **Home → Pricing** — service cards na home linkam direto pra `/pricing`
+- **Performance** — eager-load de relações (fix N+1), memoize pricing computations, throttled scroll, inline asset actions
+- **Client portal** — `/client/payments` para clientes verem suas cobranças
+- **CustomerEmail** — emails adicionais de notificação por cliente
+- **Dashboard** — métricas de transações com gráficos (Recharts), date range picker, year-over-year
 
 ### Roadmap
 
 #### Fase 1 — Automatizar cobranca (urgente)
 
-> 5 subscriptions ativas, 0 charges recorrentes. Sub #3 (PSK Ambiental) ja venceu em mar/2026. SMTP configurado e funcional.
+> 5 subscriptions ativas, 0 charges recorrentes. Sub #3 (PSK Ambiental) ja venceu em mar/2026. SMTP configurado e funcional. Lead notification ja funciona via BackgroundTasks.
 
 - [ ] Geracao automatica de `Charge` a partir de `Subscription.current_period_end`
 - [ ] Cron job (EventBridge → Lambda) pra cobranca recorrente
-- [ ] Notificacao por e-mail antes da cobranca vencer (SMTP pronto: smtp.hostinger.com)
+- [ ] Notificacao por e-mail antes da cobranca vencer
 
 #### Fase 2 — Formalizar operacao
 
@@ -269,11 +280,17 @@ business-frontend/
 
 - [ ] Integracao Stripe (cobranca cartao)
 - [ ] Seed automatico do catalogo BooPixel (script idempotente pra dev/test)
+- [ ] Meta Pixel + Conversions API (Facebook/Instagram tracking)
+- [ ] Dashboard de leads (funil visual, leads por source, SLA)
 
 #### Removidos/adiados
 
 - ~~Migrar `refresh_token` para cookie `httpOnly`~~ — nice-to-have, sem impacto no negocio
 - ~~Adicionar mais cloud providers (Cloudflare, Route53)~~ — tudo na Hostinger, sem necessidade real
+- ~~Configurar GA4 e GTM~~ — **FEITO** (G-XFS7Y4F884 com Consent Mode v2)
+- ~~Pricing page publica~~ — **FEITO** (/pricing e /planos com SEO, modal de lead, categorias)
+- ~~Notificacao email para leads~~ — **FEITO** (BackgroundTasks + SMTP Hostinger)
+- ~~Form builder visual no admin~~ — **FEITO** (StepsBuilder com JSON step editor)
 
 ---
 

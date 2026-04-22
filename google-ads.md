@@ -282,8 +282,9 @@ graph LR
 ## Decisoes Pendentes
 
 - [ ] Criar conta Google Ads
-- [ ] Configurar Google Tag Manager no app.boopixel.com
-- [ ] Configurar GA4 com eventos de conversao
+- [x] Configurar Google Tag Manager no app.boopixel.com — GA4 (G-XFS7Y4F884) com Consent Mode v2 e cookie banner
+- [x] Configurar GA4 com eventos de conversao — gtag.js carregado, consent management implementado
+- [ ] Configurar eventos customizados no GA4 (page_view_pricing, plan_click, lead_modal_open, lead_submit)
 - [ ] Definir budget inicial (minimo R$ 1.500 ou recomendado R$ 4.000)
 - [ ] Criar anuncios responsivos (RSA) com variacoes de titulo
 - [ ] Configurar remarketing pixel

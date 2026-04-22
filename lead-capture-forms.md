@@ -211,9 +211,9 @@ Permite filtrar no dashboard admin e calcular ROI por canal.
 
 ### 7.1 Notificação por email
 
-**Prioridade: alta**
+**Status: IMPLEMENTADO** ✅
 
-Quando chega lead novo: email pro time comercial (endereços em `LEAD_NOTIFICATION_EMAILS` comma-separated). Conteúdo: nome, email, telefone, fonte, resumo das respostas.
+Quando chega lead novo: email pro time comercial (endereços em `LEAD_NOTIFICATION_EMAILS` comma-separated). Conteúdo: nome, email, telefone, fonte, resumo das respostas. Implementado via `BackgroundTasks` no `lead_service._notify_team()`. Template `new_lead` (pt-BR) via SMTP Hostinger.
 
 ### 7.2 Integração com CRM externo
 
@@ -290,13 +290,14 @@ Adicionar ao `/dashboard` admin:
 ### 9.1 Curto prazo (próximas 2 sprints)
 
 - [x] Templates `landing-evento`, `sistema-mvp`, `revisao-site`
-- [ ] Notificação por email pro time comercial quando chega `lead.new`
+- [x] Notificação por email pro time comercial quando chega `lead.new` — `lead_service._notify_team()` via BackgroundTasks
+- [x] Builder visual de forms no admin — StepsBuilder com JSON step editor, validações, branching
+- [x] Modal de lead na pricing page — form dinâmico vinculado ao plano via `lead_form_id`
 - [ ] Email transacional pro lead confirmando recebimento
 - [ ] Página pública `/obrigado?lead={id}` com próximos passos
 
 ### 9.2 Médio prazo (1–3 meses)
 
-- [ ] Builder visual de forms no admin (em vez do textarea JSON)
 - [ ] A/B testing de flows (mesma URL, 2 versões)
 - [ ] Integração WhatsApp Business
 - [ ] Email nurturing automatizado (integração Mailerlite)

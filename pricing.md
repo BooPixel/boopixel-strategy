@@ -281,14 +281,16 @@ graph LR
 ## Decisoes Pendentes
 
 - [x] Definir modelo principal — pacotes + avulsos
-- [x] Criar planos no sistema (Essential, Professional, Complete, Starter, Growth, Scale, AI Agent)
+- [x] Criar planos no sistema (Essential, Professional, Advanced, Business, Growth, Enterprise, AI Agent, Automation)
 - [x] Migrar 5 clientes ativos para plano Essential (subscriptions criadas)
 - [x] Criar service assets para todos os clientes ativos (6 assets por cliente)
+- [x] Criar pagina de precos no app.boopixel.com — implementada em `/pricing` e `/planos` com SEO completo
+- [x] Categorias de planos (PlanCategory) — maintenance, premium, addon cadastradas
+- [x] Modal de lead na pricing page — form dinamico vinculado ao plano
 - [ ] Definir preco para Licenca Consultoria
-- [ ] Criar pagina de precos no app.boopixel.com
 - [ ] Definir politica de reajuste anual
 - [ ] Definir termos de contrato (fidelidade, cancelamento)
-- [ ] Validar precos Starter/Growth/Scale com novos clientes
+- [ ] Validar precos Premium (Business/Growth/Enterprise) com novos clientes
 
 ---
 
@@ -310,10 +312,12 @@ Cada cliente ativo tem 6 service assets padrao:
 ## Proximos Passos
 
 1. Definir situacao de Licenca Consultoria
-2. Montar pagina de precos no site
-3. Oferecer upgrade para Professional/Complete aos clientes atuais
-4. Lancar planos Starter/Growth/Scale para novos clientes
+2. ~~Montar pagina de precos no site~~ — **FEITO** (pricing page publica com SEO)
+3. Oferecer upgrade para Professional/Advanced aos clientes atuais
+4. Captar novos clientes para planos Premium (Business/Growth/Enterprise)
 5. Preencher dados faltantes dos clientes (phone, document, address, email real)
+6. Implementar calculo efetivo de desconto (percent/fixed/months_free)
+7. Automatizar geracao de charges a partir de subscriptions
 
 ---
 

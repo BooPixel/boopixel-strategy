@@ -294,6 +294,8 @@ Steps sem `validation` viram campos opcionais. Tipos de input aceitos: `text`, `
 - SEO completo: OG meta tags, JSON-LD (Product schema), sitemap.xml, robots.txt
 - Dominio canonico: `app.boopixel.com`
 - Home service cards linkam pra pricing
+- GA4 (G-XFS7Y4F884) com Consent Mode v2 e cookie banner
+- i18n completo (PT/EN sincronizados)
 
 ---
 
