@@ -141,3 +141,45 @@ Never run `sam delete` without explicit user confirmation.
 - **401 on every request after API deploy** — `SECRET_KEY` changed; existing tokens are invalid. Expected if the user rotated it.
 
 Authoritative deploy docs: `$API_PATH/DEPLOY.md`.
+
+---
+
+## Self-maintenance (auto-update rule)
+
+This skill must **learn from every deploy**. Whenever you discover something new during a run — a new failure mode, a workaround, a changed command, a stack name, an AWS ID, an env-specific quirk — update this file before ending the turn.
+
+### When to update
+
+Update whenever ANY of these happen during a deploy:
+
+- A command in this file fails and you find the fix (e.g. target renamed, flag changed, dependency missing).
+- The user corrects the process (e.g. "na verdade o profile é X", "prod usa outro stack name").
+- You discover an undocumented step that was required to succeed.
+- A new deploy target or environment is added to the Makefile.
+- An AWS resource ID changes (Amplify app, stack name, region, profile).
+- A troubleshooting case repeats (promote it from ad-hoc fix to documented entry).
+
+Do NOT update for:
+
+- One-off user-specific paths (path discovery already handles that).
+- Transient AWS outages.
+- Anything the user explicitly says "don't document this".
+
+### How to update
+
+1. Edit `$STRATEGY_PATH/skills/boopixel-deploy/SKILL.md` — resolve `$STRATEGY_PATH` the same way as `$API_PATH`, matching remote `BooPixel/boopixel-strategy`.
+2. Add the new knowledge in the most specific existing section (Targets, Workflow, Troubleshooting, Common requests). Create a new section only if nothing fits.
+3. Bump the `version:` in frontmatter by a patch (e.g. `1.0.0` → `1.0.1`) when the change is substantive. Skip the bump for pure typo fixes.
+4. Commit and push from `$STRATEGY_PATH` with a conventional message:
+   ```bash
+   git -C "$STRATEGY_PATH" add skills/boopixel-deploy/SKILL.md
+   git -C "$STRATEGY_PATH" commit -m "📘 DOCS: <what you learned>"
+   git -C "$STRATEGY_PATH" push origin master
+   ```
+5. Tell the user one line: "Skill atualizada: <what>."
+
+### Guardrails
+
+- Never commit secrets (DB URL, SECRET_KEY, real AWS account IDs beyond the public profile name) into SKILL.md.
+- Never push without the user having completed the deploy that produced the learning — half-learned lessons rot fast.
+- If the user is mid-deploy and rushing, save the learning to memory instead and update the skill in the next calm turn.
