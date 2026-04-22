@@ -32,15 +32,24 @@ FORMATS = {
     "stories": (1080, 1920),
 }
 
+# Design system from business-frontend (public pages)
 COLORS = {
-    "bg": "#0a0a1a",
-    "card": "#141428",
-    "accent": "#6c5ce7",
-    "accent_light": "#a29bfe",
-    "text": "#ffffff",
-    "text_muted": "#b2b2cc",
-    "price": "#00e676",
-    "badge": "#ff6b6b",
+    "bg": "#0a0a0a",
+    "card": "#121212",
+    "card_featured": "#141d3a",
+    "accent": "#3b82f6",
+    "accent_dark": "#1d4ed8",
+    "accent_light": "#60a5fa",
+    "text": "#f5f5f5",
+    "text_muted": "#a8a8b0",
+    "text_soft": "#78787f",
+    "price": "#4ade80",
+    "price_dark": "#16a34a",
+    "badge": "#3b82f6",
+    "badge_addon": "#16a34a",
+    "border": "#2a2a31",
+    "cta": "#1e88e5",
+    "cta_hover": "#1565c0",
 }
 
 CATEGORY_LABELS = {
@@ -75,13 +84,18 @@ def get_plans(slug_filter=None):
 
 
 def get_font(size, bold=False):
-    """Try system fonts, fallback to default."""
-    font_paths = [
+    """Try Inter first (brand font), then system fonts."""
+    # Inter from @fontsource (business-frontend uses this)
+    inter_paths = [
+        os.path.expanduser("~/.fonts/Inter-Regular.ttf"),
+        os.path.expanduser("~/.fonts/Inter-Bold.ttf"),
+    ]
+    system_paths = [
         "/System/Library/Fonts/Helvetica.ttc",
         "/System/Library/Fonts/SFNSDisplay.ttf",
         "/System/Library/Fonts/Arial.ttf",
     ]
-    for path in font_paths:
+    for path in (inter_paths if bold else inter_paths[:1]) + system_paths:
         if os.path.exists(path):
             try:
                 return ImageFont.truetype(path, size)
@@ -107,83 +121,115 @@ def format_price(value):
 def generate_plan_creative(plan, fmt_name, fmt_size, output_dir):
     slug, name, monthly, yearly, featured, category, items_raw = plan
     w, h = fmt_size
+    is_addon = category == "addon"
 
+    # Background: gradient effect (dark bottom, slight color top)
     img = Image.new("RGBA", (w, h), COLORS["bg"])
     draw = ImageDraw.Draw(img)
 
+    # Gradient overlay for featured/addon cards
+    if featured:
+        overlay = Image.new("RGBA", (w, h), "#00000000")
+        odraw = ImageDraw.Draw(overlay)
+        for i in range(h // 3):
+            alpha = int(40 * (1 - i / (h // 3)))
+            odraw.line([(0, i), (w, i)], fill=(59, 130, 246, alpha))
+        img = Image.alpha_composite(img, overlay)
+        draw = ImageDraw.Draw(img)
+    elif is_addon:
+        overlay = Image.new("RGBA", (w, h), "#00000000")
+        odraw = ImageDraw.Draw(overlay)
+        for i in range(h // 3):
+            alpha = int(30 * (1 - i / (h // 3)))
+            odraw.line([(0, i), (w, i)], fill=(22, 163, 106, alpha))
+        img = Image.alpha_composite(img, overlay)
+        draw = ImageDraw.Draw(img)
+
     font_brand = get_font(28)
-    font_category = get_font(22)
+    font_category = get_font(20)
     font_name = get_font(64, bold=True)
     font_price = get_font(48, bold=True)
-    font_yearly = get_font(24)
-    font_item = get_font(26)
-    font_cta = get_font(32, bold=True)
+    font_yearly = get_font(22)
+    font_item = get_font(24)
+    font_item_note = get_font(20)
+    font_cta = get_font(30, bold=True)
+    font_url = get_font(20)
 
-    # Y offset based on format
-    y = 60 if fmt_name == "feed" else 200
+    margin = 80
+    y = 60 if fmt_name == "feed" else 180
 
-    # Brand
-    draw.text((80, y), "BOOPIXEL", font=font_brand, fill=COLORS["accent_light"])
+    # Brand name
+    draw.text((margin, y), "BOOPIXEL", font=font_brand, fill=COLORS["accent_light"])
     y += 50
 
-    # Category badge
-    cat_label = CATEGORY_LABELS.get(category, category or "")
+    # Category badge pill
+    cat_label = CATEGORY_LABELS.get(category, category or "").upper()
     if cat_label:
-        draw.text((80, y), cat_label.upper(), font=font_category, fill=COLORS["text_muted"])
-        y += 40
+        bbox = draw.textbbox((0, 0), cat_label, font=font_category)
+        cat_w = bbox[2] - bbox[0] + 24
+        badge_color = COLORS["badge_addon"] if is_addon else COLORS["border"]
+        draw_rounded_rect(draw, (margin, y, margin + cat_w, y + 30), 15, badge_color)
+        draw.text((margin + 12, y + 4), cat_label, font=font_category, fill=COLORS["text"])
+        y += 46
 
     # Plan name
-    draw.text((80, y), name, font=font_name, fill=COLORS["text"])
-    y += 90
+    draw.text((margin, y), name, font=font_name, fill=COLORS["text"])
+    y += 85
 
     # Featured badge
     if featured:
-        draw_rounded_rect(draw, (80, y, 260, y + 36), 18, COLORS["badge"])
-        draw.text((100, y + 4), "MAIS POPULAR", font=font_category, fill=COLORS["text"])
-        y += 50
+        draw_rounded_rect(draw, (margin, y, margin + 190, y + 32), 16, COLORS["accent"])
+        draw.text((margin + 14, y + 4), "MAIS POPULAR", font=font_category, fill=COLORS["text"])
+        y += 48
 
     # Price
     price_text = f"{format_price(monthly)}/mes"
-    draw.text((80, y), price_text, font=font_price, fill=COLORS["price"])
-    y += 65
+    draw.text((margin, y), price_text, font=font_price, fill=COLORS["price"])
+    y += 60
 
-    # Yearly
+    # Yearly price
     yearly_text = f"ou {format_price(yearly)}/ano"
-    draw.text((80, y), yearly_text, font=font_yearly, fill=COLORS["text_muted"])
-    y += 50
+    draw.text((margin, y), yearly_text, font=font_yearly, fill=COLORS["text_soft"])
+    y += 44
 
-    # Divider
-    draw.line([(80, y), (w - 80, y)], fill=COLORS["accent"], width=2)
-    y += 30
+    # Divider line
+    draw.line([(margin, y), (w - margin, y)], fill=COLORS["border"], width=1)
+    y += 24
 
-    # Items
+    # Items list
     if items_raw:
         items = items_raw.split("|")
-        max_items = 6 if fmt_name == "feed" else 10
+        max_items = 5 if fmt_name == "feed" else 9
         for item in items[:max_items]:
             parts = item.split(" — ")
             item_name = parts[0].strip() if parts else item
             item_note = parts[1].strip() if len(parts) > 1 else ""
-            draw.text((100, y), f"•  {item_name}", font=font_item, fill=COLORS["text"])
+
+            # Checkmark
+            check_color = COLORS["price"] if not is_addon else COLORS["badge_addon"]
+            draw.text((margin + 4, y), "\u2713", font=font_item, fill=check_color)
+            draw.text((margin + 32, y), item_name, font=font_item, fill=COLORS["text"])
+            y += 30
             if item_note:
-                y += 32
-                draw.text((120, y), item_note, font=font_yearly, fill=COLORS["text_muted"])
-            y += 38
+                draw.text((margin + 32, y), item_note, font=font_item_note, fill=COLORS["text_muted"])
+                y += 26
+            y += 8
 
         if len(items) > max_items:
-            draw.text((100, y), f"+ {len(items) - max_items} mais...", font=font_yearly, fill=COLORS["accent_light"])
-            y += 38
+            remaining = len(items) - max_items
+            draw.text((margin + 32, y), f"+ {remaining} mais...", font=font_item_note, fill=COLORS["accent_light"])
+            y += 34
 
     # CTA button
-    cta_y = h - 140 if fmt_name == "stories" else h - 120
-    draw_rounded_rect(draw, (80, cta_y, w - 80, cta_y + 64), 32, COLORS["accent"])
+    cta_y = h - 130 if fmt_name == "stories" else h - 110
+    draw_rounded_rect(draw, (margin, cta_y, w - margin, cta_y + 56), 8, COLORS["cta"])
     cta_text = "Ver planos"
     bbox = draw.textbbox((0, 0), cta_text, font=font_cta)
     cta_tw = bbox[2] - bbox[0]
-    draw.text(((w - cta_tw) // 2, cta_y + 14), cta_text, font=font_cta, fill=COLORS["text"])
+    draw.text(((w - cta_tw) // 2, cta_y + 12), cta_text, font=font_cta, fill="#ffffff")
 
-    # URL
-    draw.text((80, cta_y + 80), "app.boopixel.com/pricing", font=font_yearly, fill=COLORS["text_muted"])
+    # URL footer
+    draw.text((margin, cta_y + 70), "app.boopixel.com/pricing", font=font_url, fill=COLORS["text_soft"])
 
     # Save
     filename = f"ad_{slug}_{fmt_name}.png"
