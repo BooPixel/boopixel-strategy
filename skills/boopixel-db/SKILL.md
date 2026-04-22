@@ -198,70 +198,89 @@ git push origin master
 
 ## Business Data — Plans & Items
 
-### Plans (7 active)
+### Plans (8 active, 3 categories)
 
-| ID | Slug | Name | Tier | Monthly | Yearly | Target |
-|----|------|------|------|---------|--------|--------|
-| 4 | essential | Essential | 1 | R$ 161,25 | R$ 1.935 | Clientes existentes |
-| 5 | professional | Professional | 2 | R$ 250 | R$ 2.500 | Upgrade existentes |
-| 6 | complete | Complete | 3 | R$ 497 | R$ 4.970 | Upgrade existentes |
-| 1 | starter | Starter | 4 | R$ 497 | R$ 4.970 | Novos clientes |
-| 2 | growth | Growth | 5 | R$ 1.497 | R$ 14.970 | Novos clientes |
-| 3 | scale | Scale | 6 | R$ 3.997 | R$ 39.970 | Novos clientes |
-| 7 | ai-agent | AI Agent | 7 | R$ 997 | R$ 9.970 | Addon — combinavel com qualquer plano |
+**Categories:** maintenance (sort 10), premium (sort 20), addon (sort 30)
+
+| ID | Slug | Name | Tier | Monthly | Yearly | Category |
+|----|------|------|------|---------|--------|----------|
+| 4 | essential | Essential | 1 | R$ 250 | R$ 2.750 | maintenance |
+| 9 | professional | Professional | 2 | R$ 497 | R$ 5.467 | maintenance |
+| 13 | advanced | Advanced | 3 | R$ 797 | R$ 8.767 | maintenance |
+| 10 | business | Business | 4 | R$ 1.497 | R$ 16.467 | premium |
+| 14 | growth | Growth | 5 | R$ 2.497 | R$ 27.467 | premium |
+| 11 | enterprise | Enterprise | 6 | R$ 3.997 | R$ 43.967 | premium |
+| 7 | ai-agent | AI Agent | 5 | R$ 997 | R$ 10.967 | addon |
+| 12 | automation | Automation | 6 | R$ 1.497 | R$ 16.467 | addon |
+
+Yearly = 11x monthly (desconto de 1 mes).
 
 ### Plan Items (plan_items bridge table)
 
-**Essential (plan=4) — 7 items:**
+**Essential (plan=4) — 6 items:**
+- Site Institucional (offering=2) — 1 pagina
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
+- Backup (offering=10) — backup mensal
+- Certificado SSL (offering=11) — SSL incluso
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — 1 conta
+
+**Professional (plan=9) — 7 items:**
 - Site Institucional (offering=2) — ate 5 paginas
-- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
 - Backup (offering=10) — backup semanal
 - Certificado SSL (offering=11) — SSL incluso
-- Hospedagem (offering=12) — hosting compartilhado
-- Dominio (offering=13) — 1 dominio .com.br
-- Email Profissional (offering=14) — ate 3 contas
-
-**Professional (plan=5) — 8 items:**
-- Site Institucional (offering=2) — ate 5 paginas
-- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
-- Backup (offering=10) — backup diario
-- Certificado SSL (offering=11) — SSL incluso
-- Hospedagem (offering=12) — hosting compartilhado
 - Dominio (offering=13) — 1 dominio .com.br
 - Email Profissional (offering=14) — ate 10 contas
 - Consultoria SEO (offering=5) — SEO on-page + relatorio mensal
 
-**Complete (plan=6) — 8 items:**
+**Advanced (plan=13) — 7 items:**
 - Site Institucional (offering=2) — ate 10 paginas
-- Manutencao Webmaster (offering=8) — atualizacoes WP + seguranca
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
 - Backup (offering=10) — backup diario
 - Certificado SSL (offering=11) — SSL incluso
-- Hospedagem (offering=12) — hosting compartilhado
 - Dominio (offering=13) — 1 dominio .com.br
 - Email Profissional (offering=14) — ate 10 contas
-- Consultoria SEO (offering=5) — SEO mensal completo + Google Analytics
+- Consultoria SEO (offering=5) — SEO completo + Google Analytics
 
-**Starter (plan=1) — 3 items:**
-- Site Institucional (offering=2) — ate 5 paginas
-- Landing Page (offering=1) — 1 LP/mes
-- Consultoria SEO (offering=5) — SEO basico
-
-**Growth (plan=2) — 3 items:**
-- Site Institucional (offering=2) — tudo do Starter
+**Business (plan=10) — 8 items:**
 - Landing Page (offering=1) — ate 2 LPs/mes
-- Consultoria SEO (offering=5) — SEO mensal completo
+- Site Institucional (offering=2) — ate 10 paginas
+- Consultoria SEO (offering=5) — SEO completo + trafego pago
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
+- Backup (offering=10) — backup diario
+- Certificado SSL (offering=11) — SSL incluso
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 10 contas
 
-**Scale (plan=3) — 4 items:**
-- Site Institucional (offering=2) — tudo do Growth
+**Growth (plan=14) — 8 items:**
 - Landing Page (offering=1) — ate 5 LPs/mes
-- Consultoria SEO (offering=5) — SEO + trafego pago
-- Automacao de Processos (offering=7) — automacoes custom
+- Site Institucional (offering=2) — ate 10 paginas
+- Consultoria SEO (offering=5) — SEO completo + trafego pago + consultoria mensal
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
+- Backup (offering=10) — backup diario
+- Certificado SSL (offering=11) — SSL incluso
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 10 contas
+
+**Enterprise (plan=11) — 8 items:**
+- Landing Page (offering=1) — LPs ilimitadas
+- Site Institucional (offering=2) — ate 15 paginas
+- Consultoria SEO (offering=5) — SEO completo + trafego pago + consultoria mensal
+- Manutencao Webmaster (offering=8) — atualizacoes + seguranca
+- Backup (offering=10) — backup diario
+- Certificado SSL (offering=11) — SSL incluso
+- Dominio (offering=13) — 1 dominio .com.br
+- Email Profissional (offering=14) — ate 10 contas
 
 **AI Agent (plan=7) — 2 items (addon):**
 - Agente IA WhatsApp (offering=4) — WhatsApp + Chat
 - Automacao de Processos (offering=7) — automacao basica
 
-### Offerings (14 active)
+**Automation (plan=12) — 1 item (addon):**
+- Automacao de Processos (offering=7) — automacao de processos
+
+### Offerings (13 active)
 
 | ID | Slug | Name | Model |
 |----|------|------|-------|
@@ -276,11 +295,12 @@ git push origin master
 | 9 | midias-sociais | Midias Sociais | recurring |
 | 10 | backup | Backup | recurring |
 | 11 | ssl | Certificado SSL | recurring |
-| 12 | hosting | Hospedagem | recurring |
 | 13 | dominio | Dominio | recurring |
 | 14 | email-profissional | Email Profissional | recurring |
 
-### Asset Types (13 active)
+> Offering #12 (Hospedagem) desativado — removido dos planos.
+
+### Asset Types (12 active)
 
 | ID | Name | Service Type |
 |----|------|-------------|
@@ -295,19 +315,19 @@ git push origin master
 | 13 | Backup | WebSite |
 | 14 | WordPress | WebSite |
 | 15 | Google Analytics | WebSite |
-| 16 | DNS Zone | WebSite |
 | 17 | Social Media | Social Media |
 
-### Standard Assets per Client (7 per active project)
+> Asset type #16 (DNS Zone) desativado e removido.
 
-Every active client project should have these 7 assets:
+### Standard Assets per Client (6 per active project)
+
+Every active client project should have these 6 assets:
 - Dominio (asset_type=9) — Registro.br
 - Hosting (asset_type=10) — Hostinger, Cloud Startup shared
 - SSL Certificate (asset_type=11) — Let's Encrypt, auto-renew
 - Email Account (asset_type=12) — Hostinger hPanel
 - Backup (asset_type=13) — Hostinger hPanel
 - WordPress (asset_type=14) — wp-admin
-- DNS Zone (asset_type=16) — Hostinger + Registro.br
 
 ---
 
@@ -360,17 +380,20 @@ Cliente solicita -> subscription.status = cancelled + subscription.ends_at = fim
 
 ## Active Clients (snapshot 2026-04-22)
 
-| Cliente | Project | Plan | Monthly | Annual | Since | Total Revenue |
-|---------|---------|------|---------|--------|-------|---------------|
-| Caminho das Origens | #2 | Essential | R$ 176 | R$ 2.112 | ago/2020 | R$ 6.312 |
-| Magsinos | #8 | Essential | R$ 173 | R$ 2.076 | set/2019 | R$ 7.540 |
-| PSK Ambiental | #11 | Essential | R$ 161 | R$ 1.935 | set/2019 | R$ 8.616 |
-| Pedreira Griebeler | #13 | Essential | R$ 161 | R$ 1.935 | set/2019 | R$ 7.890 |
-| Preto Imoveis | #15 | Essential | R$ 161 | R$ 1.935 | jun/2019 | R$ 4.764 |
-| Licenca Consultoria | #34 | A definir | R$ 0 | R$ 0 | — | R$ 0 |
+| Cliente | Project | Subscription | Plan | Renewal | Since | Total Revenue |
+|---------|---------|-------------|------|---------|-------|---------------|
+| Caminho das Origens | #2 | Sub #1 | Essential (legado) | 2026-10-25 | ago/2020 | R$ 6.312 |
+| Magsinos | #8 | Sub #2 | Essential (legado) | 2026-12-30 | set/2019 | R$ 7.540 |
+| PSK Ambiental | #11 | Sub #3 | Essential (legado) | 2026-03-14 (vencido) | set/2019 | R$ 8.616 |
+| Pedreira Griebeler | #13 | Sub #4 | Essential (legado) | 2026-05-13 | set/2019 | R$ 7.890 |
+| Preto Imoveis | #15 | Sub #5 | Essential (legado) | 2026-06-03 | jun/2019 | R$ 4.764 |
+| Licenca Consultoria | #34 | — | A definir | — | — | R$ 0 |
 
-**MRR (Monthly Recurring Revenue):** ~R$ 832/mes
+6 clientes ativos, 5 subscriptions, 6 projetos, 37 service assets.
+
+**MRR (Monthly Recurring Revenue):** ~R$ 832/mes (preco legado)
 **ARR (Annual Recurring Revenue):** ~R$ 9.993/ano
+**MRR pos-migracao (Essential R$ 250):** ~R$ 1.500/mes
 
 ---
 

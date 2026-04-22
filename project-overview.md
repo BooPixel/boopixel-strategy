@@ -27,11 +27,16 @@ Diferencial competitivo: oferecer **site + IA + automação** como pacote integr
 ## 2. Modelo de negócio
 
 ### Catálogo (implementado)
-- **7 planos:** Essential (R$ 161/mes) · Professional (R$ 250/mes) · Complete (R$ 497/mes) · Starter (R$ 497/mes) · Growth (R$ 1.497/mes) · Scale (R$ 3.997/mes) · AI Agent (R$ 997/mes addon)
-- **14 offerings:** landing-page, site-institucional, e-commerce, agente-ia, seo-mensal, branding, automacao, webmaster, midias-sociais, backup, ssl, hosting, dominio, email-profissional
-- **Tipos de serviço** (ServiceType) — categoria editável
-- **4 descontos** padrão: ANUAL (2 meses grátis), BUNDLE10, INDICA, TRIAL50
-- **5 subscriptions** ativas (plano Essential) + **6 clientes** ativos
+- **8 planos** em 3 categorias:
+  - Maintenance: Essential (R$ 250/mes) · Professional (R$ 497/mes) · Advanced (R$ 797/mes)
+  - Premium: Business (R$ 1.497/mes) · Growth (R$ 2.497/mes) · Enterprise (R$ 3.997/mes)
+  - Addon: AI Agent (R$ 997/mes) · Automation (R$ 1.497/mes)
+- **13 offerings** ativos (landing-page, site-institucional, e-commerce, agente-ia, seo-mensal, branding, automacao, webmaster, midias-sociais, backup, ssl, dominio, email-profissional)
+- **3 plan_categories** (maintenance, premium, addon) com pricing page publica
+- **Tipos de servico** (ServiceType) — categoria editavel
+- **4 descontos** padrao: ANUAL (1 mes gratis), BUNDLE10, INDICA, TRIAL50
+- **5 subscriptions** ativas (plano Essential legado) + **6 clientes** ativos
+- **Yearly = 11x monthly** (desconto de 1 mes)
 
 ### Modelos de cobrança
 - **Recorrente** — assinatura mensal/anual (Subscription)

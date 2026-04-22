@@ -105,23 +105,33 @@ If a new skill is created, update:
 ### Company
 - **BooPixel** — https://app.boopixel.com/
 - Socios: Fernando Celmer + Mateus Schoffen
-- CNPJ LTDA em processo de abertura
+- CNPJ LTDA em processo de abertura (BooPixel Tecnologia LTDA)
 
 ### Active Clients (6)
 - Caminho das Origens, Magsinos, PSK Ambiental, Pedreira Griebeler, Preto Imoveis, Licenca Consultoria
+- 5 subscriptions ativas (plano Essential legado)
+- 6 projetos ativos, 37 service assets
 
-### Plans (7)
-- Essential (R$ 161/mes), Professional (R$ 250/mes), Complete (R$ 497/mes)
-- Starter (R$ 497/mes), Growth (R$ 1.497/mes), Scale (R$ 3.997/mes)
-- AI Agent (R$ 997/mes — addon)
+### Plans (8 active, 3 categories)
+- **Maintenance:** Essential (R$ 250/mes), Professional (R$ 497/mes), Advanced (R$ 797/mes)
+- **Premium:** Business (R$ 1.497/mes), Growth (R$ 2.497/mes), Enterprise (R$ 3.997/mes)
+- **Addon:** AI Agent (R$ 997/mes), Automation (R$ 1.497/mes)
+- Yearly = 11x monthly (desconto 1 mes)
+- Pricing page publica: /pricing e /planos
 
-### MRR: ~R$ 832/mes | ARR: ~R$ 9.993/ano
+### MRR: ~R$ 832/mes (legado) | ARR: ~R$ 9.993/ano
 
 ### Infrastructure
-- Hostinger Cloud Startup (~R$ 141/mes total)
-- 27 websites, 16 domains
+- Hostinger Cloud Startup (~R$ 141/mes total, 27 sites, 16 dominios)
 - MySQL database (business-api)
 - AWS Lambda (backend) + AWS Amplify (frontend)
+- SMTP: smtp.hostinger.com (noreply@boopixel.com)
+
+### Marketing
+- Google Ads strategy documentada (google-ads.md)
+- Meta Ads strategy documentada (meta-ads.md)
+- Script gerador de criativos (scripts/generate_creatives.py)
+- Script publisher Meta Ads (scripts/publish_meta.py)
 
 ---
 
