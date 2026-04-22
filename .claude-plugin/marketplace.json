@@ -19,6 +19,17 @@
       "strict": false
     },
     {
+      "name": "boopixel-deploy",
+      "description": "Deploy BooPixel business-api (AWS SAM) and business-frontend (AWS Amplify, branches develop/master) to dev or prod",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fernando Celmer"
+      },
+      "source": "./skills/boopixel-deploy",
+      "category": "infrastructure",
+      "strict": false
+    },
+    {
       "name": "hostinger",
       "description": "Manage Hostinger account via API: websites, domains, DNS, billing, subscriptions, VPS, Docker, email marketing",
       "version": "1.0.0",
