@@ -274,6 +274,14 @@ business-frontend/
 - Configurações genéricas via tabela `configurations` (key-value JSON por empresa)
 - Contatos com `bot_paused` — admin pode pausar/resumir bot por contato
 - `customer_emails` renomeado pra `user_emails`
+- Rate limiting com protocolo extensível (`RateLimitBackend`) — pronto pra Redis/DynamoDB
+- Lead deduplication por email (janela 60s) — evita submissões duplicadas
+- Charges recorrentes persistidas atomicamente com transactions
+- `NullPool` no Lambda — evita conexões órfãs no pool
+- Alembic como ferramenta de migração oficial (scaffold + initial schema)
+- CORS restrito por stage via parâmetro SAM (`CorsOrigins`)
+- Convites com expiração, filtro `include_expired`, envio async via BackgroundTasks
+- Índices compostos e covering para performance de listagem e dashboard
 
 ---
 
@@ -321,13 +329,24 @@ business-frontend/
 - **Polling otimizado** — intervalos de polling reduzidos pra aliviar limite de conexões do banco
 - **Google Console layout** — admin shell redesenhado no estilo Google Console
 - **Scaffold contracts/products** — páginas frontend com dados mock (sem backend ainda)
+- **Rate limiting** — backend com rate limit configurável (`rate_limit_enabled`), protocolo `RateLimitBackend` para stores distribuídos
+- **Lead deduplication** — guard de idempotência: rejeita leads duplicados por email dentro de janela de 60s
+- **Recurring charges atomicity** — persistência atômica de charges recorrentes com transactions vinculadas
+- **Invite improvements** — convites expirados excluídos por default, `include_expired` param, email assíncrono via BackgroundTasks, max page size enforced
+- **Composite/covering indexes** — índices compostos para queries de listagem e métricas do dashboard
+- **NullPool Lambda** — `NullPool` no SQLAlchemy para evitar conexões órfãs no Lambda
+- **CORS per stage** — CORS restrito por stage (dev/prod) via `CorsOrigins` no SAM template
+- **Alembic migrations** — scaffold completo com migração inicial do schema
+- **Rename Messages → Channels** — sidebar renomeada, user emails apontam pra `/users`
 
 ### Roadmap
 
 #### Fase 1 — Automatizar cobranca (urgente)
 
-> 5 subscriptions ativas, 0 charges recorrentes. Sub #3 (PSK Ambiental) ja venceu em mar/2026. SMTP configurado e funcional. Lead notification ja funciona via BackgroundTasks.
+> 5 subscriptions ativas. Sub #3 (PSK Ambiental) ja venceu em mar/2026. SMTP configurado e funcional. Lead notification ja funciona via BackgroundTasks. Persistência atômica de charges recorrentes com transactions já implementada. Validação de frequência e date range feita.
 
+- [x] Validação de frequência e end_date em charges recorrentes
+- [x] Persistência atômica de charges recorrentes com transactions
 - [ ] Geracao automatica de `Charge` a partir de `Subscription.current_period_end`
 - [ ] Cron job (EventBridge → Lambda) pra cobranca recorrente
 - [ ] Notificacao por e-mail antes da cobranca vencer
