@@ -13,7 +13,7 @@ Configuração e integração da WhatsApp Cloud API para atendimento automatizad
 | WABA ID | 2693966874336487 |
 | Phone Number ID | 1011433038730788 |
 | Número | +55 48 8813-5243 |
-| PIN 2FA | em ~/.env (WHATSAPP_PIN) |
+| PIN 2FA | 482613 |
 | Nome exibição | BooPoixel |
 
 ### Credenciais (em ~/.env)
