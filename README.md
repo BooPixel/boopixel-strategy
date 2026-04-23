@@ -17,6 +17,7 @@ Strategic documentation, system modeling and skills for **BooPixel** — https:/
 | [Google Ads](google-ads.md) | Marketing | Estrategia de anuncios Google Ads — campanhas, keywords, budget, metricas |
 | [Meta Ads](meta-ads.md) | Marketing | Estrategia Facebook + Instagram — campanhas, criativos, segmentacao, Advantage+ |
 | [WhatsApp API](whatsapp-api.md) | Integration | WhatsApp Cloud API — configuração, webhook, templates, bot strategy |
+| [Database Options](database-options.md) | Infrastructure | Comparação de opções MySQL hosting (EC2, Lightsail, RDS, PlanetScale, Hostinger) |
 | [Scripts](scripts/) | Tools | Scripts Python — gerador de criativos (Pillow) + publisher Meta Ads |
 
 ---

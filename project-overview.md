@@ -52,11 +52,18 @@ Sociedade LTDA entre dois sócios (50/50). Fluxo completo de abertura em [cnpj-l
 
 ### Repositórios
 
-| Repo | Papel | Stack |
-|---|---|---|
-| `boopixel-strategy` | Documentação de produto, preços, templates de formulários, decisões estratégicas | Markdown + JSON |
-| `business-api` | Backend REST multi-tenant — auth, CRM, cobranças, integrações cloud, catálogo de serviços | Python 3.13, FastAPI, SQLAlchemy, MySQL, Alembic |
-| `business-frontend` | SPA admin + cliente | React, React Router, Bootstrap, i18next |
+| Repo | Papel | Stack | Status |
+|---|---|---|---|
+| `boopixel-strategy` | Documentação de produto, preços, templates de formulários, decisões estratégicas | Markdown + JSON | Ativo |
+| `business-api` | Backend REST multi-tenant — auth, CRM, cobranças, integrações cloud, catálogo de serviços, messaging, bot IA, domínios | Python 3.13, FastAPI, SQLAlchemy, MySQL, Alembic | Ativo |
+| `business-frontend` | SPA admin + cliente + pricing page pública | React, React Router, Bootstrap, i18next, Lucide, Recharts | Ativo |
+| `landing-page` | Landing page BooPixel + tema WordPress com widgets Elementor | HTML/CSS/JS + PHP (WordPress theme) | Ativo |
+| `help-api` | API de licenciamento BooChat Connect PRO | Python 3.12, FastAPI, MySQL | Ativo |
+| `help-plugin` | Plugin WordPress — chatbot IA integrado com n8n (BooPixel AI Chat Connect) | PHP 7.2+, WordPress | Ativo |
+| `ai-marketing` | Scripts de processamento de imagens para marketing (Instagram feed, carrossel) | Python, Pillow | Utilitário |
+| `bp-abraccc` | Sistema de consulta pública Studbook (ABRACCC) | — | Legado |
+| `cloud-api` | (reservado) | — | Inativo |
+| `crm-api` | (reservado) | — | Inativo |
 
 ### Infraestrutura
 
@@ -64,7 +71,7 @@ Sociedade LTDA entre dois sócios (50/50). Fluxo completo de abertura em [cnpj-l
 - **Frontend**: AWS Amplify Hosting (build automático a partir de `master`). Deploy: push ou `make frontend-prod`.
 - **Banco**: MySQL gerenciado (Hostinger).
 - **E-mail transacional**: SMTP da Hostinger (porta 465) para invites, notificações de lead, alertas admin.
-- **Cloud integrations**: Registro.br via RDAP (domínios dos clientes); arquitetura pronta para adicionar outros providers.
+- **Cloud integrations**: Registro.br via RDAP (domínios dos clientes); Hostinger API (listagem de domínios via `DomainService`); arquitetura pronta para adicionar outros providers.
 
 ### Fluxo de autenticação
 
@@ -177,7 +184,7 @@ business-api/
 │   │   ├── email.py          # EmailSender, TemplateLoader
 │   │   ├── llm_provider.py   # LLMProvider ABC, ConversationTurn, AgentConfig
 │   │   └── message.py        # IncomingMessage, OutgoingMessage, MessageProvider, SendResult
-│   ├── api/v1/routers/       # endpoints REST (auth, charges, messages, whatsapp, bot-settings)
+│   ├── api/v1/routers/       # endpoints REST (auth, charges, messages, whatsapp, bot-settings, domains, company, invites)
 │   ├── integrations/
 │   │   ├── channels/         # WhatsApp provider (implementa MessageProvider ABC)
 │   │   ├── cloud/            # Registro.br RDAP + base cloud provider
@@ -219,17 +226,25 @@ business-frontend/
 │       │   ├── leads/       # leads capturados
 │       │   ├── messages/    # chat estilo WhatsApp + envio
 │       │   ├── bot/         # configuração do bot IA (prompt, modelo, toggle)
+│       │   ├── contracts/   # contratos (scaffold, dados mock)
+│       │   ├── products/    # produtos (scaffold, dados mock)
+│       │   ├── company/     # configurações da empresa
+│       │   ├── dashboard/   # métricas + gráficos (Recharts)
+│       │   ├── invites/     # convites de usuário
+│       │   ├── profile/     # perfil do admin
+│       │   ├── settings/    # configurações gerais
+│       │   ├── payments/    # pagamentos
 │       │   └── formTemplates/
 │       └── client/          # área do cliente final
 ```
 
 ### Sidebar (estrutura atual)
 
-- **Operations**: Início · Cobranças · Transações
-- **Contacts**: Clientes · Leads · Mensagens (submenu: Mensagens + Prompt IA) · Formulários · Convites
+- **Operations**: Início (Dashboard) · Cobranças · Transações
+- **Contacts**: Clientes · Leads · Canais (submenu: Mensagens + Prompt IA) · Formulários · Convites
 - **Catalog**: Serviços (submenu: Tipos de Serviço, Tipos de Ativo) · Planos (submenu: Categorias) · Descontos
-- **Sales**: Assinaturas · Projetos
-- Footer: Configurações
+- **Sales**: Assinaturas · Projetos · Contratos (mock) · Produtos (mock)
+- Footer: Configurações · Perfil · Empresa
 
 ### Header
 
@@ -298,6 +313,14 @@ business-frontend/
 - **Tabela genérica `configurations`** — key-value JSON por empresa (substitui bot_settings)
 - **SAM template declarativo** — env vars Gemini + WhatsApp gerenciadas via CloudFormation
 - **Handoff humano** — `[[HANDOFF]]` no output do LLM pausa bot pra contato, flag `bot_paused` em `message_contacts`
+- **Domain service** — listagem de domínios da empresa via Hostinger API com dados live (`GET /domains`)
+- **Invite expiry fix** — comparação de datetime com valores naive do banco corrigida
+- **Migration tooling** — ferramentas de migração adicionadas ao projeto API
+- **Message contacts enriquecidos** — last_message e unread_count no endpoint de contatos
+- **Lucide icons** — emojis substituídos por SVGs do Lucide em todo o chat UI
+- **Polling otimizado** — intervalos de polling reduzidos pra aliviar limite de conexões do banco
+- **Google Console layout** — admin shell redesenhado no estilo Google Console
+- **Scaffold contracts/products** — páginas frontend com dados mock (sem backend ainda)
 
 ### Roadmap
 
@@ -355,3 +378,4 @@ business-frontend/
 - [Pricing](https://github.com/BooPixel/boopixel-strategy/blob/master/pricing.md) — preços, margens, comparativo
 - [CNPJ LTDA](https://github.com/BooPixel/boopixel-strategy/blob/master/cnpj-ltda.md) — abertura jurídica
 - [CLAUDE.md](https://github.com/BooPixel/business-api/blob/master/CLAUDE.md) — regras do projeto business-api para o Claude
+- [Database Options](https://github.com/BooPixel/boopixel-strategy/blob/master/database-options.md) — comparação de MySQL hosting
