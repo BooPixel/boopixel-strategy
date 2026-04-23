@@ -62,8 +62,8 @@ flowchart TD
 
 | Documento | Fernando | Mateus |
 |-----------|----------|--------|
-| RG ou CNH | [ ] | [ ] |
-| CPF | [ ] | [ ] |
+| RG ou CNH | [x] | [x] |
+| CPF | [x] | [x] |
 | Comprovante de residência (últimos 90 dias) | [ ] | [ ] |
 | Certidão de casamento (se casado) | [ ] | [ ] |
 | Última declaração IRPF | [ ] | [ ] |
