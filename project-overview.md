@@ -255,6 +255,9 @@ business-frontend/
 - **Client portal** — `/client/payments` para clientes verem suas cobranças
 - **CustomerEmail** — emails adicionais de notificação por cliente
 - **Dashboard** — métricas de transações com gráficos (Recharts), date range picker, year-over-year
+- **WhatsApp Cloud API** — webhook + bot auto-reply + persistência de mensagens no banco
+- **Messaging genérico** — arquitetura multi-canal (WhatsApp/Telegram/Discord) com providers ABC
+- **Privacy/Terms estáticos** — páginas HTML estáticas pra verificação Meta
 
 ### Roadmap
 
@@ -282,6 +285,9 @@ business-frontend/
 - [ ] Seed automatico do catalogo BooPixel (script idempotente pra dev/test)
 - [ ] Meta Pixel + Conversions API (Facebook/Instagram tracking)
 - [ ] Dashboard de leads (funil visual, leads por source, SLA)
+- [ ] Lead capture via conversa WhatsApp
+- [ ] Template messages aprovadas pelo Meta
+- [ ] Dashboard de mensagens no frontend
 
 #### Removidos/adiados
 
@@ -291,6 +297,8 @@ business-frontend/
 - ~~Pricing page publica~~ — **FEITO** (/pricing e /planos com SEO, modal de lead, categorias)
 - ~~Notificacao email para leads~~ — **FEITO** (BackgroundTasks + SMTP Hostinger)
 - ~~Form builder visual no admin~~ — **FEITO** (StepsBuilder com JSON step editor)
+- ~~WhatsApp Cloud API~~ — **FEITO** (webhook + bot auto-reply + mensagens no banco)
+- ~~Publicar app Meta~~ — **FEITO** (app Live, webhook verificado, WABA subscribed)
 
 ---
 

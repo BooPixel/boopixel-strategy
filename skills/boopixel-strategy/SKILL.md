@@ -22,11 +22,16 @@ boopixel-strategy/
 ├── lead-capture-forms.md        — Lead generation strategy
 ├── pricing.md                   — Plans, offerings, margins, market reference
 ├── project-overview.md          — Project overview
+├── google-ads.md                — Google Ads strategy, API setup, credentials
+├── meta-ads.md                  — Meta Ads strategy (Facebook + Instagram)
+├── whatsapp-api.md              — WhatsApp Cloud API — config, webhook, bot, architecture
+├── pricing-page.md              — Pricing page architecture (/pricing, /planos)
 ├── marketplace.md               — Skills marketplace config
 ├── registry.json                — Skills registry
 ├── .claude-plugin/
 │   └── marketplace.json         — Plugin system manifest
 ├── forms/                       — Lead capture form templates
+├── scripts/                     — Python scripts (whatsapp, google ads, meta ads, creatives)
 └── skills/
     ├── boopixel-db/SKILL.md     — Database manipulation skill
     ├── boopixel-deploy/SKILL.md — Deploy skill
@@ -127,11 +132,14 @@ If a new skill is created, update:
 - AWS Lambda (backend) + AWS Amplify (frontend)
 - SMTP: smtp.hostinger.com (noreply@boopixel.com)
 
-### Marketing
-- Google Ads strategy documentada (google-ads.md)
-- Meta Ads strategy documentada (meta-ads.md)
-- Script gerador de criativos (scripts/generate_creatives.py)
-- Script publisher Meta Ads (scripts/publish_meta.py)
+### Marketing & Integrations
+- Google Ads: conta 469-236-2147, MCC 860-999-5521, API Basic Access pendente (google-ads.md)
+- Meta Ads: estratégia documentada (meta-ads.md)
+- WhatsApp Cloud API: webhook + bot auto-reply em produção (whatsapp-api.md)
+  - Número: +55 48 8813-5243 | WABA: 2693966874336487 | App: 945825354522145
+  - Arquitetura multi-canal (WhatsApp/Telegram/Discord) com providers ABC
+  - Mensagens persistidas na tabela `messages`
+- Scripts: whatsapp.py, generate_creatives.py, publish_meta.py, test_google_ads.py
 
 ---
 

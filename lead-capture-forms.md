@@ -238,12 +238,17 @@ Ferramenta candidata: **Mailerlite** (barato, API boa) ou **ActiveCampaign** (ma
 
 ### 7.4 WhatsApp Business API
 
-**Prioridade: alta** (canal dominante no BR)
+**Status: IMPLEMENTADO (parcial)** ✅
 
-- Bot que executa o mesmo flow JSON do chat web
-- Mensagem inicial: "Oi! Vi que você [ação], posso te ajudar a configurar um site?"
-- Respostas por botão (mesmos `choices` do JSON)
-- Template messages pré-aprovadas pelo Meta
+Webhook + bot auto-reply funcionando em produção. Detalhes em [whatsapp-api.md](whatsapp-api.md).
+
+- ✅ Webhook recebe mensagens em tempo real
+- ✅ Bot responde automaticamente com intent detection (saudação, serviços, preços, handoff)
+- ✅ Mensagens persistidas no banco (tabela `messages`)
+- ✅ Arquitetura multi-canal (WhatsApp/Telegram/Discord via providers)
+- ❌ Lead capture via conversa (próximo passo)
+- ❌ Template messages (precisam aprovação Meta)
+- ❌ Reutilizar form JSON steps no WhatsApp
 
 ### 7.5 Calendly/agendamento
 
@@ -299,7 +304,7 @@ Adicionar ao `/dashboard` admin:
 ### 9.2 Médio prazo (1–3 meses)
 
 - [ ] A/B testing de flows (mesma URL, 2 versões)
-- [ ] Integração WhatsApp Business
+- [x] Integração WhatsApp Business — webhook + bot auto-reply implementado ([whatsapp-api.md](whatsapp-api.md))
 - [ ] Email nurturing automatizado (integração Mailerlite)
 
 ### 9.3 Longo prazo (3+ meses)
