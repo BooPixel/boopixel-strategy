@@ -188,7 +188,7 @@ This skill MUST evolve as you learn new things about the database. After complet
 ```bash
 cd /Users/fernandocelmer/Lab/BooPixel/boopixel-strategy
 git add skills/boopixel-db/SKILL.md
-git commit -m "📘 DOCS: auto-update boopixel-db skill — <what changed>"
+git commit -m " DOCS: auto-update boopixel-db skill — <what changed>"
 git push origin master
 ```
 

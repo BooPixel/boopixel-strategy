@@ -43,7 +43,7 @@ for label, cid in [("MCC", MCC_ID), ("Customer", CUSTOMER_ID)]:
             print(f"  Nome:     {c.descriptive_name}")
             print(f"  Moeda:    {c.currency_code}")
             print(f"  Timezone: {c.time_zone}")
-            print(f"\n  ✅ {label} OK!")
+            print(f"\n   {label} OK!")
     except Exception as e:
         err = str(e).split("\n")[0][:120]
-        print(f"  ❌ {err}")
+        print(f"   {err}")

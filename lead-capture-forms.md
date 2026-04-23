@@ -211,7 +211,7 @@ Permite filtrar no dashboard admin e calcular ROI por canal.
 
 ### 7.1 Notificação por email
 
-**Status: IMPLEMENTADO** ✅
+**Status: IMPLEMENTADO** 
 
 Quando chega lead novo: email pro time comercial (endereços em `LEAD_NOTIFICATION_EMAILS` comma-separated). Conteúdo: nome, email, telefone, fonte, resumo das respostas. Implementado via `BackgroundTasks` no `lead_service._notify_team()`. Template `new_lead` (pt-BR) via SMTP Hostinger.
 
@@ -238,17 +238,17 @@ Ferramenta candidata: **Mailerlite** (barato, API boa) ou **ActiveCampaign** (ma
 
 ### 7.4 WhatsApp Business API
 
-**Status: IMPLEMENTADO (parcial)** ✅
+**Status: IMPLEMENTADO (parcial)** 
 
 Webhook + bot auto-reply funcionando em produção. Detalhes em [whatsapp-api.md](whatsapp-api.md).
 
-- ✅ Webhook recebe mensagens em tempo real
-- ✅ Bot responde automaticamente com intent detection (saudação, serviços, preços, handoff)
-- ✅ Mensagens persistidas no banco (tabela `messages`)
-- ✅ Arquitetura multi-canal (WhatsApp/Telegram/Discord via providers)
-- ❌ Lead capture via conversa (próximo passo)
-- ❌ Template messages (precisam aprovação Meta)
-- ❌ Reutilizar form JSON steps no WhatsApp
+-  Webhook recebe mensagens em tempo real
+-  Bot responde automaticamente com intent detection (saudação, serviços, preços, handoff)
+-  Mensagens persistidas no banco (tabela `messages`)
+-  Arquitetura multi-canal (WhatsApp/Telegram/Discord via providers)
+-  Lead capture via conversa (próximo passo)
+-  Template messages (precisam aprovação Meta)
+-  Reutilizar form JSON steps no WhatsApp
 
 ### 7.5 Calendly/agendamento
 

@@ -25,5 +25,5 @@ flow = InstalledAppFlow.from_client_config(
 
 flow.run_local_server(port=8090)
 
-print(f"\n✅ Refresh Token:\n{flow.credentials.refresh_token}")
+print(f"\n Refresh Token:\n{flow.credentials.refresh_token}")
 print("\nCopia o token acima e me passa.")

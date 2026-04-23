@@ -25,13 +25,13 @@ Configuração e integração da WhatsApp Cloud API para atendimento automatizad
 
 | Variável | Descrição | Status |
 |----------|-----------|--------|
-| `WHATSAPP_TOKEN` | Token permanente (System User, nunca expira) | ✅ |
-| `WHATSAPP_PHONE_NUMBER_ID` | Phone Number ID (1011433038730788) | ✅ |
-| `WHATSAPP_WABA_ID` | WhatsApp Business Account ID (2693966874336487) | ✅ |
-| `WHATSAPP_APP_ID` | Meta App ID (945825354522145) | ✅ |
-| `WHATSAPP_BUSINESS_ID` | Business Manager ID (2100949430186290) | ✅ |
-| `WHATSAPP_VERIFY_TOKEN` | Webhook verification token (boopixel_webhook_2026) | ✅ |
-| `WHATSAPP_PIN` | PIN de verificação em duas etapas (482613) | ✅ |
+| `WHATSAPP_TOKEN` | Token permanente (System User, nunca expira) |  |
+| `WHATSAPP_PHONE_NUMBER_ID` | Phone Number ID (1011433038730788) |  |
+| `WHATSAPP_WABA_ID` | WhatsApp Business Account ID (2693966874336487) |  |
+| `WHATSAPP_APP_ID` | Meta App ID (945825354522145) |  |
+| `WHATSAPP_BUSINESS_ID` | Business Manager ID (2100949430186290) |  |
+| `WHATSAPP_VERIFY_TOKEN` | Webhook verification token (boopixel_webhook_2026) |  |
+| `WHATSAPP_PIN` | PIN de verificação em duas etapas (482613) |  |
 
 ### Onde estão as credenciais
 
@@ -47,24 +47,24 @@ Configuração e integração da WhatsApp Cloud API para atendimento automatizad
 
 | Item | Status |
 |------|--------|
-| App Meta criado | ✅ (945825354522145) |
-| Permissões | ✅ whatsapp_business_management, whatsapp_business_messaging |
-| Número registrado | ✅ Verificado (+55 48 8813-5243) |
-| Token permanente | ✅ System User "BooPixel" (nunca expira) |
-| Envio de mensagens | ✅ Testado (texto + botões) |
-| Webhook implementado | ✅ GET/POST /api/v1/webhooks/whatsapp |
-| Bot auto-reply | ✅ Intent detection + respostas automáticas |
-| Persistência mensagens | ✅ Tabela `messages` no MySQL |
-| Deploy produção | ✅ AWS Lambda (business-api-prod) |
-| Variáveis no Lambda | ✅ Configuradas |
-| Privacy/Terms pages | ✅ Estáticas em /privacy.html e /terms.html |
-| Amplify rewrite rules | ✅ Exceção pra .html estáticos |
-| Webhook no Meta | ✅ Verificado + messages assinado |
-| Publicar app Meta | ✅ App publicado (Live) |
-| Subscribe app à WABA | ✅ POST /subscribed_apps |
-| Template messages | ❌ Criar e submeter |
-| Método pagamento WABA | ❌ Necessário pra msgs business-initiated |
-| Corrigir nome exibição | ❌ BooPoixel → BooPixel |
+| App Meta criado |  (945825354522145) |
+| Permissões |  whatsapp_business_management, whatsapp_business_messaging |
+| Número registrado |  Verificado (+55 48 8813-5243) |
+| Token permanente |  System User "BooPixel" (nunca expira) |
+| Envio de mensagens |  Testado (texto + botões) |
+| Webhook implementado |  GET/POST /api/v1/webhooks/whatsapp |
+| Bot auto-reply |  Intent detection + respostas automáticas |
+| Persistência mensagens |  Tabela `messages` no MySQL |
+| Deploy produção |  AWS Lambda (business-api-prod) |
+| Variáveis no Lambda |  Configuradas |
+| Privacy/Terms pages |  Estáticas em /privacy.html e /terms.html |
+| Amplify rewrite rules |  Exceção pra .html estáticos |
+| Webhook no Meta |  Verificado + messages assinado |
+| Publicar app Meta |  App publicado (Live) |
+| Subscribe app à WABA |  POST /subscribed_apps |
+| Template messages |  Criar e submeter |
+| Método pagamento WABA |  Necessário pra msgs business-initiated |
+| Corrigir nome exibição |  BooPoixel → BooPixel |
 
 ---
 
@@ -383,16 +383,16 @@ python scripts/whatsapp.py read wamid.xxx
 
 | Teste | Resultado |
 |-------|-----------|
-| `whatsapp.py info` | ✅ Qualidade GREEN, TIER_250, VERIFIED |
-| `whatsapp.py templates` | ✅ 1 template (hello_world) |
-| `whatsapp.py send` texto | ✅ Mensagem recebida |
-| `whatsapp.py button` | ✅ Botões interativos recebidos |
-| Import todos módulos | ✅ Model, Repository, Base, Bot, Provider, Router |
-| Deploy Lambda | ✅ business-api-prod atualizado |
-| Tabela messages | ✅ Criada no MySQL |
-| Lambda env vars | ✅ Configuradas |
-| privacy.html / terms.html | ✅ 200 OK via Amplify |
-| Amplify rewrite rules | ✅ Exceção pra .html estáticos |
+| `whatsapp.py info` |  Qualidade GREEN, TIER_250, VERIFIED |
+| `whatsapp.py templates` |  1 template (hello_world) |
+| `whatsapp.py send` texto |  Mensagem recebida |
+| `whatsapp.py button` |  Botões interativos recebidos |
+| Import todos módulos |  Model, Repository, Base, Bot, Provider, Router |
+| Deploy Lambda |  business-api-prod atualizado |
+| Tabela messages |  Criada no MySQL |
+| Lambda env vars |  Configuradas |
+| privacy.html / terms.html |  200 OK via Amplify |
+| Amplify rewrite rules |  Exceção pra .html estáticos |
 
 ---
 
@@ -489,7 +489,7 @@ aws amplify update-app --app-id d3s0bfr2lt6dw9 --profile boopixel --custom-rules
 
 ## Estratégia
 
-### Fase 1 — Bot auto-reply (implementado ✅)
+### Fase 1 — Bot auto-reply (implementado )
 - Webhook recebe mensagem → detecta intent → responde
 - Mensagens salvas no banco (inbound + outbound)
 - Respostas configuráveis via BotConfig
@@ -529,31 +529,31 @@ aws amplify update-app --app-id d3s0bfr2lt6dw9 --profile boopixel --custom-rules
 ### business-api (9 commits em master)
 
 ```
-009550d ⚙️ FEATURE: Add WhatsApp Cloud API settings
-cc48df9 ⚙️ FEATURE: Add Message model with channel, direction and status enums
-a3fa8eb ⚙️ FEATURE: Add MessageRepository with channel and sender queries
-02ed587 ⚙️ FEATURE: Add generic messaging provider interface
-44caf37 ⚙️ FEATURE: Add channel-agnostic BotEngine with intent detection and DB persistence
-a6668fa ⚙️ FEATURE: Add WhatsApp Cloud API messaging provider
-63d9e78 ⚙️ FEATURE: Add WhatsApp service facade
-4bc53ee ⚙️ FEATURE: Add WhatsApp webhook router at /webhooks/whatsapp
-8802f9d ⚙️ FEATURE: Add messages table migration
+009550d ️ FEATURE: Add WhatsApp Cloud API settings
+cc48df9 ️ FEATURE: Add Message model with channel, direction and status enums
+a3fa8eb ️ FEATURE: Add MessageRepository with channel and sender queries
+02ed587 ️ FEATURE: Add generic messaging provider interface
+44caf37 ️ FEATURE: Add channel-agnostic BotEngine with intent detection and DB persistence
+a6668fa ️ FEATURE: Add WhatsApp Cloud API messaging provider
+63d9e78 ️ FEATURE: Add WhatsApp service facade
+4bc53ee ️ FEATURE: Add WhatsApp webhook router at /webhooks/whatsapp
+8802f9d ️ FEATURE: Add messages table migration
 ```
 
 ### business-frontend (2 commits em master)
 
 ```
-27431be ⚙️ FEATURE: Add static privacy and terms pages for Meta app verification
-d0c67ae ⚙️ FEATURE: Copy privacy.html and terms.html to build output
+27431be ️ FEATURE: Add static privacy and terms pages for Meta app verification
+d0c67ae ️ FEATURE: Copy privacy.html and terms.html to build output
 ```
 
 ### boopixel-strategy (commits em master)
 
 ```
-d8b4e94 📄 DOC: Add WhatsApp CLI script and scripts README
-40187f1 📄 DOC: Complete WhatsApp API doc
-47ab0ff 📄 DOC: Add WhatsApp 2FA PIN to docs
-17b615c 📄 DOC: Add WhatsApp API integration doc
+d8b4e94  DOC: Add WhatsApp CLI script and scripts README
+40187f1  DOC: Complete WhatsApp API doc
+47ab0ff  DOC: Add WhatsApp 2FA PIN to docs
+17b615c  DOC: Add WhatsApp API integration doc
 ```
 
 ---
@@ -619,7 +619,7 @@ d8b4e94 📄 DOC: Add WhatsApp CLI script and scripts README
      - Chama `WhatsAppProvider.send()`, persiste outbound com `status=sent` + `external_id`
      - 400 se canal não suportado, 502 se Meta falhar
    - Frontend: textarea no rodapé do chat, Enter envia, Shift+Enter quebra linha
-   - ⚠️ Janela 24h do WhatsApp: só aceita texto livre se cliente enviou msg nas últimas 24h — fora disso precisa template approved (não implementado)
+   - ️ Janela 24h do WhatsApp: só aceita texto livre se cliente enviou msg nas últimas 24h — fora disso precisa template approved (não implementado)
 
 3. **Nome customizado do contato** (tabela `message_contacts`)
    - Migration: `b2c3d4e5f6a7_create_message_contacts_table`
@@ -629,7 +629,7 @@ d8b4e94 📄 DOC: Add WhatsApp CLI script and scripts README
      - `GET /api/v1/messages/contacts` — lista contatos custom da empresa
      - `PUT /api/v1/messages/contacts` — upsert `{channel, identifier, display_name}`
    - Auto-seed: `BotEngine._ensure_contact` cria `MessageContact` automaticamente na primeira mensagem inbound usando o `sender_name` do perfil WhatsApp (profile.name vindo do webhook)
-   - Override: se usuário editar pelo ✎ no header do chat, `display_name` custom sobrepõe o profile name
+   - Override: se usuário editar pelo  no header do chat, `display_name` custom sobrepõe o profile name
 
 ### Arquitetura
 
@@ -645,7 +645,7 @@ flowchart LR
 
     FE[Frontend /messages] -->|GET /messages| List[MessageService.list]
     FE -->|GET /messages/contacts| ListC[MessageService.list_contacts]
-    FE -->|PUT /messages/contacts ✎| Upsert[MessageService.upsert_contact]
+    FE -->|PUT /messages/contacts | Upsert[MessageService.upsert_contact]
     FE -->|POST /messages/send| Send[MessageService.send]
     Send --> Provider[WhatsAppProvider]
     Provider --> MetaAPI[Meta Graph API]
@@ -671,13 +671,13 @@ flowchart LR
 ### Commits
 
 **business-api:**
-- `1e459ff` ⚙️ FEATURE: Add POST /messages/send for outbound WhatsApp delivery
-- `a72eec2` ⚙️ FEATURE: Editable contact display names with auto-seed from provider profile
+- `1e459ff` ️ FEATURE: Add POST /messages/send for outbound WhatsApp delivery
+- `a72eec2` ️ FEATURE: Editable contact display names with auto-seed from provider profile
 
 **business-frontend:**
-- `38c082a` ⚙️ FEATURE: Turn messages page into WhatsApp-style chat with send support
-- `0ac7ddb` ⚙️ FEATURE: Polish messages chat — theme fix, auto-scroll, remove channel filter
-- `8b8537c` ⚙️ FEATURE: Inline contact name editing in chat header
+- `38c082a` ️ FEATURE: Turn messages page into WhatsApp-style chat with send support
+- `0ac7ddb` ️ FEATURE: Polish messages chat — theme fix, auto-scroll, remove channel filter
+- `8b8537c` ️ FEATURE: Inline contact name editing in chat header
 
 ### Deploy prod (2026-04-23)
 
@@ -708,7 +708,7 @@ flowchart LR
 - `NotificationsContext` global (mount em `src/index.js` dentro do `AuthProvider`)
   - Polling 10s (pausa quando aba oculta, refetch imediato ao voltar)
   - Estado global: `{total, items, refresh, markContactRead}`
-  - Title da aba: `(N) BooPixel` estático; ao chegar msg nova com aba oculta → pisca `🔔 (N) BooPixel` até voltar pra aba
+  - Title da aba: `(N) BooPixel` estático; ao chegar msg nova com aba oculta → pisca ` (N) BooPixel` até voltar pra aba
   - Notificação nativa do SO quando permissão concedida (request automático no 1º load)
 - Sino no `AppHeader` com badge vermelho (contador `99+`) e dropdown com últimos 8 contatos, clicar navega `/messages?contact=X&channel=Y` + mark-read otimista
 - Página `/messages` lê query string e seleciona contato; ao abrir conversa, marca inbound não lidas
@@ -811,13 +811,13 @@ flowchart LR
 ### Commits
 
 **business-api:**
-- `64f1b0b` ⚙️ FEATURE: Unread message tracking with per-conversation mark-read endpoint
-- `1d4c013` ⚙️ FEATURE: Gemini-backed bot replies with per-company configurable prompt
-- `0a02054` ⚙️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template
+- `64f1b0b` ️ FEATURE: Unread message tracking with per-conversation mark-read endpoint
+- `1d4c013` ️ FEATURE: Gemini-backed bot replies with per-company configurable prompt
+- `0a02054` ️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template
 
 **business-frontend:**
-- `e5ad798` ⚙️ FEATURE: Bell notifications, tab title flash and responsive chat layout
-- `78f3cbf` ⚙️ FEATURE: Bot settings page under Messages submenu
+- `e5ad798` ️ FEATURE: Bell notifications, tab title flash and responsive chat layout
+- `78f3cbf` ️ FEATURE: Bot settings page under Messages submenu
 
 ### Deploy prod
 
@@ -956,13 +956,13 @@ app/
 ### Commits
 
 **business-api:**
-- `23d760e` ⚙️ FEATURE: Manual bot pause/resume toggle per contact
-- `0a02054` ⚙️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template (já docado)
-- `127da16` ♻️ REFACTOR: Split ABCs, integrations/ layout, rename customer_emails → user_emails
+- `23d760e` ️ FEATURE: Manual bot pause/resume toggle per contact
+- `0a02054` ️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template (já docado)
+- `127da16` ️ REFACTOR: Split ABCs, integrations/ layout, rename customer_emails → user_emails
 
 **business-frontend:**
-- `1a1a99c` ⚙️ FEATURE: Pause/resume bot toggle in chat header
-- `15bcd2f` ⚙️ FEATURE: Rename Messages → Channels and point user emails to /users endpoint
+- `1a1a99c` ️ FEATURE: Pause/resume bot toggle in chat header
+- `15bcd2f` ️ FEATURE: Rename Messages → Channels and point user emails to /users endpoint
 
 ### Deploy prod
 

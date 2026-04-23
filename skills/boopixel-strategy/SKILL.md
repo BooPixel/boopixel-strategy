@@ -81,7 +81,7 @@ If a new .md is created, always add it to the Documents section in README.md.
 ```bash
 cd /Users/fernandocelmer/Lab/BooPixel/boopixel-strategy
 git add <files>
-git commit -m "📄 DOC: <what changed>"
+git commit -m " DOC: <what changed>"
 git push origin master
 ```
 

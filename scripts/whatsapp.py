@@ -49,12 +49,12 @@ def _post_message(payload):
     data = response.json()
 
     if "error" in data:
-        print(f"❌ Erro: {data['error']['message']}")
+        print(f" Erro: {data['error']['message']}")
         sys.exit(1)
 
     msg_id = data["messages"][0]["id"]
     wa_id = data["contacts"][0]["wa_id"]
-    print(f"✅ Mensagem enviada!")
+    print(f" Mensagem enviada!")
     print(f"   Para: {wa_id}")
     print(f"   ID: {msg_id}")
     return data
@@ -62,7 +62,7 @@ def _post_message(payload):
 
 def send_text(to, message):
     """Envia mensagem de texto simples."""
-    print(f"📤 Enviando texto para {to}...")
+    print(f" Enviando texto para {to}...")
     return _post_message({
         "messaging_product": "whatsapp",
         "to": to,
@@ -73,7 +73,7 @@ def send_text(to, message):
 
 def send_template(to, template_name, language="pt_BR", parameters=None):
     """Envia template message (pode iniciar conversa)."""
-    print(f"📤 Enviando template '{template_name}' para {to}...")
+    print(f" Enviando template '{template_name}' para {to}...")
     template = {
         "name": template_name,
         "language": {"code": language},
@@ -92,7 +92,7 @@ def send_template(to, template_name, language="pt_BR", parameters=None):
 
 def send_image(to, image_url, caption=None):
     """Envia imagem com legenda opcional."""
-    print(f"📤 Enviando imagem para {to}...")
+    print(f" Enviando imagem para {to}...")
     image = {"link": image_url}
     if caption:
         image["caption"] = caption
@@ -106,7 +106,7 @@ def send_image(to, image_url, caption=None):
 
 def send_document(to, document_url, filename=None, caption=None):
     """Envia documento (PDF, DOC, etc.)."""
-    print(f"📤 Enviando documento para {to}...")
+    print(f" Enviando documento para {to}...")
     document = {"link": document_url}
     if filename:
         document["filename"] = filename
@@ -122,7 +122,7 @@ def send_document(to, document_url, filename=None, caption=None):
 
 def send_interactive_buttons(to, body_text, buttons_csv):
     """Envia mensagem com botões interativos (max 3)."""
-    print(f"📤 Enviando botões para {to}...")
+    print(f" Enviando botões para {to}...")
     button_labels = [b.strip() for b in buttons_csv.split(",")][:3]
     buttons = []
     for i, label in enumerate(button_labels):
@@ -148,7 +148,7 @@ def send_interactive_buttons(to, body_text, buttons_csv):
 
 def send_list(to, body_text, button_text, sections_json):
     """Envia mensagem com lista de opções."""
-    print(f"📤 Enviando lista para {to}...")
+    print(f" Enviando lista para {to}...")
     sections = json.loads(sections_json)
     return _post_message({
         "messaging_product": "whatsapp",
@@ -167,7 +167,7 @@ def send_list(to, body_text, button_text, sections_json):
 
 def get_phone_info():
     """Mostra informações do número registrado."""
-    print("📱 Buscando informações do número...")
+    print(" Buscando informações do número...")
     url = f"{BASE_URL}/{PHONE_NUMBER_ID}"
     params = {
         "fields": "id,display_phone_number,verified_name,quality_rating,messaging_limit_tier,code_verification_status",
@@ -177,7 +177,7 @@ def get_phone_info():
     data = response.json()
 
     if "error" in data:
-        print(f"❌ Erro: {data['error']['message']}")
+        print(f" Erro: {data['error']['message']}")
         sys.exit(1)
 
     print(f"   ID:            {data.get('id')}")
@@ -191,14 +191,14 @@ def get_phone_info():
 
 def list_templates():
     """Lista todos os message templates da conta."""
-    print("📋 Listando templates...")
+    print(" Listando templates...")
     url = f"{BASE_URL}/{WABA_ID}/message_templates"
     params = {"access_token": TOKEN}
     response = requests.get(url, params=params)
     data = response.json()
 
     if "error" in data:
-        print(f"❌ Erro: {data['error']['message']}")
+        print(f" Erro: {data['error']['message']}")
         sys.exit(1)
 
     templates = data.get("data", [])
@@ -208,7 +208,7 @@ def list_templates():
 
     print(f"   {len(templates)} template(s) encontrado(s):\n")
     for t in templates:
-        status_icon = "✅" if t["status"] == "APPROVED" else "⏳" if t["status"] == "PENDING" else "❌"
+        status_icon = "" if t["status"] == "APPROVED" else "⏳" if t["status"] == "PENDING" else ""
         print(f"   {status_icon} {t['name']}")
         print(f"      Categoria: {t['category']}")
         print(f"      Idioma:    {t['language']}")
@@ -228,9 +228,9 @@ def mark_as_read(message_id):
     response = requests.post(url, headers=_headers(), json=payload)
     data = response.json()
     if data.get("success"):
-        print(f"✅ Mensagem {message_id} marcada como lida.")
+        print(f" Mensagem {message_id} marcada como lida.")
     else:
-        print(f"❌ Erro: {data}")
+        print(f" Erro: {data}")
     return data
 
 
@@ -303,7 +303,7 @@ Exemplos:
     args = parser.parse_args()
 
     if not TOKEN or not PHONE_NUMBER_ID:
-        print("❌ WHATSAPP_TOKEN e WHATSAPP_PHONE_NUMBER_ID não configurados no ~/.env")
+        print(" WHATSAPP_TOKEN e WHATSAPP_PHONE_NUMBER_ID não configurados no ~/.env")
         sys.exit(1)
 
     if args.command == "send":

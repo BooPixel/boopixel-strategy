@@ -173,7 +173,7 @@ Do NOT update for:
 4. Commit and push from `$STRATEGY_PATH` with a conventional message:
    ```bash
    git -C "$STRATEGY_PATH" add skills/boopixel-deploy/SKILL.md
-   git -C "$STRATEGY_PATH" commit -m "📘 DOCS: <what you learned>"
+   git -C "$STRATEGY_PATH" commit -m " DOCS: <what you learned>"
    git -C "$STRATEGY_PATH" push origin master
    ```
 5. Tell the user one line: "Skill atualizada: <what>."

@@ -234,7 +234,7 @@ business-frontend/
 ### Header
 
 - Sino de notificações com badge de não lidas (polling 10s)
-- Tab title flash com emoji 🔔 quando nova mensagem com aba oculta
+- Tab title flash com emoji  quando nova mensagem com aba oculta
 - Notificação nativa do SO (browser Notification API)
 
 ---

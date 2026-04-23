@@ -226,7 +226,7 @@ This skill MUST evolve as you learn new things about the Hostinger account. Afte
 ```bash
 cd /Users/fernandocelmer/Lab/BooPixel/boopixel-strategy
 git add skills/hostinger/SKILL.md
-git commit -m "📘 DOCS: auto-update hostinger skill — <what changed>"
+git commit -m " DOCS: auto-update hostinger skill — <what changed>"
 git push origin master
 ```
 
