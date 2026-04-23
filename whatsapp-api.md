@@ -59,8 +59,9 @@ Configuração e integração da WhatsApp Cloud API para atendimento automatizad
 | Variáveis no Lambda | ✅ Configuradas |
 | Privacy/Terms pages | ✅ Estáticas em /privacy.html e /terms.html |
 | Amplify rewrite rules | ✅ Exceção pra .html estáticos |
-| Webhook no Meta | ⚠️ URL configurada, falta publicar app |
-| Publicar app Meta | ❌ Falta Privacy URL válida + publicar |
+| Webhook no Meta | ✅ Verificado + messages assinado |
+| Publicar app Meta | ✅ App publicado (Live) |
+| Subscribe app à WABA | ✅ POST /subscribed_apps |
 | Template messages | ❌ Criar e submeter |
 | Método pagamento WABA | ❌ Necessário pra msgs business-initiated |
 | Corrigir nome exibição | ❌ BooPoixel → BooPixel |
@@ -142,6 +143,18 @@ Configuração e integração da WhatsApp Cloud API para atendimento automatizad
 1. developers.facebook.com/apps/945825354522145/settings/basic/
 2. Preencher: Privacy URL (`https://app.boopixel.com/privacy.html`), Terms URL, Categoria
 3. Mudar modo do app: Development → Live
+
+### 7. App publicado mas webhook ainda não recebe mensagens
+
+**Problema:** App publicado, webhook verificado, campo `messages` assinado, mas mensagens reais não chegavam no Lambda.
+
+**Solução:** Faltava assinar o app na WABA via API:
+```bash
+curl -X POST "https://graph.facebook.com/v21.0/$WHATSAPP_WABA_ID/subscribed_apps" \
+  -H "Authorization: Bearer $WHATSAPP_TOKEN"
+```
+
+Retorna `{"success": true}`. Sem essa chamada, o Meta não roteia mensagens da WABA pro app.
 
 ---
 
@@ -558,8 +571,9 @@ d8b4e94 📄 DOC: Add WhatsApp CLI script and scripts README
 - [x] Criar privacy.html e terms.html estáticos
 - [x] Configurar Amplify rewrite rules
 - [x] Configurar webpack CopyPlugin pra .html
-- [ ] Publicar app Meta (Development → Live) — precisa Privacy URL aceita
-- [ ] Configurar webhook no Meta (URL + verify token + assinar messages)
+- [x] Publicar app Meta (Development → Live)
+- [x] Configurar webhook no Meta (URL + verify token + assinar messages)
+- [x] Assinar app à WABA (`POST /subscribed_apps`)
 - [ ] Criar e submeter template messages pra aprovação
 - [ ] Adicionar método de pagamento WABA
 - [ ] Corrigir nome exibição (BooPoixel → BooPixel)
