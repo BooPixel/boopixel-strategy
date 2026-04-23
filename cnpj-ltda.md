@@ -60,19 +60,25 @@ flowchart TD
 
 ### Por socio (Mateus e Fernando)
 
-- RG ou CNH
-- CPF
-- Comprovante de residencia (ultimos 90 dias)
-- Certidao de casamento (se casado — regime de bens importa)
-- Certificado digital e-CPF (padrao ICP-Brasil)
+| Documento | Fernando | Mateus |
+|-----------|----------|--------|
+| RG ou CNH | [ ] | [ ] |
+| CPF | [ ] | [ ] |
+| Comprovante de residência (últimos 90 dias) | [ ] | [ ] |
+| Certidão de casamento (se casado) | [ ] | [ ] |
+| Última declaração IRPF | [ ] | [ ] |
+| Certificado digital e-CPF (A1, ICP-Brasil) | [ ] | [ ] |
 
 ### Da empresa
 
-- Contrato social (minimo 2 vias)
-- Comprovante de endereco da sede (IPTU ou contrato de locacao)
-- Consulta previa de viabilidade aprovada
-- DBE (Documento Basico de Entrada) — Receita Federal
-- Formulario de inscricao estadual/municipal
+| Documento | Status |
+|-----------|--------|
+| Contrato social (mínimo 2 vias) | [ ] |
+| Comprovante de endereço da sede (IPTU ou contrato de locação) | [ ] |
+| Autorização do proprietário (se imóvel alugado) | [ ] |
+| Consulta prévia de viabilidade aprovada | [ ] |
+| DBE (Documento Básico de Entrada) — Receita Federal | [ ] |
+| Formulário de inscrição estadual/municipal | [ ] |
 
 > **Nota:** Casados em comunhao universal de bens NAO podem ser socios entre si (Art. 977, Codigo Civil).
 
