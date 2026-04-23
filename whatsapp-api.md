@@ -809,9 +809,154 @@ flowchart LR
 
 ### Pendências
 
-- [ ] Tool use do Gemini — bot chama `create_lead`, `get_pricing`, `schedule_handoff` como funções
-- [ ] Flag `bot_paused` em `message_contacts` pra admin assumir conversa manual
+- [ ] Tool use (Gemini/OpenAI/Anthropic) — bot chama `create_lead`, `get_pricing`, `schedule_handoff` como funções
+- [x] Flag `bot_paused` em `message_contacts` pra admin assumir conversa manual
 - [ ] Grounding RAG com docs de serviços/preços
 - [ ] Structured output `{reply, escalate, lead_data}` pra capturar sinais
 - [ ] Status real dos outbound (delivered/read via `statuses[]` do webhook) — hoje trava em `sent`
 - [ ] Tela de Configurations genérica (CRUD de qualquer `key`) pra não precisar criar tela por feature
+
+---
+
+## Atualização 2026-04-23 (parte 3) — ABCs, multi-provider, handoff automático, reorganização
+
+### 1. Detecção de handoff + pausa do bot
+
+**Fluxo:**
+```mermaid
+flowchart TD
+    In[Cliente manda msg] --> Check{contact.bot_paused?}
+    Check -->|Sim| Skip[Salva inbound<br/>não responde]
+    Check -->|Não| LLM[Chama LLM]
+    LLM --> Reply{reply contém<br/>[[HANDOFF]]?}
+    Reply -->|Sim| Pause[Remove sentinel<br/>Envia msg<br/>set bot_paused=true]
+    Reply -->|Não| Send[Envia reply normal]
+```
+
+- Coluna `bot_paused` (bool default false) em `message_contacts` + migration `f6a7b8c9d0e1`
+- `BotEngine._process` checa paused antes de chamar LLM; se sentinel `[[HANDOFF]]` no reply, remove e chama `_pause_contact()`
+- Instrução do sentinel é appendada programaticamente em `_llm_reply()` — não depende do prompt salvo pelo user (bug achado: banco tinha prompt antigo sem a regra)
+
+**Toggle manual:**
+- Endpoint `PUT /api/v1/messages/contacts/bot-toggle` body `{channel, identifier, bot_paused}` — admin pausa/retoma manual
+- Frontend: botão "Pausar bot" / "Retomar bot" (variant amarelo quando pausado) no header do chat
+
+### 2. Multi-provider LLM com ABC
+
+`BotEngine` ficou provider-agnostic via factory. Ordem de prioridade por prefixo do model id:
+
+| Prefixo | Provider | SDK |
+|---------|----------|-----|
+| `gemini*` | `GeminiProvider` | `google-genai` |
+| `gpt-*`, `o1-*`, `o3-*`, `o4-*` | `OpenAIProvider` | `openai` |
+| `claude-*` | `AnthropicProvider` | `anthropic` |
+
+**Deps** (`pyproject.toml` + `poetry.lock` + `dependencies/requirements.txt` + `requirements-lambda.txt`):
+- `openai ^1.50.0`, `anthropic ^0.40.0` (além do já existente `google-genai`)
+
+**Env vars** (via SAM template):
+- `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` (vazios no samconfig — ativam quando setar)
+
+**Factory:** `get_provider(model: str) -> LLMProvider` em `app/integrations/llm/__init__.py`. Itera `PROVIDERS` chamando `supports(model)`.
+
+**Frontend:** select do bot mantém só modelos Gemini por padrão (comentário: "quando ativar outros, basta expandir a lista").
+
+### 3. Camada de abstração `app/abc/`
+
+Criada pasta com contratos puros (só `@abstractmethod`, sem business logic). 4 arquivos:
+
+| Arquivo | Contratos |
+|---------|-----------|
+| `abc/bot.py` | `Bot` — `handle(messages) -> list[SendResult]` |
+| `abc/email.py` | `EmailSender`, `TemplateLoader` |
+| `abc/llm_provider.py` | `LLMProvider`, `AgentConfig`, `ConversationTurn` |
+| `abc/message.py` | `MessageProvider` — `send` + `receive` + `channel`. Plus DTOs `IncomingMessage`, `OutgoingMessage`, `SendResult` |
+
+`LLMProvider` totalmente desacoplado do domínio (não importa `app.models.*`). Provider recebe `list[ConversationTurn]` e `BotEngine` traduz do SQLAlchemy model antes de chamar.
+
+`MessageProvider` ficou minimalista:
+- `send(OutgoingMessage) -> SendResult`
+- `receive(payload) -> list[IncomingMessage]`
+- `channel: str`
+
+`OutgoingMessage` virou `{to, text, extras: dict}` — features específicas de canal (buttons, image, template) viajam em `extras` sem poluir a ABC.
+
+### 4. Reorganização do `app/`
+
+Objetivo: isolar infra cross-cutting de integrações externas de domínio de negócio.
+
+**Layout final:**
+
+```
+app/
+├── abc/                      # contratos puros (4 files)
+├── core/                     # infra: settings, db, auth, errors, listing, middleware, security, helpers
+├── integrations/             # bindings pra serviços externos
+│   ├── cloud/registrobr/     # API externa registrobr
+│   ├── email/                # SMTPEmailSender + FileTemplateLoader + templates/
+│   ├── llm/providers/        # gemini_provider, openai_provider, anthropic_provider
+│   └── channels/             # whatsapp.py (e futuros telegram/discord/sms)
+├── services/                 # domínio de negócio (layered)
+│   ├── channels/bot.py       # BotEngine (orquestração sobre providers)
+│   └── *_service.py          # charges, subscriptions, customers, etc
+├── models/
+├── repositories/
+├── schemas/
+└── api/v1/
+    ├── filters/
+    └── routers/
+```
+
+**Decisões semânticas:**
+- `core/` = cross-cutting "sem o qual nada funciona" (db, settings, middleware, auth)
+- `integrations/` = "bindings plugáveis" — dá pra desligar um sem derrubar o resto
+- `services/channels/` vs `integrations/channels/`: providers de canal (WhatsApp) viram integração; bot que orquestra fica em services (é business logic)
+
+**Refactor descartado:** tentei migrar tudo pra `app/modules/` feature-first, mas os domínios de negócio (charge/subscription/plan) são tão interconectados que `services/ + models/ + repositories/ + schemas/` layered pro core ficou melhor.
+
+### 5. Tabelas renomeadas
+
+- `customer_emails` → `user_emails` (5 rows migradas manualmente em prod, tabela antiga dropada)
+- Constraint: `uq_customer_emails_user_email` → `uq_user_emails_user_email`
+- Classe: `CustomerEmail` → `UserEmail`
+- URL: `/api/v1/customers/{id}/emails` → `/api/v1/users/{id}/emails`
+- Frontend hook atualizado
+- Migration `a7b8c9d0e1f2` stampada (tabela auto-criada pelo SQLAlchemy impediu DDL, dados copiados na mão)
+
+### 6. Rename frontend
+
+- "Mensagens" → "Canais" (PT) / "Messages" → "Channels" (EN) — label do menu + i18n
+
+### 7. Limpeza
+
+- Removido `app/services/whatsapp_service.py` (3 linhas órfãs) — `MessageService.send()` instancia `WhatsAppProvider()` inline
+- Removidos métodos sem uso em `WhatsAppProvider`: `send_template`, `send_image`, `send_document`
+- `send_text`/`send_buttons` tornados privados (`_send_text`/`_send_buttons`)
+- `parse_webhook` inlinado em `receive()` (contrato da ABC)
+
+### Commits
+
+**business-api:**
+- `23d760e` ⚙️ FEATURE: Manual bot pause/resume toggle per contact
+- `0a02054` ⚙️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template (já docado)
+- `127da16` ♻️ REFACTOR: Split ABCs, integrations/ layout, rename customer_emails → user_emails
+
+**business-frontend:**
+- `1a1a99c` ⚙️ FEATURE: Pause/resume bot toggle in chat header
+- `15bcd2f` ⚙️ FEATURE: Rename Messages → Channels and point user emails to /users endpoint
+
+### Deploy prod
+
+- Migration `a7b8c9d0e1f2` aplicada: `INSERT INTO user_emails SELECT ... FROM customer_emails` + `DROP TABLE customer_emails` + `alembic stamp head`
+- `make deploy-prod` com novas deps `openai` + `anthropic` — subiu sem problemas
+- Frontend via Amplify automático
+
+### Pendências atualizadas
+
+- [ ] Tool use (Gemini/OpenAI/Anthropic) — function calling de verdade
+- [ ] Grounding RAG com docs de serviços/preços
+- [ ] Structured output `{reply, escalate, lead_data}`
+- [ ] Status real outbound (`statuses[]` do webhook WhatsApp)
+- [ ] Tela de Configurations genérica (CRUD de qualquer `key`)
+- [ ] Lead capture automático via conversa (ligar bot → `lead_service`)
+- [ ] Notificação proativa (enviar msg do admin → cliente via `/messages/send`)
