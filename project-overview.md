@@ -124,6 +124,9 @@ erDiagram
 | **Charge** | Cobrança individual. Pode estar vinculada a um Project (`project_id`). |
 | **Transaction** | Movimentação financeira (entrada/saída). |
 | **CustomerEmail** | E-mails adicionais do cliente para notificação. |
+| **Message** | Mensagem de qualquer canal (WhatsApp, Telegram, etc.). `channel`, `direction` ∈ {inbound, outbound}, `status`, `is_read`, `external_id`. |
+| **MessageContact** | Contato com display_name editável + flag `bot_paused`. Unique por (company, channel, identifier). Auto-seed do perfil WhatsApp. |
+| **Configuration** | Key-value genérico por empresa. JSON serializado. Usado pra bot settings (`key=bot`). |
 
 ---
 
@@ -169,16 +172,20 @@ Próximo passo: job periódico lê `Subscription.current_period_end` e gera `Cha
 ```
 business-api/
 ├── app/
-│   ├── api/v1/routers/      # endpoints REST
+│   ├── api/v1/routers/      # endpoints REST (auth, charges, messages, whatsapp, bot-settings, etc.)
 │   ├── cloud/               # integrações (registro.br, futuras)
 │   ├── core/                # auth, email, security, settings, listing (paginação)
 │   ├── db/                  # base, mixins, tipos
-│   ├── models/              # SQLAlchemy
+│   ├── models/              # SQLAlchemy (20+ modelos incl. Message, MessageContact, Configuration)
 │   ├── repositories/        # acesso a dados
 │   ├── schemas/             # Pydantic (request/response)
-│   └── services/            # lógica de negócio
-│       └── asset_actions/   # ações genéricas por asset (registry pattern)
+│   └── services/
+│       ├── ai/              # GeminiAgent (LLM bot replies)
+│       ├── messaging/       # providers multi-canal (base ABC, WhatsApp, bot engine)
+│       ├── asset_actions/   # ações genéricas por asset (registry pattern)
+│       └── ...              # lead, charge, message, bot_settings, etc.
 ├── alembic/                 # migrations
+├── template.yaml            # AWS SAM (Lambda + API Gateway + env vars declarativas)
 ├── dependencies/            # requirements.txt (Lambda layer)
 └── requirements-lambda.txt  # idem
 ```
@@ -190,7 +197,7 @@ business-frontend/
 ├── src/
 │   ├── api/                 # axios config, endpoints, services
 │   ├── components/          # atoms / molecules / templates
-│   ├── contexts/            # AuthContext, ThemeContext
+│   ├── contexts/            # AuthContext, ThemeContext, NotificationsContext
 │   ├── guards/              # ProtectedRoute, RoleProtectedRoute
 │   ├── hooks/               # useRequest, useAuth, use<Entity>
 │   ├── i18n/                # pt / en (sincronizados)
@@ -202,6 +209,8 @@ business-frontend/
 │       │   ├── charges/     # cobranças
 │       │   ├── transactions/# financeiro
 │       │   ├── leads/       # leads capturados
+│       │   ├── messages/    # chat estilo WhatsApp + envio
+│       │   ├── bot/         # configuração do bot IA (prompt, modelo, toggle)
 │       │   └── formTemplates/
 │       └── client/          # área do cliente final
 ```
@@ -209,10 +218,16 @@ business-frontend/
 ### Sidebar (estrutura atual)
 
 - **Operations**: Início · Cobranças · Transações
-- **Contacts**: Clientes · Leads · Formulários · Convites
-- **Catalog**: Serviços · Planos · Descontos · Tipos de Serviço · Tipos de Ativo
+- **Contacts**: Clientes · Leads · Mensagens (submenu: Mensagens + Prompt IA) · Formulários · Convites
+- **Catalog**: Serviços (submenu: Tipos de Serviço, Tipos de Ativo) · Planos (submenu: Categorias) · Descontos
 - **Sales**: Assinaturas · Projetos
 - Footer: Configurações
+
+### Header
+
+- Sino de notificações com badge de não lidas (polling 10s)
+- Tab title flash com emoji 🔔 quando nova mensagem com aba oculta
+- Notificação nativa do SO (browser Notification API)
 
 ---
 
@@ -258,6 +273,16 @@ business-frontend/
 - **WhatsApp Cloud API** — webhook + bot auto-reply + persistência de mensagens no banco
 - **Messaging genérico** — arquitetura multi-canal (WhatsApp/Telegram/Discord) com providers ABC
 - **Privacy/Terms estáticos** — páginas HTML estáticas pra verificação Meta
+- **Chat UI estilo WhatsApp** — painel contatos + thread com bolhas, envio pelo admin, responsivo mobile
+- **Envio de mensagens pelo admin** — `POST /messages/send`, textarea com Enter pra enviar
+- **Contatos editáveis** — tabela `message_contacts` com display_name custom, auto-seed do perfil WhatsApp
+- **Unread tracking** — coluna `is_read`, endpoint `/messages/unread`, mark-read por conversa
+- **Notificações** — sino no header com badge, polling 10s, tab title flash, notificação nativa do SO
+- **Bot IA com Gemini** — `GeminiAgent` (gemini-2.5-flash), histórico de conversa, system prompt configurável
+- **Bot settings** — página `/bot` pra editar prompt, modelo e toggle on/off, persistido na tabela `configurations`
+- **Tabela genérica `configurations`** — key-value JSON por empresa (substitui bot_settings)
+- **SAM template declarativo** — env vars Gemini + WhatsApp gerenciadas via CloudFormation
+- **Handoff humano** — `[[HANDOFF]]` no output do LLM pausa bot pra contato, flag `bot_paused` em `message_contacts`
 
 ### Roadmap
 
@@ -287,7 +312,10 @@ business-frontend/
 - [ ] Dashboard de leads (funil visual, leads por source, SLA)
 - [ ] Lead capture via conversa WhatsApp
 - [ ] Template messages aprovadas pelo Meta
-- [ ] Dashboard de mensagens no frontend
+- [ ] Tool use Gemini (create_lead, get_pricing, schedule_handoff)
+- [ ] Grounding RAG com docs de serviços/preços
+- [ ] Status real outbound (delivered/read via webhook statuses[])
+- [ ] Tela genérica de Configurations (CRUD qualquer key)
 
 #### Removidos/adiados
 
@@ -297,8 +325,11 @@ business-frontend/
 - ~~Pricing page publica~~ — **FEITO** (/pricing e /planos com SEO, modal de lead, categorias)
 - ~~Notificacao email para leads~~ — **FEITO** (BackgroundTasks + SMTP Hostinger)
 - ~~Form builder visual no admin~~ — **FEITO** (StepsBuilder com JSON step editor)
-- ~~WhatsApp Cloud API~~ — **FEITO** (webhook + bot auto-reply + mensagens no banco)
+- ~~WhatsApp Cloud API~~ — **FEITO** (webhook + bot IA Gemini + chat UI + notificações + contatos editáveis)
 - ~~Publicar app Meta~~ — **FEITO** (app Live, webhook verificado, WABA subscribed)
+- ~~Bot auto-reply~~ — **FEITO** (evoluiu pra Gemini LLM com histórico + handoff humano)
+- ~~Dashboard de mensagens~~ — **FEITO** (chat estilo WhatsApp com envio, contatos, unread tracking)
+- ~~Notificações~~ — **FEITO** (sino, polling 10s, tab flash, notificação nativa SO)
 
 ---
 
