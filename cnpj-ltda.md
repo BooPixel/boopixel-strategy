@@ -74,8 +74,7 @@ flowchart TD
 | Documento | Status |
 |-----------|--------|
 | Contrato social (mínimo 2 vias) | [ ] |
-| Comprovante de endereço da sede (IPTU ou contrato de locação) | [ ] |
-| Autorização do proprietário (se imóvel alugado) | [ ] |
+| Comprovante de endereço da sede (IPTU) | [ ] |
 | Consulta prévia de viabilidade aprovada | [ ] |
 | DBE (Documento Básico de Entrada) — Receita Federal | [ ] |
 | Formulário de inscrição estadual/municipal | [ ] |
@@ -95,7 +94,7 @@ flowchart TD
 | Capital Social | A definir (nao ha minimo legal) |
 | Divisao de Quotas | 50% Mateus / 50% Fernando |
 | Administracao | Ambos os socios (ou definir) |
-| Sede | Endereco a definir |
+| Sede | Endereço residencial de um dos sócios (a definir qual) |
 | Prazo | Indeterminado |
 
 ---
@@ -155,7 +154,7 @@ flowchart TD
 |------------|----------|
 | Contador online (Contaja, Agilize) | Abertura gratis + mensalidade baixa |
 | Certificado digital A1 (mais barato que A3) | ~R$ 100-180 por socio |
-| Sede no endereco de um socio | Elimina aluguel |
+| Sede no endereço de um sócio | Elimina aluguel (**decisão tomada**) |
 | Atividade baixo risco (Lei 14.195/2021) | Dispensa alvara pago, abertura em ate 24h |
 | Simples Nacional | Menor burocracia fiscal |
 
