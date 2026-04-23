@@ -172,21 +172,29 @@ Próximo passo: job periódico lê `Subscription.current_period_end` e gera `Cha
 ```
 business-api/
 ├── app/
-│   ├── api/v1/routers/      # endpoints REST (auth, charges, messages, whatsapp, bot-settings, etc.)
-│   ├── cloud/               # integrações (registro.br, futuras)
-│   ├── core/                # auth, email, security, settings, listing (paginação)
-│   ├── db/                  # base, mixins, tipos
-│   ├── models/              # SQLAlchemy (20+ modelos incl. Message, MessageContact, Configuration)
-│   ├── repositories/        # acesso a dados
-│   ├── schemas/             # Pydantic (request/response)
+│   ├── abc/                  # Abstract Base Classes
+│   │   ├── bot.py            # Bot interface
+│   │   ├── email.py          # EmailSender, TemplateLoader
+│   │   ├── llm_provider.py   # LLMProvider ABC, ConversationTurn, AgentConfig
+│   │   └── message.py        # IncomingMessage, OutgoingMessage, MessageProvider, SendResult
+│   ├── api/v1/routers/       # endpoints REST (auth, charges, messages, whatsapp, bot-settings)
+│   ├── integrations/
+│   │   ├── channels/         # WhatsApp provider (implementa MessageProvider ABC)
+│   │   ├── cloud/            # Registro.br RDAP + base cloud provider
+│   │   ├── email/            # SMTP sender, templates, service
+│   │   └── llm/              # Multi-provider LLM factory (Gemini, OpenAI, Anthropic)
+│   ├── core/                 # auth, security, settings, listing (paginação)
+│   ├── db/                   # base, mixins, tipos
+│   ├── models/               # SQLAlchemy (20+ modelos)
+│   ├── repositories/         # acesso a dados
+│   ├── schemas/              # Pydantic (request/response)
 │   └── services/
-│       ├── ai/              # GeminiAgent (LLM bot replies)
-│       ├── messaging/       # providers multi-canal (base ABC, WhatsApp, bot engine)
-│       ├── asset_actions/   # ações genéricas por asset (registry pattern)
-│       └── ...              # lead, charge, message, bot_settings, etc.
-├── alembic/                 # migrations
-├── template.yaml            # AWS SAM (Lambda + API Gateway + env vars declarativas)
-├── dependencies/            # requirements.txt (Lambda layer)
+│       ├── channels/         # BotEngine (LLM-backed, handoff, per-contact pause)
+│       ├── asset_actions/    # ações genéricas por asset (registry pattern)
+│       └── ...               # lead, charge, message, bot_settings, etc.
+├── alembic/                  # migrations
+├── template.yaml             # AWS SAM (Lambda + API Gateway + env vars declarativas)
+├── dependencies/             # requirements.txt (Lambda layer)
 └── requirements-lambda.txt  # idem
 ```
 
@@ -244,6 +252,13 @@ business-frontend/
 - Actions de asset via registry genérico (add nova action = novo arquivo)
 - Service legacy completamente removido (migrado pra Project + Offering)
 - Paginação padrão (`PaginatedResponse[T]`) em todos os endpoints de listagem
+- ABCs extraídos em `app/abc/` — contratos separados de implementações
+- LLM multi-provider via factory (`get_provider(model)`) — Gemini, OpenAI, Anthropic
+- Integrações isoladas em `app/integrations/` (channels, cloud, email, llm)
+- Bot LLM-only (sem fallback keyword) com handoff sentinel `[[HANDOFF]]`
+- Configurações genéricas via tabela `configurations` (key-value JSON por empresa)
+- Contatos com `bot_paused` — admin pode pausar/resumir bot por contato
+- `customer_emails` renomeado pra `user_emails`
 
 ---
 

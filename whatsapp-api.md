@@ -176,29 +176,40 @@ graph LR
     META -->|resposta| WA
 ```
 
-### Arquitetura de providers (genérica, multi-canal)
+### Arquitetura refatorada (2026-04-23)
 
 ```
-app/services/messaging/
-├── __init__.py
-├── base.py           — IncomingMessage, OutgoingMessage, SendResult, MessagingProvider (ABC)
-├── bot.py            — BotEngine + BotConfig (genérico, canal-agnostic)
-└── whatsapp.py       — WhatsAppProvider (implementa MessagingProvider)
+app/abc/
+├── bot.py              — Bot interface
+├── email.py            — EmailSender, TemplateLoader
+├── llm_provider.py     — LLMProvider ABC, ConversationTurn, AgentConfig
+└── message.py          — IncomingMessage, OutgoingMessage, MessageProvider, SendResult
 
-app/services/
-└── whatsapp_service.py — Facade (exporta provider instance)
+app/integrations/
+├── channels/
+│   └── whatsapp.py     — WhatsAppProvider (implementa MessageProvider ABC)
+├── cloud/
+│   └── registrobr/     — RDAP lookup
+├── email/
+│   └── sender.py       — SMTP via Hostinger
+└── llm/
+    └── __init__.py      — Factory: get_provider(model) → Gemini/OpenAI/Anthropic
+
+app/services/channels/
+└── bot.py              — BotEngine (LLM-only, handoff, per-contact pause)
 
 app/api/v1/routers/
-└── whatsapp.py       — GET (verify) + POST (webhook) em /webhooks/whatsapp
+├── whatsapp.py         — GET (verify) + POST (webhook)
+├── message.py          — GET /messages, POST /send, GET /unread, POST /mark-read, contacts CRUD
+└── bot_settings.py     — GET/PUT /bot-settings
 
 app/models/
-└── message.py        — Message model (channel, direction, status enums)
-
-app/repositories/
-└── message_repository.py — Queries por external_id, sender, channel
+├── message.py          — Message (channel, direction, status, is_read)
+├── message_contact.py  — MessageContact (display_name, bot_paused)
+└── configuration.py    — Configuration (key-value genérico)
 ```
 
-### MessagingProvider (ABC)
+### MessageProvider (ABC — app/abc/message.py)
 
 Interface que qualquer canal deve implementar:
 
@@ -207,44 +218,52 @@ Interface que qualquer canal deve implementar:
 | `send_text(to, message)` | Enviar texto |
 | `send_buttons(to, body, buttons)` | Botões interativos (max 3) |
 | `mark_as_read(message_id)` | Marcar como lido |
-| `parse_webhook(payload)` | Parsear webhook → `list[IncomingMessage]` |
-| `send(message: OutgoingMessage)` | Envio genérico (decide texto ou botão) |
+| `receive(payload)` | Parsear webhook → `list[IncomingMessage]` |
+| `send(message: OutgoingMessage)` | Envio genérico |
 
-### BotEngine
+### LLMProvider (ABC — app/abc/llm_provider.py)
 
-Motor de respostas automáticas, channel-agnostic:
+| Método | Descrição |
+|--------|-----------|
+| `reply(history, current_text, config)` | Gerar resposta baseada em histórico |
+
+Factory `get_provider(model)` retorna provider correto:
+- `gemini-*` → GeminiProvider (google-genai SDK)
+- `gpt-*` → OpenAIProvider
+- `claude-*` → AnthropicProvider
+
+### BotEngine (app/services/channels/bot.py)
+
+Motor LLM-only com handoff:
 
 1. Recebe `list[IncomingMessage]`
-2. Salva inbound no banco
-3. Detecta intent
-4. Gera resposta baseada no `BotConfig`
-5. Envia via provider
-6. Salva outbound no banco
+2. Salva inbound no banco + auto-seed contato (`_ensure_contact`)
+3. Verifica `bot_paused` pra esse contato — se sim, pula reply
+4. Carrega settings do banco (`configurations.bot`): system_prompt, enabled, model
+5. Busca histórico (últimas 20 msgs da conversa, ambas direções)
+6. Chama `GeminiAgent.reply(history, current_text, config)`
+7. Se resposta contém `[[HANDOFF]]` → pausa bot pra esse contato
+8. Envia resposta via provider
+9. Salva outbound no banco
 
 ### BotConfig
 
 | Campo | Default |
 |-------|---------|
 | company_name | "BooPixel" |
-| company_id | 1 |
-| pricing_url | "https://app.boopixel.com/pricing" |
-| welcome_message | Saudação + menu 4 opções |
-| services_message | Lista de serviços |
-| pricing_message | Link pra pricing page |
-| human_handoff_message | Encaminha pra equipe |
-| default_message | Menu de opções |
+| company_id | 2 |
 
-### Intent Detection
+Settings do bot (system_prompt, enabled, model) vêm da tabela `configurations` (key `bot`), editável em `/bot` no admin.
 
-| Input | Intent | Resposta |
-|-------|--------|----------|
-| "oi", "olá", "bom dia", etc. | greeting | Menu boas-vindas |
-| "1", "site", "landing", "loja" | services | Lista de serviços |
-| "2", "plano", "preço", "valor" | pricing | Link pricing page |
-| "3", "falar", "atendente" | human | Encaminha pra equipe |
-| Qualquer outra | unknown | Menu com 3 opções |
+### Handoff Humano
 
-### WhatsAppProvider
+Quando o LLM inclui `[[HANDOFF]]` na resposta:
+1. Remove o sentinel do texto
+2. Marca `bot_paused=true` no `MessageContact` desse contato
+3. Mensagens futuras desse contato são salvas mas bot não responde
+4. Admin pode resumir bot pelo toggle no header do chat
+
+### WhatsAppProvider (app/integrations/channels/whatsapp.py)
 
 | Método | Descrição |
 |--------|-----------|
@@ -254,7 +273,7 @@ Motor de respostas automáticas, channel-agnostic:
 | send_image | Imagem com legenda |
 | send_document | PDF, DOC, etc. |
 | mark_as_read | Marcar como lido |
-| parse_webhook | Parsear payload Meta → IncomingMessage |
+| receive | Parsear payload Meta → IncomingMessage |
 
 ### Model Message
 
