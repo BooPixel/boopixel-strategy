@@ -579,4 +579,96 @@ d8b4e94 📄 DOC: Add WhatsApp CLI script and scripts README
 - [ ] Corrigir nome exibição (BooPoixel → BooPixel)
 - [ ] Implementar lead capture via conversa WhatsApp
 - [ ] Integrar com lead_service
-- [ ] Dashboard de mensagens no frontend
+- [x] Dashboard de mensagens no frontend (chat estilo WhatsApp)
+
+---
+
+## Atualização 2026-04-23 — Chat UI + envio + contatos editáveis
+
+### Novas funcionalidades
+
+1. **UI estilo WhatsApp** (`/messages` no frontend)
+   - Painel esquerdo: lista de contatos (agrupados por "outra parte": `sender` se inbound, `recipient` se outbound), ordenado por msg mais recente
+   - Painel direito: thread do contato com bolhas (outbound verde à direita, inbound branco à esquerda)
+   - Auto-scroll pro fim da conversa ao abrir/receber msg
+   - Avatar com iniciais, busca, badge do canal
+   - Tema light/dark totalmente suportado via CSS vars (bolha outbound `#dcf8c6` light / `#1f4d2e` dark)
+
+2. **Envio de mensagens pelo frontend** (admin → cliente)
+   - Backend: `POST /api/v1/messages/send` (admin auth)
+     - Body: `{recipient, text, channel}` (apenas `whatsapp` por enquanto)
+     - Chama `WhatsAppProvider.send()`, persiste outbound com `status=sent` + `external_id`
+     - 400 se canal não suportado, 502 se Meta falhar
+   - Frontend: textarea no rodapé do chat, Enter envia, Shift+Enter quebra linha
+   - ⚠️ Janela 24h do WhatsApp: só aceita texto livre se cliente enviou msg nas últimas 24h — fora disso precisa template approved (não implementado)
+
+3. **Nome customizado do contato** (tabela `message_contacts`)
+   - Migration: `b2c3d4e5f6a7_create_message_contacts_table`
+   - Colunas: `id`, `company_id`, `channel`, `identifier`, `display_name`, `created_at`, `updated_at`
+   - Unique `(company_id, channel, identifier)`
+   - Endpoints:
+     - `GET /api/v1/messages/contacts` — lista contatos custom da empresa
+     - `PUT /api/v1/messages/contacts` — upsert `{channel, identifier, display_name}`
+   - Auto-seed: `BotEngine._ensure_contact` cria `MessageContact` automaticamente na primeira mensagem inbound usando o `sender_name` do perfil WhatsApp (profile.name vindo do webhook)
+   - Override: se usuário editar pelo ✎ no header do chat, `display_name` custom sobrepõe o profile name
+
+### Arquitetura
+
+```mermaid
+flowchart LR
+    Meta[Meta webhook] --> Router[POST /webhooks/whatsapp]
+    Router --> BG[BackgroundTask]
+    BG --> Bot[BotEngine]
+    Bot --> SaveIn[(messages: inbound)]
+    Bot --> SeedContact[(message_contacts auto-seed)]
+    Bot --> Reply[WhatsAppProvider.send]
+    Reply --> SaveOut[(messages: outbound)]
+
+    FE[Frontend /messages] -->|GET /messages| List[MessageService.list]
+    FE -->|GET /messages/contacts| ListC[MessageService.list_contacts]
+    FE -->|PUT /messages/contacts ✎| Upsert[MessageService.upsert_contact]
+    FE -->|POST /messages/send| Send[MessageService.send]
+    Send --> Provider[WhatsAppProvider]
+    Provider --> MetaAPI[Meta Graph API]
+    Send --> SaveOut
+```
+
+### Arquivos novos/alterados
+
+**Backend** (`business-api`):
+- `app/models/message_contact.py` — model com `TimestampMixin` + UniqueConstraint
+- `app/repositories/message_contact_repository.py` — get + list_by_company
+- `app/schemas/message.py` — `MessageSendRequest`, `MessageContactUpsertRequest`, `MessageContactResponse`
+- `app/services/message_service.py` — `send`, `list_contacts`, `upsert_contact`
+- `app/services/messaging/bot.py` — `_ensure_contact` método
+- `app/api/v1/routers/message.py` — `POST /send`, `GET /contacts`, `PUT /contacts` (rotas de `/contacts` antes de `/{message_id}` pra não conflitar com path param)
+- `alembic/versions/b2c3d4e5f6a7_create_message_contacts_table.py`
+
+**Frontend** (`business-frontend`):
+- `src/pages/admin/messages/index.js` — UI chat, edição inline de nome, auto-scroll
+- `src/hooks/useMessages/index.js` — `sendMessage`, `loadContacts`, `saveContact`, estado `contacts`
+- `src/assets/theme.css` — classe `.chat-bubble` themed
+
+### Commits
+
+**business-api:**
+- `1e459ff` ⚙️ FEATURE: Add POST /messages/send for outbound WhatsApp delivery
+- `a72eec2` ⚙️ FEATURE: Editable contact display names with auto-seed from provider profile
+
+**business-frontend:**
+- `38c082a` ⚙️ FEATURE: Turn messages page into WhatsApp-style chat with send support
+- `0ac7ddb` ⚙️ FEATURE: Polish messages chat — theme fix, auto-scroll, remove channel filter
+- `8b8537c` ⚙️ FEATURE: Inline contact name editing in chat header
+
+### Deploy prod (2026-04-23)
+
+- API: `make deploy-prod` → stack `business-api-prod` atualizado
+- Alembic: prod estava em `9312122e60dd` mas `messages` já existia → `alembic stamp a1b2c3d4e5f6` + `alembic stamp head`; tabela `message_contacts` já existia (criada pelo SQLAlchemy na inicialização do Lambda), então stamp direto pra `b2c3d4e5f6a7`
+- Frontend: push pra master → Amplify deploy automático
+
+### Pendências
+
+- [ ] Template messages pra iniciar conversa fora da janela de 24h
+- [ ] Suporte multi-canal real (Telegram, Discord, SMS) — hoje só WhatsApp
+- [ ] Unificar com `leads` (converter mensagem WhatsApp em lead)
+- [ ] Notificação quando nova mensagem chega (push/badge)
