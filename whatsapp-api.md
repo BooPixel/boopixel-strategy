@@ -671,4 +671,147 @@ flowchart LR
 - [ ] Template messages pra iniciar conversa fora da janela de 24h
 - [ ] Suporte multi-canal real (Telegram, Discord, SMS) — hoje só WhatsApp
 - [ ] Unificar com `leads` (converter mensagem WhatsApp em lead)
-- [ ] Notificação quando nova mensagem chega (push/badge)
+- [x] Notificação quando nova mensagem chega (push/badge)
+
+---
+
+## Atualização 2026-04-23 (parte 2) — Unread, notificações, responsivo e bot de IA
+
+### 1. Tracking de não lidas + sino de notificações
+
+**Backend:**
+- Coluna `messages.is_read` (bool, default false). Outbound existentes → `true` no backfill
+- Endpoint `GET /api/v1/messages/unread` → `{total, items[]}` agrupado por contato com preview e contagem
+- Endpoint `POST /api/v1/messages/mark-read` body `{channel, sender}` marca conversa toda como lida
+- Rotas ordenadas antes de `/{message_id}` pra evitar conflito de path param
+
+**Frontend:**
+- `NotificationsContext` global (mount em `src/index.js` dentro do `AuthProvider`)
+  - Polling 10s (pausa quando aba oculta, refetch imediato ao voltar)
+  - Estado global: `{total, items, refresh, markContactRead}`
+  - Title da aba: `(N) BooPixel` estático; ao chegar msg nova com aba oculta → pisca `🔔 (N) BooPixel` até voltar pra aba
+  - Notificação nativa do SO quando permissão concedida (request automático no 1º load)
+- Sino no `AppHeader` com badge vermelho (contador `99+`) e dropdown com últimos 8 contatos, clicar navega `/messages?contact=X&channel=Y` + mark-read otimista
+- Página `/messages` lê query string e seleciona contato; ao abrir conversa, marca inbound não lidas
+
+### 2. Responsividade da tela de chat
+
+**CSS** (`src/assets/theme.css`):
+- Classe `messages-layout` com breakpoint 768px
+- Desktop: sidebar 340px + chat side-by-side
+- Mobile: só sidebar visível; ao selecionar contato, swap pra chat com botão ← voltar
+- `has-active` class toggla os painéis via `display`
+
+### 3. Bot de IA com Gemini (v1)
+
+**Dep:**
+- `google-genai ^1.0.0` nos 4 arquivos obrigatórios (pyproject, lock, requirements.txt, requirements-lambda.txt)
+
+**Settings** (`app/core/settings.py`):
+- `gemini_api_key` — chave da Google AI Studio
+- `gemini_model` (default `gemini-2.5-flash`)
+- `llm_enabled` (kill switch global)
+
+**Agent** (`app/services/ai/gemini_agent.py`):
+- `GeminiAgent.reply(history, current_text, config)` monta `contents` com papéis `user`/`model` a partir dos `Message` do DB
+- `DEFAULT_SYSTEM_PROMPT` — persona BooPixel, serviços, regras ("nunca inventar preço", "escalar se não souber"), `temperature=0.7`, `max_output_tokens=500`
+- Fallback: se API falhar (timeout, quota, erro) → loga e cai no template keyword matching
+
+**BotEngine** (`app/services/messaging/bot.py`):
+- Carrega histórico via `message_repository.list_conversation(company_id, channel, contact, limit=21)` (ambas direções, desc → reversed)
+- Filtra msg corrente pra não duplicar
+- `_load_settings()` lê da `configurations` key `bot` (ver tabela genérica abaixo); fallback pros defaults
+
+### 4. Tabela genérica `configurations`
+
+Substitui `bot_settings` (dropada). Projetada pra outras configs futuras do sistema.
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `id` | INT PK | |
+| `company_id` | INT FK → companies | |
+| `key` | VARCHAR(128) | Nome da config (ex: `bot`) |
+| `value` | TEXT | JSON serializado |
+| `created_at`, `updated_at` | DATETIME | |
+
+Unique `(company_id, key)`.
+
+**Uso atual:**
+- Key `bot`: `{"system_prompt": "...", "enabled": true, "model": "gemini-2.5-flash"}`
+
+**Migrations:**
+- `d4e5f6a7b8c9_create_bot_settings_table.py` (criada, depois descartada)
+- `e5f6a7b8c9d0_create_configurations_tables.py` — cria `configurations`, copia `bot_settings` → `configurations.key='bot'` (JSON), dropa `bot_settings`
+
+Prod ficou com `configuration_types` órfã (experimento two-table descartado) — foi dropada manualmente.
+
+### 5. Tela `/bot` — Prompt IA editável
+
+**Backend** (`app/api/v1/routers/bot_settings.py`):
+- `GET /api/v1/bot-settings` — retorna settings atuais (ou defaults)
+- `PUT /api/v1/bot-settings` body `{system_prompt, enabled, model}` — upsert na `configurations.bot`
+- Service `bot_settings_service.py` só embrulha `ConfigurationRepository` com serialização JSON
+
+**Frontend:**
+- Hook `src/hooks/useBotSettings/index.js` — `load`, `save`
+- Página `src/pages/admin/bot/index.js` no padrão Company: DashboardLayout → Alerts → Card → Form (toggle enabled, select modelo, textarea prompt)
+- View wrapper `src/views/BotSettings.js`, rota `/bot` em `src/app.js`
+- Sidebar: item "Mensagens" vira dropdown com submenu Mensagens + Prompt IA
+- Ícone Bot (lucide)
+
+### 6. SAM template — env vars gerenciadas
+
+Adicionados ao `template.yaml` e `samconfig.toml` (dev + prod):
+- `GeminiApiKey` (NoEcho), `GeminiModel`
+- `WhatsappToken` (NoEcho), `WhatsappPhoneNumberId`, `WhatsappVerifyToken`
+
+Antes essas envs eram setadas manualmente no console da Lambda; agora são declarativas via CloudFormation.
+
+### Arquitetura (atualizada)
+
+```mermaid
+flowchart LR
+    Meta[Meta webhook] --> Router[POST /webhooks/whatsapp]
+    Router --> BG[BackgroundTask]
+    BG --> Bot[BotEngine]
+    Bot --> SaveIn[(messages: inbound)]
+    Bot --> SeedContact[(message_contacts auto-seed)]
+    Bot --> LoadCfg[(configurations.bot)]
+    Bot --> Reply[GeminiAgent.reply]
+    Reply --> Gemini[(Gemini 2.5 Flash)]
+    Reply --> Provider[WhatsAppProvider.send]
+    Provider --> SaveOut[(messages: outbound)]
+
+    FE[Frontend] -->|poll 10s| Unread[GET /messages/unread]
+    FE -->|GET /bot-settings| BotGet[MessageService/BotSettings]
+    FE -->|PUT /bot-settings| BotPut[(configurations.bot)]
+    FE -->|POST /messages/send| Send[MessageService.send]
+    FE -->|POST /messages/mark-read| MarkRead[(messages.is_read=true)]
+```
+
+### Commits
+
+**business-api:**
+- `64f1b0b` ⚙️ FEATURE: Unread message tracking with per-conversation mark-read endpoint
+- `1d4c013` ⚙️ FEATURE: Gemini-backed bot replies with per-company configurable prompt
+- `0a02054` ⚙️ FEATURE: Wire Gemini and WhatsApp env vars into SAM template
+
+**business-frontend:**
+- `e5ad798` ⚙️ FEATURE: Bell notifications, tab title flash and responsive chat layout
+- `78f3cbf` ⚙️ FEATURE: Bot settings page under Messages submenu
+
+### Deploy prod
+
+- Migrations stampadas (tabelas auto-criadas pelo SQLAlchemy impedem DDL do alembic): `c3d4e5f6a7b8` (is_read), `d4e5f6a7b8c9` (bot_settings — descartada), `e5f6a7b8c9d0` (configurations)
+- Data migration manual em prod: `bot_settings` → `configurations.bot` (1 row company_id=2), depois `DROP TABLE bot_settings`
+- Órfã `configuration_types` dropada manualmente
+- 2 deploys `make deploy-prod` — primeiro subiu código + dep `google-genai`, segundo aplicou env vars via template atualizado
+
+### Pendências
+
+- [ ] Tool use do Gemini — bot chama `create_lead`, `get_pricing`, `schedule_handoff` como funções
+- [ ] Flag `bot_paused` em `message_contacts` pra admin assumir conversa manual
+- [ ] Grounding RAG com docs de serviços/preços
+- [ ] Structured output `{reply, escalate, lead_data}` pra capturar sinais
+- [ ] Status real dos outbound (delivered/read via `statuses[]` do webhook) — hoje trava em `sent`
+- [ ] Tela de Configurations genérica (CRUD de qualquer `key`) pra não precisar criar tela por feature
